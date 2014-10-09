@@ -10,7 +10,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -29,8 +31,11 @@ import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import negocio.Articulo;
 import negocio.Auditoria;
 import negocio.ItemAuditoria;
+import negocio.ItemOrdenVenta;
+import negocio.TROrdenVenta;
 
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
@@ -40,6 +45,7 @@ import org.w3c.dom.Text;
 import org.xml.sax.SAXException;
 
 import daos.AuditoriaDAO;
+import enums.Estado;
 
 
 @Stateless
@@ -61,8 +67,8 @@ public class WSMonitoreo{
 			fop.write(contentInBytes);
 			fop.flush();
 			fop.close();
-			DocumentBuilderFactory f‡bricaCreadorDocumento = DocumentBuilderFactory.newInstance();
-		    DocumentBuilder creadorDocumento = f‡bricaCreadorDocumento.newDocumentBuilder();
+			DocumentBuilderFactory fabricaCreadorDocumento = DocumentBuilderFactory.newInstance();
+		    DocumentBuilder creadorDocumento = fabricaCreadorDocumento.newDocumentBuilder();
 		    Document documento = creadorDocumento.parse("temp.xml");
 		  //Obtener el elemento ra’z del documento
 		    Element raiz = documento.getDocumentElement();
@@ -89,7 +95,7 @@ public class WSMonitoreo{
 		    item.setAuditoria(nueva);
 		    nueva.agregarItemAuditoria(item);
 		    //TEST
-		    dao.gravarAuditoria(nueva);
+		    dao.grabarAuditoria(nueva);
 			temp.delete();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -108,6 +114,108 @@ public class WSMonitoreo{
 		return crearTextoRespuesta(true,"Carga finalizada correctamente");
 	}
 
+	/************************************************/
+	/* SERVICIO QUE RECIBE UNA VENTA Y LA GUARDA,   */
+	/* NO ASOCIA A LA VENTA NINGUNA ORDEN DE        */
+	/* TABLAS (INSERT): TRORDENVENTA,ITEMORDENVENTA */
+	/* TABLAS (UPDATE): ARTICULO (CDAD VENTAS)      */
+	/************************************************/
+	@WebMethod
+	public String registrarVenta(String xml)
+	{
+		//FLAGS
+	    String mensajeFinal="Venta registrada";
+	    boolean aprobado=true;
+		//Creo el archivo xml para parsear la venta
+		File venta = new File("ventaEnProc.xml");
+			try {
+				FileOutputStream fop;
+				fop = new FileOutputStream(venta);
+				byte[] contentInBytes = xml.getBytes();
+				fop.write(contentInBytes);
+				fop.flush();
+				fop.close();
+				DocumentBuilderFactory fabricaCreadorDocumento = DocumentBuilderFactory.newInstance();
+			    DocumentBuilder creadorDocumento;
+			    creadorDocumento = fabricaCreadorDocumento.newDocumentBuilder();
+				Document documento = creadorDocumento.parse("ventaEnProc.xml");
+				
+				//PARSEO
+			    Element raiz = documento.getDocumentElement();
+			    //Obtener la lista de nodos
+			    Node ventaIdN = raiz.getElementsByTagName("ventaId").item(0);
+			    Integer ventaId = Integer.valueOf(ventaIdN.getChildNodes().item(0).getNodeValue());
+			    Node moduloIdN = raiz.getElementsByTagName("moduloId").item(0);
+			    Integer moduloId = Integer.valueOf(moduloIdN.getChildNodes().item(0).getNodeValue());
+			    Node latitudN = raiz.getElementsByTagName("coordenadaX").item(0);
+			    Float latitud = Float.valueOf(latitudN.getChildNodes().item(0).getNodeValue());
+			    Node longitudN = raiz.getElementsByTagName("coordenadaY").item(0);
+			    Float longitud = Float.valueOf(longitudN.getChildNodes().item(0).getNodeValue());
+			    Node fechaN = raiz.getElementsByTagName("fecha").item(0);
+			    String fecha = fechaN.getChildNodes().item(0).getNodeValue();
+			    Node montoN = raiz.getElementsByTagName("monto").item(0);
+			    Float monto = Float.valueOf(montoN.getChildNodes().item(0).getNodeValue());
+			    Node ventasItemN = raiz.getElementsByTagName("ventaItems").item(0);
+			    List<ItemOrdenVenta> items= new ArrayList<ItemOrdenVenta>();
+			    for(int i = 0 ; i<ventasItemN.getChildNodes().getLength()/2;i++)
+			    {
+			    	Node productoIdN = raiz.getElementsByTagName("productoId").item(i);
+				    Integer productoId =Integer.valueOf(productoIdN.getChildNodes().item(0).getNodeValue());
+				    Node cantidadN = raiz.getElementsByTagName("cantidad").item(i);
+				    Float cantidad = Float.valueOf(cantidadN.getChildNodes().item(0).getNodeValue());
+				    ItemOrdenVenta iov = new ItemOrdenVenta();
+				    Articulo art=dao.traerArticuloPorCodigo(productoId);
+				    //chequear si art es null
+				    if(art==null)
+				    {
+				    	mensajeFinal="El articulo de codigo "+ String.valueOf(productoId)+ " no existe";
+				    	aprobado=false;
+				    	i=ventasItemN.getChildNodes().getLength()/2;
+				    }else{
+				    	iov.setArticulo(art);
+				    	iov.setCantidad(cantidad);
+				    	items.add(iov);
+				    }
+			    }
+			    
+			    if(aprobado)
+			    {
+			    	TROrdenVenta trov = new TROrdenVenta();
+			    	trov.setEstado(Estado.Abierta);
+			    	
+			    	trov.setNumero(ventaId);
+			    	trov.setLongitud(longitud);
+			    	trov.setLatitud(latitud);
+			    	trov.setMonto(monto);
+			    	trov.setFecha(fecha);
+			    	trov.setItems(items);
+			    	dao.grabarVenta(trov);
+			    	
+			    }
+			
+			} catch (FileNotFoundException e) {
+				aprobado=false;
+				mensajeFinal="El archivo xml no ha podido ser creado";
+				//e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				aprobado=false;
+				mensajeFinal="Error creando el archivo";
+				//e.printStackTrace();
+			} catch (ParserConfigurationException e) {
+				// TODO Auto-generated catch block
+				aprobado=false;
+				mensajeFinal="Ha surgido un problema durante el parseo";
+				//e.printStackTrace();
+			}catch (SAXException e) {
+				// TODO Auto-generated catch block
+				aprobado=false;
+				mensajeFinal="SAX Error";
+				//e.printStackTrace();
+			}
+			return crearTextoRespuesta(aprobado,mensajeFinal);
+		
+	}
 
 	private String crearTextoRespuesta(boolean aprobado,String mensaje){
 		String cadena = "";

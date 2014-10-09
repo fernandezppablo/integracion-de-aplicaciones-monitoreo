@@ -11,12 +11,18 @@ public class ClientSample {
 	        System.out.println("Create Web Service...");
 	        WSMonitoreo port1 = service1.getWSMonitoreoPort();
 	        System.out.println("Call Web Service Operation...");
+	        System.out.println("Server said: " + port1.registrarVenta(null));
+	        //Please input the parameters instead of 'null' for the upper method!
+	
 	        System.out.println("Server said: " + port1.informarLog(null));
 	        //Please input the parameters instead of 'null' for the upper method!
 	
 	        System.out.println("Create Web Service...");
 	        WSMonitoreo port2 = service1.getWSMonitoreoPort();
 	        System.out.println("Call Web Service Operation...");
+	        System.out.println("Server said: " + port2.registrarVenta(null));
+	        //Please input the parameters instead of 'null' for the upper method!
+	
 	        System.out.println("Server said: " + port2.informarLog(null));
 	        //Please input the parameters instead of 'null' for the upper method!
 	

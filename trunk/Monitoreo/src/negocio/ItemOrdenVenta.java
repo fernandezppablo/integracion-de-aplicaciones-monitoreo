@@ -1,11 +1,14 @@
 package negocio;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 
 
 
@@ -17,6 +20,7 @@ public class ItemOrdenVenta  extends PersistentObject{
 	@OneToOne
 	private Articulo articulo;
 	private float cantidad;
+	
 	public TROrdenVenta getTransaccion() {
 		return transaccion;
 	}
