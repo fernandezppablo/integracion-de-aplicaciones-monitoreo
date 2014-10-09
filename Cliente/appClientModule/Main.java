@@ -26,24 +26,20 @@ import webservices.WSMonitoreoService;
 public class Main {
 	public static void main(String[] args) throws Exception{
 		// TODO Auto-generated method stub
-		
 		WSMonitoreo port = new WSMonitoreoService().getWSMonitoreoPort();
-		String resultado = port.informarLog(generate("log"));
+		/************************************/
+		/* TEST INFORMAR LOG                */
+		/************************************/
+		//String resultado = port.informarLog(generateLog("log"));
+		/************************************/
+		/* TEST REGISTRAR VENTA             */
+		/************************************/
+		
+		String resultado = port.registrarVenta(generateVenta());
 		System.out.println(resultado);
 		
 		
-		/*
-		Properties jndiProps = new Properties();
-		jndiProps.put(Context.INITIAL_CONTEXT_FACTORY, "org.jboss.naming.remote.client.InitialContextFactory");
-		jndiProps.put(Context.PROVIDER_URL, "remote://127.0.0.1:4447");
-		jndiProps.put(Context.SECURITY_PRINCIPAL, "test");
-		jndiProps.put(Context.SECURITY_CREDENTIALS, "test123");
-		jndiProps.put("jboss.naming.client.ejb.context", true);
-		Context context = new InitialContext(jndiProps);
-		InterfazAuditoria administrarproductos = (InterfazAuditoria)context.lookup("TPIntegracionAplicacionesEAR/TPIntegracionAplicaciones/AdministradorAuditoria!"+InterfazAuditoria.class.getCanonicalName());
-		String prueba = administrarproductos.informarLog("HORNO");
-		System.out.println(prueba);
-		*/
+		
 	}
 	
 	
@@ -55,7 +51,7 @@ public class Main {
 	
 	}
 	
-	public static String generate(String name) throws Exception{
+	public static String generateLog(String name) throws Exception{
 		 
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -107,6 +103,89 @@ public class Main {
 	          cadena = cadena + linea;
 	     }
         //
+	    
+	    return cadena;
+    }
+	public static String generateVenta() throws Exception{
+		 
+
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        DOMImplementation implementation = builder.getDOMImplementation();
+        Document document = implementation.createDocument(null, "venta", null);
+        document.setXmlVersion("1.0");
+ 
+            //Main Node
+        Element raiz = document.getDocumentElement();
+        //Por cada key creamos un item que contendr‡ la key y el value
+
+        //Log jefe
+        //Element log = document.createElement("log"); 
+        //fecha
+        Element ventaId = document.createElement("ventaId");
+        Text nodeValueValue = document.createTextNode("35");
+        ventaId.appendChild(nodeValueValue);
+        Element moduloId = document.createElement("moduloId"); 
+        nodeValueValue = document.createTextNode("5");
+        moduloId.appendChild(nodeValueValue);
+        Element cooX = document.createElement("coordenadaX"); 
+        nodeValueValue = document.createTextNode("56.45");
+        cooX.appendChild(nodeValueValue);
+        Element cooY = document.createElement("coordenadaY"); 
+        nodeValueValue = document.createTextNode("35.15");
+        cooY.appendChild(nodeValueValue);
+        Element fecha = document.createElement("fecha"); 
+        Text nodeKeyValue = document.createTextNode("2014-10-05 14:55:59");
+        fecha.appendChild(nodeKeyValue);
+        Element monto = document.createElement("monto"); 
+        nodeValueValue = document.createTextNode("50");
+        monto.appendChild(nodeValueValue);
+        Element ventaItems = document.createElement("ventaItems");
+        //Items
+        Element item1Id = document.createElement("productoId");
+        nodeValueValue = document.createTextNode("32");
+        item1Id.appendChild(nodeValueValue);
+        Element item1Cant = document.createElement("cantidad");
+        nodeValueValue = document.createTextNode("10");
+        item1Cant.appendChild(nodeValueValue);
+        Element item2Id = document.createElement("productoId");
+        nodeValueValue = document.createTextNode("42");
+        item2Id.appendChild(nodeValueValue);
+        Element item2Cant = document.createElement("cantidad");
+        nodeValueValue = document.createTextNode("22");
+        item2Cant.appendChild(nodeValueValue);
+        
+        //items a ventasItem
+        ventaItems.appendChild(item1Id);
+        ventaItems.appendChild(item1Cant);
+        ventaItems.appendChild(item2Id);
+        ventaItems.appendChild(item2Cant);
+        
+        //append itemNode to raiz
+        raiz.appendChild(ventaId); //pegamos el elemento a la raiz "Documento"
+        raiz.appendChild(moduloId);
+        raiz.appendChild(cooX);
+        raiz.appendChild(cooY);
+        raiz.appendChild(fecha);
+        raiz.appendChild(monto);
+        raiz.appendChild(ventaItems);
+        //Generate XML
+        Source source = new DOMSource(document);
+        // Esto sirve para guardar el xml
+        //Indicamos donde lo queremos almacenar
+        java.io.File temp = new java.io.File("venta.xml");
+        Result result = new StreamResult(temp); //nombre del archivo
+        Transformer transformer = TransformerFactory.newInstance().newTransformer();
+        transformer.transform(source, result);
+        String cadena = "";
+		String linea;
+	    FileReader f = new FileReader("venta.xml");
+	    BufferedReader b = new BufferedReader(f);
+	    while((linea = b.readLine())!=null) {
+	          cadena = cadena + linea;
+	     }
+        //
+	    
 	    return cadena;
     }
 

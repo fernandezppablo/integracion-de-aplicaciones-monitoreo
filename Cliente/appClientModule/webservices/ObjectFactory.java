@@ -24,14 +24,24 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
+    private final static QName _RegistrarVenta_QNAME = new QName("http://webservices/", "registrarVenta");
     private final static QName _InformarLogResponse_QNAME = new QName("http://webservices/", "informarLogResponse");
     private final static QName _InformarLog_QNAME = new QName("http://webservices/", "informarLog");
+    private final static QName _RegistrarVentaResponse_QNAME = new QName("http://webservices/", "registrarVentaResponse");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: webservices
      * 
      */
     public ObjectFactory() {
+    }
+
+    /**
+     * Create an instance of {@link RegistrarVentaResponse }
+     * 
+     */
+    public RegistrarVentaResponse createRegistrarVentaResponse() {
+        return new RegistrarVentaResponse();
     }
 
     /**
@@ -43,11 +53,28 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link RegistrarVenta }
+     * 
+     */
+    public RegistrarVenta createRegistrarVenta() {
+        return new RegistrarVenta();
+    }
+
+    /**
      * Create an instance of {@link InformarLogResponse }
      * 
      */
     public InformarLogResponse createInformarLogResponse() {
         return new InformarLogResponse();
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link RegistrarVenta }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://webservices/", name = "registrarVenta")
+    public JAXBElement<RegistrarVenta> createRegistrarVenta(RegistrarVenta value) {
+        return new JAXBElement<RegistrarVenta>(_RegistrarVenta_QNAME, RegistrarVenta.class, null, value);
     }
 
     /**
@@ -66,6 +93,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://webservices/", name = "informarLog")
     public JAXBElement<InformarLog> createInformarLog(InformarLog value) {
         return new JAXBElement<InformarLog>(_InformarLog_QNAME, InformarLog.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link RegistrarVentaResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://webservices/", name = "registrarVentaResponse")
+    public JAXBElement<RegistrarVentaResponse> createRegistrarVentaResponse(RegistrarVentaResponse value) {
+        return new JAXBElement<RegistrarVentaResponse>(_RegistrarVentaResponse_QNAME, RegistrarVentaResponse.class, null, value);
     }
 
 }

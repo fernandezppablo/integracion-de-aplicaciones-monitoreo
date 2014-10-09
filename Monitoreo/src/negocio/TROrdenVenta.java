@@ -3,23 +3,27 @@ package negocio;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
 import enums.Estado;
 
 @Entity
-public class TROrdenVenta  extends PersistentObject{
+public class TROrdenVenta extends PersistentObject{
 	
 	private Estado estado;
 	private float latitud;
 	private float longitud;
 	private String fecha;
 	private float monto;
-	private String numero;
-	@OneToMany(mappedBy="transaccion")
+	
+	private Integer numero;
+	@OneToMany(cascade=CascadeType.ALL)
+	@JoinColumn(name="TROrdenVentaId")
 	private List<ItemOrdenVenta> items = new ArrayList<ItemOrdenVenta>();
 	public Estado getEstado() {
 		return estado;
@@ -51,10 +55,10 @@ public class TROrdenVenta  extends PersistentObject{
 	public void setMonto(float monto) {
 		this.monto = monto;
 	}
-	public String getNumero() {
+	public Integer getNumero() {
 		return numero;
 	}
-	public void setNumero(String numero) {
+	public void setNumero(Integer numero) {
 		this.numero = numero;
 	}
 	public List<ItemOrdenVenta> getItems() {
