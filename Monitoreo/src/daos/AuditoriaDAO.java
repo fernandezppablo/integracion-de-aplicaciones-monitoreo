@@ -1,7 +1,10 @@
 package daos;
 
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import interfaces.AuditoriaDAOInterfaz;
 
@@ -54,13 +57,33 @@ public class AuditoriaDAO implements AuditoriaDAOInterfaz{
 		Articulo a = new Articulo();
 		
 		Query q =em.createQuery("select a.id from Articulo a where a.codigo=:artId").setParameter("artId", id);
-		List<Integer> arts=q.getResultList();
-		if(arts.size()!=1)
+		try
 		{
+			List<Integer> arts= q.getResultList();
+			if(arts.size()!=1)
+			{
+				return null;
+			}
+			return em.find(Articulo.class, arts.get(0));
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
 			return null;
 		}
-		return em.find(Articulo.class, arts.get(0));
 		
+	}
+	
+	public List<Map<Integer,Integer>> rankingArticulos()
+	{
+		List<Map<Integer,Integer>> resultado = new ArrayList<Map<Integer,Integer>>();
+		Query q = em.createQuery(
+				"select new map(a.id, SUM(i.cantidad)) " + 
+						"from ItemOrdenVenta i inner join Articulo a on a.id = i.Articulo " +
+						"group by a.id order by SUM(i,cantidad)"
+				);
+		resultado = q.getResultList();
+		return resultado;
 	}
 	
 	/*public void actualizarCantidadDeVentas(ItemOrdenVenta iov)
