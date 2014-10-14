@@ -6,6 +6,6 @@
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Alvaro/Desktop/UADE/2014/2do Cuatrimestre/Integracion de aplicaciones/TP/jboss/runtimes/jboss-eap/bin/client/jboss-client.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Monitoreo"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
