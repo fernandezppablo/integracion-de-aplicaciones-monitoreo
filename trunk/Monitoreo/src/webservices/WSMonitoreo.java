@@ -8,6 +8,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -42,6 +44,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.Text;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import daos.AuditoriaDAO;
@@ -60,16 +63,12 @@ public class WSMonitoreo{
 	public String informarLog(String xml) {
 		// Vamos a crear un archivo xml para leerlo
 		
-		File temp = new File("temp.xml");
 		try {
-			FileOutputStream fop = new FileOutputStream(temp);
-			byte[] contentInBytes = xml.getBytes();
-			fop.write(contentInBytes);
-			fop.flush();
-			fop.close();
 			DocumentBuilderFactory fabricaCreadorDocumento = DocumentBuilderFactory.newInstance();
 		    DocumentBuilder creadorDocumento = fabricaCreadorDocumento.newDocumentBuilder();
-		    Document documento = creadorDocumento.parse("temp.xml");
+		    InputSource beta = new InputSource();
+		    beta.setCharacterStream(new StringReader(xml));
+		    Document documento = creadorDocumento.parse(beta);
 		  //Obtener el elemento ra’z del documento
 		    Element raiz = documento.getDocumentElement();
 		    //Obtener la lista de nodos
@@ -96,7 +95,6 @@ public class WSMonitoreo{
 		    nueva.agregarItemAuditoria(item);
 		    //TEST
 		    dao.grabarAuditoria(nueva);
-			temp.delete();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -127,18 +125,14 @@ public class WSMonitoreo{
 	    String mensajeFinal="Venta registrada";
 	    boolean aprobado=true;
 		//Creo el archivo xml para parsear la venta
-		File venta = new File("ventaEnProc.xml");
 			try {
-				FileOutputStream fop;
-				fop = new FileOutputStream(venta);
-				byte[] contentInBytes = xml.getBytes();
-				fop.write(contentInBytes);
-				fop.flush();
-				fop.close();
 				DocumentBuilderFactory fabricaCreadorDocumento = DocumentBuilderFactory.newInstance();
 			    DocumentBuilder creadorDocumento;
 			    creadorDocumento = fabricaCreadorDocumento.newDocumentBuilder();
-				Document documento = creadorDocumento.parse("ventaEnProc.xml");
+			    InputSource beta = new InputSource();
+			    beta.setCharacterStream(new StringReader(xml));
+			    Document documento = creadorDocumento.parse(beta);
+		
 				
 				//PARSEO
 			    Element raiz = documento.getDocumentElement();
@@ -261,36 +255,16 @@ public class WSMonitoreo{
 	        Source source = new DOMSource(document);
 	        // Esto sirve para guardar el xml
 	        //Indicamos donde lo queremos almacenar
-	        java.io.File temp = new java.io.File("temp2.xml");
-	        Result result = new StreamResult(temp); //nombre del archivo
-	        Transformer transformer;
-		
-			transformer = TransformerFactory.newInstance().newTransformer();
-			transformer.transform(source, result);
-			String linea;
-			FileReader f = new FileReader("temp2.xml");
-			BufferedReader b = new BufferedReader(f);
-			while((linea = b.readLine())!=null) {
-				cadena = cadena + linea;
-			}
-		} catch (TransformerConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (TransformerFactoryConfigurationError e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        //
-		catch (TransformerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	        
+	        Transformer transformer = TransformerFactory.newInstance().newTransformer();
+	        StringWriter sw = new StringWriter();
+	        transformer.transform(new DOMSource(document), new StreamResult(sw));
+			cadena = sw.toString();
+	
 		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TransformerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
