@@ -19,14 +19,24 @@ import com.sun.org.apache.xerces.internal.impl.xpath.regex.ParseException;
 
 
 @Entity
-@XmlRootElement(name="log")
 public class ItemAuditoria extends PersistentObject{
 	private String log;
 	private Date fecha;
 	private int idModulo; 
 	@ManyToOne
 	private Auditoria auditoria;
-	@XmlElement(name = "mensaje")
+	
+	
+	
+	
+	public ItemAuditoria(String log, Date fecha, int idModulo,
+			Auditoria auditoria) {
+		super();
+		this.log = log;
+		this.fecha = fecha;
+		this.idModulo = idModulo;
+		this.auditoria = auditoria;
+	}
 	public String getLog() {
 		return log;
 	}
@@ -40,7 +50,7 @@ public class ItemAuditoria extends PersistentObject{
 		this.log = log;
 	}
 
-	@XmlElement(name = "idModulo")
+
 	public int getIdModulo() {
 		return idModulo;
 	}
@@ -49,15 +59,12 @@ public class ItemAuditoria extends PersistentObject{
 		this.idModulo = idModulo;
 	}
 	
-	@XmlElement(name = "fecha")
-	@XmlJavaTypeAdapter(DateAdapter.class)
 	public Date getFecha() {
 		return fecha;
 	}
 	public void setFecha(Date fecha) throws Exception {
 		this.fecha = fecha;
 	}
-
 
 
 	
