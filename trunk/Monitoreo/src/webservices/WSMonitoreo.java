@@ -43,6 +43,7 @@ import org.xml.sax.SAXException;
 
 import com.sun.xml.internal.ws.util.Pool.Unmarshaller;
 
+import dto.ItemAuditoriaDTO;
 import enums.Estado;
 
 
@@ -54,17 +55,17 @@ public class WSMonitoreo{
 	@WebMethod
 	public String informarLog(String xml) {
 
-			Auditoria nueva = new Auditoria();
 			JAXBContext jaxbcontext;
 			try {
-				jaxbcontext = JAXBContext.newInstance(ItemAuditoria.class);
+				jaxbcontext = JAXBContext.newInstance(ItemAuditoriaDTO.class);
 				javax.xml.bind.Unmarshaller desencripta = jaxbcontext.createUnmarshaller();
-				ItemAuditoria item = (ItemAuditoria) desencripta.unmarshal(new StringReader(xml));
+				ItemAuditoriaDTO item = (ItemAuditoriaDTO) desencripta.unmarshal(new StringReader(xml));
 				if(item.getFecha()==null){
 					return crearTextoRespuesta(false,"Error en el formato de la fecha");
 				}
-				item.setAuditoria(nueva);
-				nueva.agregarItemAuditoria(item);
+				Auditoria nueva = new Auditoria();
+				ItemAuditoria entidad = new ItemAuditoria(item.getLog(), item.getFecha(), item.getIdModulo(), nueva);
+				nueva.agregarItemAuditoria(entidad);
 				dao.grabarAuditoria(nueva);
 			} catch (JAXBException e) {
 				// TODO Auto-generated catch block
