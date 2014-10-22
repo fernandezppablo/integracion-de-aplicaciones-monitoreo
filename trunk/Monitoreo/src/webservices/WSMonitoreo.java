@@ -2,11 +2,7 @@ package webservices;
 
 import interfaces.AuditoriaDAOInterfaz;
 
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -17,19 +13,17 @@ import java.util.Date;
 import java.util.List;
 
 import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 import javax.xml.parsers.*;
-import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
@@ -47,67 +41,36 @@ import org.w3c.dom.Text;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import daos.AuditoriaDAO;
+import com.sun.xml.internal.ws.util.Pool.Unmarshaller;
+
 import enums.Estado;
 
 
-@Stateless
 @WebService
 public class WSMonitoreo{
-	//test
-	@PersistenceContext(unitName = "TP")
-	private EntityManager em;
+
 	@EJB(name = "AuditoriaDAO")
 	private AuditoriaDAOInterfaz dao;
 	@WebMethod
 	public String informarLog(String xml) {
-		// Vamos a crear un archivo xml para leerlo
-		
-		try {
-			DocumentBuilderFactory fabricaCreadorDocumento = DocumentBuilderFactory.newInstance();
-		    DocumentBuilder creadorDocumento = fabricaCreadorDocumento.newDocumentBuilder();
-		    InputSource beta = new InputSource();
-		    beta.setCharacterStream(new StringReader(xml));
-		    Document documento = creadorDocumento.parse(beta);
-		  //Obtener el elemento ra’z del documento
-		    Element raiz = documento.getDocumentElement();
-		    //Obtener la lista de nodos
-		    Node fechas = raiz.getElementsByTagName("fecha").item(0);
-		    String fecha = fechas.getChildNodes().item(0).getNodeValue(); 
-		    Node modulos = raiz.getElementsByTagName("idModulo").item(0);
-		    String modulo = modulos.getChildNodes().item(0).getNodeValue(); 
-		    Node mensajes = raiz.getElementsByTagName("mensaje").item(0);
-		    String mensaje = mensajes.getChildNodes().item(0).getNodeValue(); 
-		    Auditoria nueva = new Auditoria();
-		    em.persist(nueva);
-		    ItemAuditoria item = new ItemAuditoria();
-		    Date date = null;
+
+			Auditoria nueva = new Auditoria();
+			JAXBContext jaxbcontext;
 			try {
-				date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(fecha);
-			} catch (ParseException e) {
+				jaxbcontext = JAXBContext.newInstance(ItemAuditoria.class);
+				javax.xml.bind.Unmarshaller desencripta = jaxbcontext.createUnmarshaller();
+				ItemAuditoria item = (ItemAuditoria) desencripta.unmarshal(new StringReader(xml));
+				if(item.getFecha()==null){
+					return crearTextoRespuesta(false,"Error en el formato de la fecha");
+				}
+				item.setAuditoria(nueva);
+				nueva.agregarItemAuditoria(item);
+				dao.grabarAuditoria(nueva);
+			} catch (JAXBException e) {
 				// TODO Auto-generated catch block
-				return crearTextoRespuesta(false,"Formato de fecha invalido");
+				return crearTextoRespuesta(false,e.toString());
 			}
-		    item.setFecha(date);
-		    item.setIdModulo(Integer.valueOf(modulo));
-		    item.setLog(mensaje);
-		    item.setAuditoria(nueva);
-		    nueva.agregarItemAuditoria(item);
-		    //TEST
-		    dao.grabarAuditoria(nueva);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SAXException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
 
 		return crearTextoRespuesta(true,"Carga finalizada correctamente");
 	}
@@ -207,6 +170,7 @@ public class WSMonitoreo{
 				mensajeFinal="SAX Error";
 				//e.printStackTrace();
 			}
+	
 			return crearTextoRespuesta(aprobado,mensajeFinal);
 		
 	}

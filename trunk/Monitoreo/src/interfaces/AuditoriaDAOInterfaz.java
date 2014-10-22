@@ -17,4 +17,5 @@ public interface AuditoriaDAOInterfaz {
 	public void grabarVenta(TROrdenVenta trov);
 	public Articulo traerArticuloPorCodigo(Integer id);
 	public List<Map<Integer,Integer>> rankingArticulos();
+
 }

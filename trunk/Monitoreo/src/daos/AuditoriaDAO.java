@@ -8,8 +8,13 @@ import java.util.Map;
 
 import interfaces.AuditoriaDAOInterfaz;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
+import javax.ejb.PostActivate;
+import javax.ejb.PrePassivate;
+import javax.ejb.Stateful;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -44,7 +49,7 @@ public class AuditoriaDAO implements AuditoriaDAOInterfaz{
 		
 		em.getEntityManagerFactory().isOpen();
 		em.persist(trov);
-		
+	
 		for(ItemOrdenVenta iov: trov.getItems()){
 			em.persist(iov);
 		}
@@ -56,15 +61,15 @@ public class AuditoriaDAO implements AuditoriaDAOInterfaz{
 	{
 		Articulo a = new Articulo();
 		
-		Query q =em.createQuery("select a.id from Articulo a where a.codigo=:artId").setParameter("artId", id);
+		Query q =em.createQuery("select a from Articulo a where a.codigo=:artId").setParameter("artId", id);
 		try
 		{
-			List<Integer> arts= q.getResultList();
+			List<Articulo> arts= (List<Articulo>)q.getResultList();
 			if(arts.size()!=1)
 			{
 				return null;
 			}
-			return em.find(Articulo.class, arts.get(0));
+			return arts.get(0);
 		}
 		catch(Exception e)
 		{
@@ -97,7 +102,6 @@ public class AuditoriaDAO implements AuditoriaDAOInterfaz{
 		
 	}
 */
-	
-	
 
+	
 }
