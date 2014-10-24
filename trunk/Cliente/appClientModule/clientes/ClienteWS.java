@@ -1,3 +1,4 @@
+package clientes;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
@@ -23,7 +24,7 @@ import webservices.WSMonitoreoService;
 
 
 
-public class Main {
+public class ClienteWS {
 	public static void main(String[] args) throws Exception{
 		// TODO Auto-generated method stub
 		WSMonitoreo port = new WSMonitoreoService().getWSMonitoreoPort();
@@ -34,7 +35,7 @@ public class Main {
 		/************************************/
 		/* TEST REGISTRAR VENTA             */
 		/************************************/
-		
+		//System.out.println(generateVenta());
 		String resultado = port.registrarVenta(generateVenta());
 		System.out.println(resultado);
 		
@@ -46,7 +47,7 @@ public class Main {
 	/* (non-Java-doc)
 	 * @see java.lang.Object#Object()
 	 */
-	public Main() {
+	public ClienteWS() {
 		super();
 	
 	}
@@ -68,11 +69,11 @@ public class Main {
         //Element log = document.createElement("log"); 
         //fecha
         Element fecha = document.createElement("fecha"); 
-        Text nodeKeyValue = document.createTextNode("2014-10-05 14:55:59");
+        Text nodeKeyValue = document.createTextNode("1999-12-05 12:04:23");
         fecha.appendChild(nodeKeyValue);      
         //idModulo
         Element idModulo = document.createElement("idModulo"); 
-        Text nodeValueValue = document.createTextNode("5");                
+        Text nodeValueValue = document.createTextNode("111");                
         idModulo.appendChild(nodeValueValue);
       //idModulo
         Element mensaje = document.createElement("mensaje"); 
@@ -135,31 +136,34 @@ public class Main {
         nodeValueValue = document.createTextNode("35.15");
         cooY.appendChild(nodeValueValue);
         Element fecha = document.createElement("fecha"); 
-        Text nodeKeyValue = document.createTextNode("2014-10-05 14:55:59");
+        Text nodeKeyValue = document.createTextNode("1999-12-05 12:04:23");
         fecha.appendChild(nodeKeyValue);
         Element monto = document.createElement("monto"); 
         nodeValueValue = document.createTextNode("50");
         monto.appendChild(nodeValueValue);
         Element ventaItems = document.createElement("ventaItems");
         //Items
+        Element item1 = document.createElement("Item");
         Element item1Id = document.createElement("productoId");
-        nodeValueValue = document.createTextNode("32");
+        nodeValueValue = document.createTextNode("3");
         item1Id.appendChild(nodeValueValue);
+        item1.appendChild(item1Id);
         Element item1Cant = document.createElement("cantidad");
         nodeValueValue = document.createTextNode("10");
         item1Cant.appendChild(nodeValueValue);
+        item1.appendChild(item1Cant);
+        ventaItems.appendChild(item1);
+        Element item2 = document.createElement("Item");
         Element item2Id = document.createElement("productoId");
-        nodeValueValue = document.createTextNode("42");
+        nodeValueValue = document.createTextNode("3");
         item2Id.appendChild(nodeValueValue);
+        item2.appendChild(item2Id);
         Element item2Cant = document.createElement("cantidad");
         nodeValueValue = document.createTextNode("22");
         item2Cant.appendChild(nodeValueValue);
-        
-        //items a ventasItem
-        ventaItems.appendChild(item1Id);
-        ventaItems.appendChild(item1Cant);
-        ventaItems.appendChild(item2Id);
-        ventaItems.appendChild(item2Cant);
+        item2.appendChild(item2Cant);
+        ventaItems.appendChild(item2);
+
         
         //append itemNode to raiz
         raiz.appendChild(ventaId); //pegamos el elemento a la raiz "Documento"
