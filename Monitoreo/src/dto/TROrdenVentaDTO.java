@@ -1,43 +1,56 @@
 package dto;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import enums.Estado;
 
-
+@XmlRootElement(name="venta")
 public class TROrdenVentaDTO {
-
-	private String id;
-	private Estado estado;
-	private float latitud;
-	private float longitud;
-	private String fecha;
+	
+	private int ventaId;
+	private int moduloId;
+	private float coordenadaX;
+	private float coordenadaY;
+	private Date fecha;
 	private float monto;
-	private String numero;
-	private List<ItemOrdenVentaDTO> items = new ArrayList<ItemOrdenVentaDTO>();
-	public Estado getEstado() {
-		return estado;
+	private List<ItemOrdenVentaDTO> ventaItems;
+	public int getVentaId() {
+		return ventaId;
 	}
-	public void setEstado(Estado estado) {
-		this.estado = estado;
+	public void setVentaId(int ventaId) {
+		this.ventaId = ventaId;
 	}
-	public float getLatitud() {
-		return latitud;
+	public int getModuloId() {
+		return moduloId;
 	}
-	public void setLatitud(float latitud) {
-		this.latitud = latitud;
+	public void setModuloId(int moduloId) {
+		this.moduloId = moduloId;
 	}
-	public float getLongitud() {
-		return longitud;
+	public float getCoordenadaX() {
+		return coordenadaX;
 	}
-	public void setLongitud(float longitud) {
-		this.longitud = longitud;
+	public void setCoordenadaX(float coordenadaX) {
+		this.coordenadaX = coordenadaX;
 	}
-	public String getFecha() {
+	public float getCoordenadaY() {
+		return coordenadaY;
+	}
+	public void setCoordenadaY(float coordenadaY) {
+		this.coordenadaY = coordenadaY;
+	}
+	@XmlElement(name = "fecha")
+	@XmlJavaTypeAdapter(DateAdapter.class)
+	public Date getFecha() {
 		return fecha;
 	}
-	public void setFecha(String fecha) {
+	public void setFecha(Date fecha) {
 		this.fecha = fecha;
 	}
 	public float getMonto() {
@@ -46,24 +59,19 @@ public class TROrdenVentaDTO {
 	public void setMonto(float monto) {
 		this.monto = monto;
 	}
-	public String getNumero() {
-		return numero;
+	 @XmlElement( name="Item" )
+	 @XmlElementWrapper( name="ventaItems" )
+	public List<ItemOrdenVentaDTO> getVentaItems() {
+		return ventaItems;
 	}
-	public void setNumero(String numero) {
-		this.numero = numero;
-	}
-	public List<ItemOrdenVentaDTO> getItems() {
-		return items;
-	}
-	public void setItems(List<ItemOrdenVentaDTO> items) {
-		this.items = items;
+	public void setVentaItems(List<ItemOrdenVentaDTO> ventaItems) {
+		this.ventaItems = ventaItems;
 	}
 	
-	public void agregarItem(ItemOrdenVentaDTO item){
-		this.items.add(item);
-	}
-	public String getId() {
-		return id;
-	}
+
+	
+	
+	
+	
 	
 }

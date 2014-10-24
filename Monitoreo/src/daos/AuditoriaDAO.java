@@ -24,6 +24,10 @@ import javax.persistence.PersistenceContext;
 
 import javax.persistence.Query;
 
+import dto.AuditoriaDTO;
+import dto.ItemAuditoriaDTO;
+import dto.ItemOrdenVentaDTO;
+import dto.TROrdenVentaDTO;
 import negocio.Articulo;
 import negocio.Auditoria;
 import negocio.ItemAuditoria;
@@ -36,27 +40,54 @@ public class AuditoriaDAO implements AuditoriaDAOInterfaz{
 	private EntityManager em;
 	
 
-	public void grabarAuditoria(Auditoria aGrabar){
-		em.getEntityManagerFactory().isOpen();
-		em.persist(aGrabar);
-		
-		for(ItemAuditoria actual: aGrabar.getItemsauditoria()){
-			em.persist(actual);
+	public void grabarAuditoria(AuditoriaDTO aGrabar) throws Exception{
+		Auditoria nueva = new Auditoria();
+		em.persist(nueva);
+		List<ItemAuditoria> lista = new ArrayList<ItemAuditoria>();
+		for(ItemAuditoriaDTO actual: aGrabar.getItemsauditoria()){
+			ItemAuditoria entidad = new ItemAuditoria(actual.getLog(), actual.getFecha(), actual.getIdModulo(), nueva);
+			em.persist(entidad);
+			lista.add(entidad);		
 		}
+		nueva.setItemsauditoria(lista);
+		em.persist(nueva);
+
 	}
 	
-	public void grabarVenta(TROrdenVenta trov){
+	public void grabarVenta(TROrdenVentaDTO trov) throws Exception{
 		
-		em.getEntityManagerFactory().isOpen();
-		em.persist(trov);
-	
-		for(ItemOrdenVenta iov: trov.getItems()){
-			em.persist(iov);
+
+		TROrdenVenta nueva = new TROrdenVenta();
+		nueva.setFecha(trov.getFecha());
+		nueva.setLatitud(trov.getCoordenadaX());
+		nueva.setLongitud(trov.getCoordenadaY());
+		nueva.setMonto(trov.getMonto());
+		nueva.setNumero(trov.getVentaId());
+		if(trov.getVentaItems().size()!=0){
+			em.persist(nueva);
+			List<ItemOrdenVenta> lista = new ArrayList<ItemOrdenVenta>();
+			for(ItemOrdenVentaDTO iov: trov.getVentaItems()){
+				Articulo articulo = this.traerArticuloPorCodigo(iov.getProductoId());
+				if(articulo!=null){
+					ItemOrdenVenta item = new ItemOrdenVenta();
+					item.setArticulo(articulo);
+					item.setCantidad(iov.getCantidad());
+					item.setTROrdenVentaId(nueva);
+					lista.add(item);
+				}else{
+					em.remove(nueva);
+					throw new Exception("Item con articulo inexistente. Id articulo inexistente: " + iov.getProductoId());
+				}
+			}
+			nueva.setItems(lista);
+			em.persist(nueva);
+		}else{
+			throw new Exception("Transaccion sin items");
 		}
 		
+		
 	}
-	
-	
+
 	public Articulo traerArticuloPorCodigo(Integer id)
 	{
 		Articulo a = new Articulo();
