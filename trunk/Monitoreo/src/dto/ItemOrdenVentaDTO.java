@@ -1,33 +1,34 @@
 package dto;
 
+import java.io.Serializable;
 
-public class ItemOrdenVentaDTO {
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
-	private String id;
-	private TROrdenVentaDTO transaccion;
-	private ArticuloDTO articulo;
+
+public class ItemOrdenVentaDTO implements Serializable{
+
+	private int productoId;
 	private float cantidad;
-	public TROrdenVentaDTO getTransaccion() {
-		return transaccion;
+	
+	public ItemOrdenVentaDTO(){
+		
 	}
-	public void setTransaccion(TROrdenVentaDTO transaccion) {
-		this.transaccion = transaccion;
+
+	public int getProductoId() {
+		return productoId;
 	}
-	public ArticuloDTO getArticulo() {
-		return articulo;
+	public void setProductoId(int productoId) {
+		this.productoId = productoId;
 	}
-	public void setArticulo(ArticuloDTO articulo) {
-		this.articulo = articulo;
-	}
+
 	public float getCantidad() {
 		return cantidad;
 	}
 	public void setCantidad(float cantidad) {
 		this.cantidad = cantidad;
 	}
-	public String getId() {
-		return id;
-	}
+
 
 	
 }

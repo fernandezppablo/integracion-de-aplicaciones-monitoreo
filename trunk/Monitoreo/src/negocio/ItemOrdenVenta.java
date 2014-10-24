@@ -16,16 +16,18 @@ import javax.persistence.PrimaryKeyJoinColumn;
 public class ItemOrdenVenta  extends PersistentObject{
 	
 	@ManyToOne
-	private TROrdenVenta transaccion;
+	@JoinColumn(name="TROrdenVentaId")
+	private TROrdenVenta TROrdenVentaId;
 	@OneToOne
 	private Articulo articulo;
 	private float cantidad;
 	
-	public TROrdenVenta getTransaccion() {
-		return transaccion;
+	
+	public TROrdenVenta getTROrdenVentaId() {
+		return TROrdenVentaId;
 	}
-	public void setTransaccion(TROrdenVenta transaccion) {
-		this.transaccion = transaccion;
+	public void setTROrdenVentaId(TROrdenVenta tROrdenVentaId) {
+		TROrdenVentaId = tROrdenVentaId;
 	}
 	public Articulo getArticulo() {
 		return articulo;

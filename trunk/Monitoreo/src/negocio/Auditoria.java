@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
 
@@ -16,29 +17,19 @@ import javax.persistence.OneToMany;
 @Entity
 public class Auditoria extends PersistentObject{
 	
-	@OneToMany(mappedBy="auditoria")
-	private Set<ItemAuditoria> itemsauditoria = new HashSet<ItemAuditoria>(); 
+	@OneToMany
+	@JoinColumn(name="auditoria")
+	private List<ItemAuditoria> itemsauditoria; 
 
-
-
-
-	public Set<ItemAuditoria> getItemsauditoria() {
+	public List<ItemAuditoria> getItemsauditoria() {
 		return itemsauditoria;
 	}
 
-
-
-
-	public void setItemsauditoria(Set<ItemAuditoria> itemsauditoria) {
+	public void setItemsauditoria(List<ItemAuditoria> itemsauditoria) {
 		this.itemsauditoria = itemsauditoria;
 	}
 
 
-
-
-	public void agregarItemAuditoria(ItemAuditoria agregar){
-		this.itemsauditoria.add(agregar);
-	}
 
 	
 }

@@ -78,7 +78,7 @@ public class TROrdenDespacho  extends PersistentObject{
 	public void setAsociada(TROrdenVenta asociada) {
 		if(asociada != null){
 			this.asociada = asociada;
-			this.fecha = asociada.getFecha();
+		//	this.fecha = asociada.getFecha();
 			this.latitud = asociada.getLatitud();
 			this.longitud =  asociada.getLongitud();
 			this.monto = asociada.getMonto();

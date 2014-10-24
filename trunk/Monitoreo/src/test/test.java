@@ -27,27 +27,6 @@ public class test {
 
 	public static void main(String[] args) {
 	
-		WSMonitoreo monitoreo = new WSMonitoreo();
-		FileReader f;
-		try {
-			f = new FileReader(generate("log.xml"));
-			BufferedReader b = new BufferedReader(f);
-			String cadena = "";
-			String linea;
-			while((linea = b.readLine())!=null) {
-				cadena = cadena + linea;
-			}
-			System.out.println(monitoreo.informarLog(cadena));
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 	
 	}

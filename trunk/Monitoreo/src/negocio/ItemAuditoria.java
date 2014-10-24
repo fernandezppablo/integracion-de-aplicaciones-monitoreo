@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlElement;
@@ -24,6 +25,7 @@ public class ItemAuditoria extends PersistentObject{
 	private Date fecha;
 	private int idModulo; 
 	@ManyToOne
+	@JoinColumn(name="auditoria")
 	private Auditoria auditoria;
 	
 	

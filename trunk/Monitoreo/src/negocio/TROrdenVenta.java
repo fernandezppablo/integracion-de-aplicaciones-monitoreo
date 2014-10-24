@@ -1,6 +1,7 @@
 package negocio;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -18,7 +19,7 @@ public class TROrdenVenta extends PersistentObject{
 	private Estado estado;
 	private float latitud;
 	private float longitud;
-	private String fecha;
+	private Date fecha;
 	private float monto;
 	
 	private Integer numero;
@@ -43,10 +44,11 @@ public class TROrdenVenta extends PersistentObject{
 	public void setLongitud(float longitud) {
 		this.longitud = longitud;
 	}
-	public String getFecha() {
+	
+	public Date getFecha() {
 		return fecha;
 	}
-	public void setFecha(String fecha) {
+	public void setFecha(Date fecha) {
 		this.fecha = fecha;
 	}
 	public float getMonto() {

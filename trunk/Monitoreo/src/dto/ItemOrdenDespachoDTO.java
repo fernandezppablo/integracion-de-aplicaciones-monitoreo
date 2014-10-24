@@ -32,7 +32,7 @@ public class ItemOrdenDespachoDTO {
 	public void setItemasociado(ItemOrdenVentaDTO itemasociado) {
 		if(itemasociado != null){
 			this.itemasociado = itemasociado;
-			this.articulo = itemasociado.getArticulo();
+	
 			this.cantidad = itemasociado.getCantidad();
 		}
 	

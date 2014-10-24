@@ -9,4 +9,11 @@ public class PersistentObject {
 	@Id
 	@GeneratedValue
 	private int id;
+
+	public int getId() {
+		return id;
+	}
+
+	
+	
 }

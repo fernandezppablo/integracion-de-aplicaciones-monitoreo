@@ -2,19 +2,14 @@ package interfaces;
 
 import java.util.List;
 import java.util.Map;
-
 import javax.ejb.Local;
-import javax.ejb.Remote;
-import javax.ejb.Stateless;
-
+import dto.AuditoriaDTO;
+import dto.TROrdenVentaDTO;
 import negocio.Articulo;
-import negocio.Auditoria;
-import negocio.ItemOrdenVenta;
-import negocio.TROrdenVenta;
 @Local
 public interface AuditoriaDAOInterfaz {
-	public void grabarAuditoria(Auditoria aGrabar);
-	public void grabarVenta(TROrdenVenta trov);
+	public void grabarAuditoria(AuditoriaDTO aGrabar) throws Exception;
+	public void grabarVenta(TROrdenVentaDTO trov) throws Exception;
 	public Articulo traerArticuloPorCodigo(Integer id);
 	public List<Map<Integer,Integer>> rankingArticulos();
 

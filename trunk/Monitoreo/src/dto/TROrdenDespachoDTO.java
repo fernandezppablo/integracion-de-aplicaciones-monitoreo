@@ -69,14 +69,10 @@ public class TROrdenDespachoDTO {
 	public void setAsociada(TROrdenVentaDTO asociada) {
 		if(asociada != null){
 			this.asociada = asociada;
-			this.fecha = asociada.getFecha();
-			this.latitud = asociada.getLatitud();
-			this.longitud =  asociada.getLongitud();
+		
+
 			this.monto = asociada.getMonto();
-			for(ItemOrdenVentaDTO actual: asociada.getItems()){
-				ItemOrdenDespachoDTO nuevo = new ItemOrdenDespachoDTO();
-				nuevo.setItemasociado(actual);
-			}
+
 		}
 	}
 	public String getId() {
