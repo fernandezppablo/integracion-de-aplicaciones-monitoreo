@@ -1,6 +1,7 @@
 package webservices;
 
 import interfaces.AuditoriaDAOInterfaz;
+import interfaces.TROrdenVentaDAOInterfaz;
 
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -24,7 +25,9 @@ import dto.TROrdenVentaDTO;
 public class WSMonitoreo{
 
 	@EJB(name = "AuditoriaDAO")
-	private AuditoriaDAOInterfaz dao;
+	private AuditoriaDAOInterfaz daoauditoria;
+	@EJB(name = "TROrdenVentaDAO")
+	private TROrdenVentaDAOInterfaz daoventa;
 	@WebMethod
 	public String informarLog(String xml) {
 
@@ -38,7 +41,7 @@ public class WSMonitoreo{
 				}
 				AuditoriaDTO nueva = new AuditoriaDTO();
 				nueva.agregarItemAuditoria(item);
-				dao.grabarAuditoria(nueva);
+				daoauditoria.grabarAuditoria(nueva);
 
 
 			} catch (JAXBException e) {
@@ -71,7 +74,7 @@ public class WSMonitoreo{
 			TROrdenVentaDTO trorden = (TROrdenVentaDTO) desencripta.unmarshal(new StringReader(xml));
 			if(trorden.getFecha()!=null){
 				try {
-					dao.grabarVenta(trorden);
+					daoventa.grabarVenta(trorden);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					return generarRespuesta(false,e.getMessage());

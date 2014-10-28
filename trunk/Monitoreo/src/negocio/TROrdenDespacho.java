@@ -20,7 +20,7 @@ public class TROrdenDespacho  extends PersistentObject{
 	private float longitud;
 	private String fecha;
 	private float monto;
-	private String numero;
+	
 	@OneToOne
 	private TROrdenVenta asociada;
 	@OneToMany(mappedBy="transaccion")
@@ -54,12 +54,6 @@ public class TROrdenDespacho  extends PersistentObject{
 	}
 	public void setMonto(float monto) {
 		this.monto = monto;
-	}
-	public String getNumero() {
-		return numero;
-	}
-	public void setNumero(String numero) {
-		this.numero = numero;
 	}
 	public List<ItemOrdenDespacho> getItems() {
 		return items;

@@ -1,25 +1,15 @@
 package Web;
 
-import java.util.List;
-import java.util.Map;
-
-import interfaces.AuditoriaDAOInterfaz;
-import interfaces.DespachoDAOInterfaz;
+import interfaces.TROrdenDespachoDAOInterfaz;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
-import daos.DespachoDAO;
-import dto.DespachoDTOREST;
 import dto.MensajeRespuestaDTO;
 
 /**
@@ -29,8 +19,8 @@ import dto.MensajeRespuestaDTO;
 @Path("REST")
 public class RSMonitoreo {
 	//(name = "DespachoDAO")
-	@EJB
-    private DespachoDAO dao;
+	@EJB(name="TROrdenDespachoDAO")
+    private TROrdenDespachoDAOInterfaz dao;
     /**
      * Default constructor. 
      */

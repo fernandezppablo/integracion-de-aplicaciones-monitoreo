@@ -1,32 +1,29 @@
 package daos;
 
+import interfaces.TROrdenDespachoDAOInterfaz;
+
 import java.util.List;
 
-import interfaces.DespachoDAOInterfaz;
-
-import javax.ejb.Singleton;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.ws.rs.Path;
-
 import enums.Estado;
-import negocio.Despacho;
+import negocio.TROrdenDespacho;
 
 
 @Stateless
-public class DespachoDAO {
+public class TROrdenDespachoDAO implements TROrdenDespachoDAOInterfaz{
 	@PersistenceContext(unitName = "TP")	
 	private EntityManager em;
 
 
 	public void cambiarEstadoDespacho(int numero) throws Exception {
-		Query q = em.createQuery("SELECT D FROM Despacho D WHERE D.id = :NUMERO");
+		Query q = em.createQuery("SELECT D FROM TROrdenDespacho D WHERE D.id = :NUMERO");
 		q.setParameter("NUMERO", numero);
-		List<Despacho> despachos = (List<Despacho>) q.getResultList();
+		List<TROrdenDespacho> despachos = (List<TROrdenDespacho>) q.getResultList();
 		if(despachos.size()!=0){
-			Despacho despacho = despachos.get(0);
+			TROrdenDespacho despacho = despachos.get(0);
 			if(despacho.getEstado().equals(Estado.Abierta)){
 				despacho.setEstado(Estado.Cerrada);
 				em.persist(despacho);
