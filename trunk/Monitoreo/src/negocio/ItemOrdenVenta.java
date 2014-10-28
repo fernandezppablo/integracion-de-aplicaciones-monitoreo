@@ -18,8 +18,7 @@ public class ItemOrdenVenta  extends PersistentObject{
 	@ManyToOne
 	@JoinColumn(name="TROrdenVentaId")
 	private TROrdenVenta TROrdenVentaId;
-	@OneToOne
-	private Articulo articulo;
+	private int articulo;
 	private float cantidad;
 	
 	
@@ -29,16 +28,18 @@ public class ItemOrdenVenta  extends PersistentObject{
 	public void setTROrdenVentaId(TROrdenVenta tROrdenVentaId) {
 		TROrdenVentaId = tROrdenVentaId;
 	}
-	public Articulo getArticulo() {
-		return articulo;
-	}
-	public void setArticulo(Articulo articulo) {
-		this.articulo = articulo;
-	}
 	public float getCantidad() {
 		return cantidad;
 	}
 	public void setCantidad(float cantidad) {
 		this.cantidad = cantidad;
 	}
+	public int getArticulo() {
+		return articulo;
+	}
+	public void setArticulo(int articulo) {
+		this.articulo = articulo;
+	}
+	
+	
 }

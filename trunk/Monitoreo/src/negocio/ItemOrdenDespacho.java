@@ -17,8 +17,7 @@ public class ItemOrdenDespacho extends PersistentObject{
 	
 	@ManyToOne
 	private TROrdenDespacho transaccion;
-	@OneToOne
-	private Articulo articulo;
+	private int articulo;
 	@OneToOne
 	private ItemOrdenVenta itemasociado;
 	private float cantidad;
@@ -27,12 +26,6 @@ public class ItemOrdenDespacho extends PersistentObject{
 	}
 	public void setTransaccion(TROrdenDespacho transaccion) {
 		this.transaccion = transaccion;
-	}
-	public Articulo getArticulo() {
-		return articulo;
-	}
-	public void setArticulo(Articulo articulo) {
-		this.articulo = articulo;
 	}
 	public float getCantidad() {
 		return cantidad;
@@ -51,6 +44,13 @@ public class ItemOrdenDespacho extends PersistentObject{
 		}
 	
 	}
+	public int getArticulo() {
+		return articulo;
+	}
+	public void setArticulo(int articulo) {
+		this.articulo = articulo;
+	}
+	
 	
 	
 	
