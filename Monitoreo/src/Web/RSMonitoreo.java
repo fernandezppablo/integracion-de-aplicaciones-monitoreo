@@ -55,9 +55,9 @@ public class RSMonitoreo {
     @Path("/cambioEstadoDespacho")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public MensajeRespuestaDTO cambiaEstadoDespacho(DespachoDTOREST despacho) {	
+    public MensajeRespuestaDTO cambiarOrdenEstadoDespacho(int despacho) {	
       try {
-		dao.cambiarEstadoDespacho(despacho.getDespachoId());
+		dao.cambiarEstadoDespacho(despacho);
 	} catch (Exception e) {
 		// TODO Auto-generated catch block
 		return generarRespuesta(false,e.getMessage());

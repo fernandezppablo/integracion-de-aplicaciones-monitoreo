@@ -2,19 +2,11 @@ package daos;
 
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import interfaces.AuditoriaDAOInterfaz;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import javax.ejb.EJB;
-import javax.ejb.LocalBean;
-import javax.ejb.PostActivate;
-import javax.ejb.PrePassivate;
-import javax.ejb.Stateful;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,7 +20,6 @@ import dto.AuditoriaDTO;
 import dto.ItemAuditoriaDTO;
 import dto.ItemOrdenVentaDTO;
 import dto.TROrdenVentaDTO;
-import negocio.Articulo;
 import negocio.Auditoria;
 import negocio.ItemAuditoria;
 import negocio.ItemOrdenVenta;
@@ -67,17 +58,13 @@ public class AuditoriaDAO implements AuditoriaDAOInterfaz{
 			em.persist(nueva);
 			List<ItemOrdenVenta> lista = new ArrayList<ItemOrdenVenta>();
 			for(ItemOrdenVentaDTO iov: trov.getVentaItems()){
-				Articulo articulo = this.traerArticuloPorCodigo(iov.getProductoId());
-				if(articulo!=null){
-					ItemOrdenVenta item = new ItemOrdenVenta();
-					item.setArticulo(articulo);
-					item.setCantidad(iov.getCantidad());
-					item.setTROrdenVentaId(nueva);
-					lista.add(item);
-				}else{
-					em.remove(nueva);
-					throw new Exception("Item con articulo inexistente. Id articulo inexistente: " + iov.getProductoId());
-				}
+			
+				ItemOrdenVenta item = new ItemOrdenVenta();
+				item.setArticulo(iov.getProductoId());
+				item.setCantidad(iov.getCantidad());
+				item.setTROrdenVentaId(nueva);
+				lista.add(item);
+				
 			}
 			nueva.setItems(lista);
 			em.persist(nueva);
@@ -88,27 +75,7 @@ public class AuditoriaDAO implements AuditoriaDAOInterfaz{
 		
 	}
 
-	public Articulo traerArticuloPorCodigo(Integer id)
-	{
-		Articulo a = new Articulo();
-		
-		Query q =em.createQuery("select a from Articulo a where a.codigo=:artId").setParameter("artId", id);
-		try
-		{
-			List<Articulo> arts= (List<Articulo>)q.getResultList();
-			if(arts.size()!=1)
-			{
-				return null;
-			}
-			return arts.get(0);
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-			return null;
-		}
-		
-	}
+
 	
 	public List<Map<Integer,Integer>> rankingArticulos()
 	{

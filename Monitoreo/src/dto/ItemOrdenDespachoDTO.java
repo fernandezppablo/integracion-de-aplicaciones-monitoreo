@@ -1,46 +1,28 @@
 package dto;
 
+import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement
 public class ItemOrdenDespachoDTO {
-	private String id;
-
-	private TROrdenDespachoDTO transaccion;
-	private ArticuloDTO articulo;
-	private ItemOrdenVentaDTO itemasociado;
+	private int codigoArticulo;
 	private float cantidad;
-	public TROrdenDespachoDTO getTransaccion() {
-		return transaccion;
+
+	public int getCodigoArticulo() {
+		return codigoArticulo;
 	}
-	public void setTransaccion(TROrdenDespachoDTO transaccion) {
-		this.transaccion = transaccion;
+
+	public void setCodigoArticulo(int codigoArticulo) {
+		this.codigoArticulo = codigoArticulo;
 	}
-	public ArticuloDTO getArticulo() {
-		return articulo;
-	}
-	public void setArticulo(ArticuloDTO articulo) {
-		this.articulo = articulo;
-	}
+
 	public float getCantidad() {
 		return cantidad;
 	}
+
 	public void setCantidad(float cantidad) {
 		this.cantidad = cantidad;
 	}
-	public ItemOrdenVentaDTO getItemasociado() {
-		return itemasociado;
-	}
-	public void setItemasociado(ItemOrdenVentaDTO itemasociado) {
-		if(itemasociado != null){
-			this.itemasociado = itemasociado;
 	
-			this.cantidad = itemasociado.getCantidad();
-		}
-	
-	}
-	public String getId() {
-		return id;
-	}
-
 	
 	
 	
