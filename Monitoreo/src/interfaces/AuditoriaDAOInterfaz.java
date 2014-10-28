@@ -9,7 +9,5 @@ import dto.TROrdenVentaDTO;
 @Local
 public interface AuditoriaDAOInterfaz {
 	public void grabarAuditoria(AuditoriaDTO aGrabar) throws Exception;
-	public void grabarVenta(TROrdenVentaDTO trov) throws Exception;
-	public List<Map<Integer,Integer>> rankingArticulos();
 
 }

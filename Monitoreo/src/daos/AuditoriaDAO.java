@@ -45,61 +45,11 @@ public class AuditoriaDAO implements AuditoriaDAOInterfaz{
 
 	}
 	
-	public void grabarVenta(TROrdenVentaDTO trov) throws Exception{
-		
 
-		TROrdenVenta nueva = new TROrdenVenta();
-		nueva.setFecha(trov.getFecha());
-		nueva.setLatitud(trov.getCoordenadaX());
-		nueva.setLongitud(trov.getCoordenadaY());
-		nueva.setMonto(trov.getMonto());
-		nueva.setNumero(trov.getVentaId());
-		if(trov.getVentaItems().size()!=0){
-			em.persist(nueva);
-			List<ItemOrdenVenta> lista = new ArrayList<ItemOrdenVenta>();
-			for(ItemOrdenVentaDTO iov: trov.getVentaItems()){
-			
-				ItemOrdenVenta item = new ItemOrdenVenta();
-				item.setArticulo(iov.getProductoId());
-				item.setCantidad(iov.getCantidad());
-				item.setTROrdenVentaId(nueva);
-				lista.add(item);
-				
-			}
-			nueva.setItems(lista);
-			em.persist(nueva);
-		}else{
-			throw new Exception("Transaccion sin items");
-		}
-		
-		
-	}
 
 
 	
-	public List<Map<Integer,Integer>> rankingArticulos()
-	{
-		List<Map<Integer,Integer>> resultado = new ArrayList<Map<Integer,Integer>>();
-		Query q = em.createQuery(
-				"select new map(a.id, SUM(i.cantidad)) " + 
-						"from ItemOrdenVenta i inner join Articulo a on a.id = i.Articulo " +
-						"group by a.id order by SUM(i,cantidad)"
-				);
-		resultado = q.getResultList();
-		return resultado;
-	}
-	
-	/*public void actualizarCantidadDeVentas(ItemOrdenVenta iov)
-	{
-		Query q =em.createQuery("update Articulo a "
-				+ "set cantidadVentas=cantidadVentas+ :cantidad"
-				+ " where a.codigo=:artId");
-		q.setParameter("artId", iov.getArticulo().getCodigo());
-		q.setParameter("cantidad",iov.getCantidad());
-		q.executeUpdate();
-		
-	}
-*/
+
 
 	
 }
