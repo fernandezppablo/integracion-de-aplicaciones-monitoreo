@@ -31,12 +31,12 @@ public class ClienteWS {
 		/************************************/
 		/* TEST INFORMAR LOG                */
 		/************************************/
-		//String resultado = port.informarLog(generateLog("log"));
+		String resultado = port.informarLog(generateLog("log"));
 		/************************************/
 		/* TEST REGISTRAR VENTA             */
 		/************************************/
 		//System.out.println(generateVenta());
-		String resultado = port.registrarVenta(generateVenta());
+		//String resultado = port.registrarVenta(generateVenta());
 		System.out.println(resultado);
 		
 		

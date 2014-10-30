@@ -29,7 +29,7 @@ import javax.xml.bind.JAXBException;
 import dto.AuditoriaDTO;
 import dto.ItemAuditoriaDTO;
 
-@MessageDriven
+
 public class JMSServices {
 	
 	//Data para conectarse por JDNI no se si va a hacer falta
@@ -65,7 +65,7 @@ public class JMSServices {
 	}
 	//TEST //////////////////////////////////////
 	public void PonerXmlEnCola(String xml){
-		this.InicializarJMS();
+
 		ConnectionFactory cf = null;
 		Queue q = null;
 		Connection c = null;

@@ -6,7 +6,7 @@
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry combineaccessrules="false" kind="src" path="/Monitoreo"/>
 	<classpathentry kind="lib" path="/Users/oiacub/Downloads/json-simple-1.1.1.jar"/>
+	<classpathentry kind="lib" path="/Applications/jbdevstudio/runtimes/jboss-eap/bin/client/jboss-client.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
