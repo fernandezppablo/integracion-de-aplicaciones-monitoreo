@@ -1,5 +1,6 @@
 package jms;
 
+import java.io.StringReader;
 import java.util.Properties;
 
 import javax.jms.Connection;
@@ -13,6 +14,11 @@ import javax.jms.TextMessage;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+
+import dto.AuditoriaDTO;
+import dto.ItemAuditoriaDTO;
 
 public class JMSServices {
 	
@@ -45,7 +51,7 @@ public class JMSServices {
 
 	}
 	
-	public void EnviarAuditoriaAModuloEmails(){
+	public void EnviarAuditoriaAModuloEmails(String xml){
 		this.InicializarJMS();
 		ConnectionFactory cf = null;
 		Queue q = null;
@@ -92,26 +98,20 @@ public class JMSServices {
 		}
 		//Mandar un mensaje
 		
-		// ******************************************************************************
-		//                     Aca abajo habria que poner el xml.                      //
-		// *****************************************************************************
+		
 		
 		TextMessage message;
 		try {
-			message = s.createTextMessage("Aca va el mensaje con la data, osea el xml parseado y con toda la magia.");
+			message = s.createTextMessage(xml);
 			mp.send(message);
 		} catch (JMSException e) {
 			
 			e.printStackTrace();
 		}
 		
-		System.out.println("Hasta aca ok.!!!!!");
+		System.out.println("Se puso el xml en la cola.");
 		
-		
-		
-		
-		
-		
+		//TODO PROBAR!!!!
 		
 		
 	}
