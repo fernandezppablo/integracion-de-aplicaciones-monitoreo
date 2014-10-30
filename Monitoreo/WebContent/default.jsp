@@ -5,8 +5,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Sistema de Monitoreo</title>
-<link type="text/css" href="<c:url value="/WebContent/css/bootstrap.css" />" rel="stylesheet">
-<script type="text/javascript" src="<c:url value="/WebContent/scripts/jquery.js" />"></script>
+<link type="text/css" href="/WebContent/css/bootstrap.css"/>
+<script type="text/javascript" src="/WebContent/scripts/jquery.js"></script>
 </head>
 <body>
 Sistema de Monitoreo
