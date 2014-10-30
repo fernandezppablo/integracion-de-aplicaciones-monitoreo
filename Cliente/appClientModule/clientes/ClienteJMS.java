@@ -11,7 +11,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import jms.JMSServices;
+
 
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
@@ -29,7 +29,7 @@ import webservices.WSMonitoreoService;
 public class ClienteJMS {
 	public static void main(String[] args) throws Exception{
 		// TODO Auto-generated method stub
-		
+		/*
 		//Crear e inicializar jms
 		JMSServices jms = new JMSServices();
 		jms.InicializarJMS();
@@ -37,7 +37,7 @@ public class ClienteJMS {
 		jms.PonerXmlEnCola(generateLog("log.xml"));
 		//Leer de la cola
 		jms.generarLog(generateLog("log.xml"));
-		
+		*/
 		
 		
 		

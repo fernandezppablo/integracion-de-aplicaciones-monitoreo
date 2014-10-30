@@ -21,8 +21,7 @@ public class ClienteREST {
 	private static final String targetURL = "http://localhost:8080/Monitoreo/Web/REST/cambioEstadoDespacho";
 	
 	public static void main(String[] args) throws IOException {
-		JSONObject objeto = new JSONObject();
-		objeto.put("despachoId", 23455);
+		
 
 		try {
 		
@@ -36,7 +35,7 @@ public class ClienteREST {
 
             httpConnection.setRequestProperty("Content-Type", "application/json");
 
-            String input = objeto.toJSONString();
+            String input = "1";
 
             OutputStream outputStream = httpConnection.getOutputStream();
 
