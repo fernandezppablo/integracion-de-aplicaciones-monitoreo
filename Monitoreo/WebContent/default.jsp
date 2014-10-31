@@ -5,10 +5,16 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Sistema de Monitoreo</title>
-<link type="text/css" href="/WebContent/css/bootstrap.css"/>
-<script type="text/javascript" src="/WebContent/scripts/jquery.js"></script>
+<link rel="stylesheet" type="text/css" href="styles/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="styles/grayscale.css" />
+<link rel="stylesheet" type="text/css" href="styles/bootstrap-theme.css" />
+<script type="text/javascript" src="scripts/jquery.js"></script>
 </head>
 <body>
-Sistema de Monitoreo
+<br>
+<div align="center">
+<h4 class="btn btn-primary">Sistema de Monitoreo</h4>
+</div>
+
 </body>
 </html>
