@@ -1,197 +1,109 @@
 package clientes;
-import java.io.BufferedReader;
-import java.io.FileReader;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.Result;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
+import java.util.Properties;
 
-
-
-import org.w3c.dom.DOMImplementation;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Text;
-
-import webservices.WSMonitoreo;
-import webservices.WSMonitoreoService;
-
-
-
-
-
+import javax.jms.Connection;
+import javax.jms.ConnectionFactory;
+import javax.jms.JMSException;
+import javax.jms.MessageProducer;
+import javax.jms.Queue;
+import javax.jms.Session;
+import javax.jms.TextMessage;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 
 public class ClienteJMS {
-	public static void main(String[] args) throws Exception{
-		// TODO Auto-generated method stub
-		/*
-		//Crear e inicializar jms
-		JMSServices jms = new JMSServices();
-		jms.InicializarJMS();
-		//Poner en cola
-		jms.PonerXmlEnCola(generateLog("log.xml"));
-		//Leer de la cola
-		jms.generarLog(generateLog("log.xml"));
-		*/
+
+
+    private static String user = "monitoreo";
+	private static String pass = "monitoreo1.0";
+	private static InitialContext context = null;
+    public static void main(String[] args) {
+    	//Propiedas de coneccion
+		Properties config = new Properties();
+		config.put(Context.INITIAL_CONTEXT_FACTORY, "org.jboss.naming.remote.client.InitialContextFactory");
+		config.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
+		config.put(Context.PROVIDER_URL, "remote://localhost:4447");
+		config.put(Context.SECURITY_PRINCIPAL, user);
+		config.put(Context.SECURITY_CREDENTIALS, pass);
+		
+		//Instanciacion del contexto inicial
+		try {
+			context = new InitialContext(config);
+			
+		} catch (NamingException e) {
+			System.out.println("Error al inicializar el contexto!");
+			e.printStackTrace();
+			return;
+		}
+		System.out.println("Contexto inicializado correctamente!");
+		PonerXmlEnCola("Test");
+    }
+    
+    public static void PonerXmlEnCola(String xml){
+
+		ConnectionFactory cf = null;
+		Queue q = null;
+		Connection c = null;
+		Session s = null;
+		MessageProducer mp = null;
+		//Buscamos la connection factory y la cola
+		try {
+			cf = (ConnectionFactory) context.lookup("jms/RemoteConnectionFactory");
+			q = (Queue)  context.lookup("queue/monitoreo");
+		
+			
+		} catch (NamingException e) {
+			System.out.println("Error al buscar la connection factory y la cola.");
+			e.printStackTrace();
+		}
+		//Crear la coneccion
+		try {
+			c = cf.createConnection(user,pass);
+		} catch (JMSException e) {
+			System.out.println("Error al crear la coneccion.");
+			e.printStackTrace();
+		}
+		//Crear la sesion
+		try {
+			s = c.createSession(false, Session.AUTO_ACKNOWLEDGE);
+		} catch (JMSException e) {
+			System.out.println("Error al crear la sesion");
+			e.printStackTrace();
+		}
+		//Crear el productor de mensajes
+		try {
+			mp = s.createProducer(q);
+		} catch (JMSException e) {
+			System.out.println("Error al crear el productor de mensajes.");
+			e.printStackTrace();
+		}
+		//Iniciar la coneccion
+		try {
+			c.start();
+		} catch (JMSException e) {
+			System.out.println("Error al iniciar la coneccion");
+			e.printStackTrace();
+		}
+		//Mandar un mensaje
 		
 		
+		
+		TextMessage message;
+		try {
+			message = s.createTextMessage(xml);
+			mp.send(message);
+		} catch (JMSException e) {
+			
+			e.printStackTrace();
+		}
+		
+		System.out.println("Se puso el xml en la cola.");
+		
+		//TODO PROBAR!!!!
 		
 		
 	}
-	
-	
-	/* (non-Java-doc)
-	 * @see java.lang.Object#Object()
-	 */
-	public ClienteJMS() {
-		super();
-	
-	}
-	
-	public static String generateLog(String name) throws Exception{
-		 
-
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        DOMImplementation implementation = builder.getDOMImplementation();
-        Document document = implementation.createDocument(null, name, null);
-        document.setXmlVersion("1.0");
- 
-            //Main Node
-        Element raiz = document.getDocumentElement();
-        //Por cada key creamos un item que contendr‡ la key y el value
-
-        //Log jefe
-        //Element log = document.createElement("log"); 
-        //fecha
-        Element fecha = document.createElement("fecha"); 
-        Text nodeKeyValue = document.createTextNode("1999-12-05 12:04:23");
-        fecha.appendChild(nodeKeyValue);      
-        //idModulo
-        Element idModulo = document.createElement("idModulo"); 
-        Text nodeValueValue = document.createTextNode("111");                
-        idModulo.appendChild(nodeValueValue);
-      //idModulo
-        Element mensaje = document.createElement("mensaje"); 
-        nodeValueValue = document.createTextNode("Correccion exitosa");                
-        mensaje.appendChild(nodeValueValue);
-        //append keyNode and valueNode to itemNode
-    //    log.appendChild(fecha);
-    //    log.appendChild(idModulo);
-    //    log.appendChild(mensaje);
-        
-        //append itemNode to raiz
-        raiz.appendChild(fecha); //pegamos el elemento a la raiz "Documento"
-        raiz.appendChild(idModulo); //pegamos el elemento a la raiz "Documento"   
-        raiz.appendChild(mensaje); //pegamos el elemento a la raiz "Documento"
-        //Generate XML
-        Source source = new DOMSource(document);
-        // Esto sirve para guardar el xml
-        //Indicamos donde lo queremos almacenar
-        java.io.File temp = new java.io.File(name+".xml");
-        Result result = new StreamResult(temp); //nombre del archivo
-        Transformer transformer = TransformerFactory.newInstance().newTransformer();
-        transformer.transform(source, result);
-        String cadena = "";
-		String linea;
-	    FileReader f = new FileReader("log.xml");
-	    BufferedReader b = new BufferedReader(f);
-	    while((linea = b.readLine())!=null) {
-	          cadena = cadena + linea;
-	     }
-        //
-	    
-	    return cadena;
-    }
-	public static String generateVenta() throws Exception{
-		 
-
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        DOMImplementation implementation = builder.getDOMImplementation();
-        Document document = implementation.createDocument(null, "venta", null);
-        document.setXmlVersion("1.0");
- 
-            //Main Node
-        Element raiz = document.getDocumentElement();
-        //Por cada key creamos un item que contendr‡ la key y el value
-
-        //Log jefe
-        //Element log = document.createElement("log"); 
-        //fecha
-        Element ventaId = document.createElement("ventaId");
-        Text nodeValueValue = document.createTextNode("35");
-        ventaId.appendChild(nodeValueValue);
-        Element moduloId = document.createElement("moduloId"); 
-        nodeValueValue = document.createTextNode("5");
-        moduloId.appendChild(nodeValueValue);
-        Element cooX = document.createElement("coordenadaX"); 
-        nodeValueValue = document.createTextNode("56.45");
-        cooX.appendChild(nodeValueValue);
-        Element cooY = document.createElement("coordenadaY"); 
-        nodeValueValue = document.createTextNode("35.15");
-        cooY.appendChild(nodeValueValue);
-        Element fecha = document.createElement("fecha"); 
-        Text nodeKeyValue = document.createTextNode("1999-12-05 12:04:23");
-        fecha.appendChild(nodeKeyValue);
-        Element monto = document.createElement("monto"); 
-        nodeValueValue = document.createTextNode("50");
-        monto.appendChild(nodeValueValue);
-        Element ventaItems = document.createElement("ventaItems");
-        //Items
-        Element item1 = document.createElement("Item");
-        Element item1Id = document.createElement("productoId");
-        nodeValueValue = document.createTextNode("3");
-        item1Id.appendChild(nodeValueValue);
-        item1.appendChild(item1Id);
-        Element item1Cant = document.createElement("cantidad");
-        nodeValueValue = document.createTextNode("10");
-        item1Cant.appendChild(nodeValueValue);
-        item1.appendChild(item1Cant);
-        ventaItems.appendChild(item1);
-        Element item2 = document.createElement("Item");
-        Element item2Id = document.createElement("productoId");
-        nodeValueValue = document.createTextNode("3");
-        item2Id.appendChild(nodeValueValue);
-        item2.appendChild(item2Id);
-        Element item2Cant = document.createElement("cantidad");
-        nodeValueValue = document.createTextNode("22");
-        item2Cant.appendChild(nodeValueValue);
-        item2.appendChild(item2Cant);
-        ventaItems.appendChild(item2);
-
-        
-        //append itemNode to raiz
-        raiz.appendChild(ventaId); //pegamos el elemento a la raiz "Documento"
-        raiz.appendChild(moduloId);
-        raiz.appendChild(cooX);
-        raiz.appendChild(cooY);
-        raiz.appendChild(fecha);
-        raiz.appendChild(monto);
-        raiz.appendChild(ventaItems);
-        //Generate XML
-        Source source = new DOMSource(document);
-        // Esto sirve para guardar el xml
-        //Indicamos donde lo queremos almacenar
-        java.io.File temp = new java.io.File("venta.xml");
-        Result result = new StreamResult(temp); //nombre del archivo
-        Transformer transformer = TransformerFactory.newInstance().newTransformer();
-        transformer.transform(source, result);
-        String cadena = "";
-		String linea;
-	    FileReader f = new FileReader("venta.xml");
-	    BufferedReader b = new BufferedReader(f);
-	    while((linea = b.readLine())!=null) {
-	          cadena = cadena + linea;
-	     }
-        //
-	    
-	    return cadena;
-    }
 
 }
