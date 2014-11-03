@@ -26,6 +26,7 @@ public class TROrdenVentaDAO implements TROrdenVentaDAOInterfaz{
 		nueva.setLongitud(trov.getCoordenadaY());
 		nueva.setMonto(trov.getMonto());
 		nueva.setNumero(trov.getVentaId());
+		nueva.setModuloId(trov.getModuloId());
 		if(trov.getVentaItems().size()!=0){
 			em.persist(nueva);
 			List<ItemOrdenVenta> lista = new ArrayList<ItemOrdenVenta>();

@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
@@ -22,6 +23,7 @@ public class TROrdenDespacho  extends PersistentObject{
 	private float monto;
 	
 	@OneToOne
+	@JoinColumn(name="asociada")
 	private TROrdenVenta asociada;
 	@OneToMany(mappedBy="transaccion")
 	private List<ItemOrdenDespacho> items = new ArrayList<ItemOrdenDespacho>();

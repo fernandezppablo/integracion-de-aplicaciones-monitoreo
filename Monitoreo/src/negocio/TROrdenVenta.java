@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import enums.Estado;
 
@@ -21,11 +22,13 @@ public class TROrdenVenta extends PersistentObject{
 	private float longitud;
 	private Date fecha;
 	private float monto;
-	
+	private int moduloId;
 	private Integer numero;
 	@OneToMany(cascade=CascadeType.ALL)
 	@JoinColumn(name="TROrdenVentaId")
 	private List<ItemOrdenVenta> items = new ArrayList<ItemOrdenVenta>();
+	@OneToOne
+	private TROrdenVenta asociada;
 	public Estado getEstado() {
 		return estado;
 	}
@@ -73,4 +76,11 @@ public class TROrdenVenta extends PersistentObject{
 	public void agregarItem(ItemOrdenVenta item){
 		this.items.add(item);
 	}
+	public int getModuloId() {
+		return moduloId;
+	}
+	public void setModuloId(int moduloId) {
+		this.moduloId = moduloId;
+	}
+	
 }
