@@ -44,6 +44,7 @@ public class AuditoriaDAO implements AuditoriaDAOInterfaz{
 		em.persist(nueva);
 
 	}
+
 	
 
 

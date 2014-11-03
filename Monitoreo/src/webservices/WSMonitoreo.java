@@ -29,7 +29,7 @@ public class WSMonitoreo{
 	@EJB(name = "TROrdenVentaDAO")
 	private TROrdenVentaDAOInterfaz daoventa;
 	@WebMethod
-	public String informarLog(String xml) {
+	public String enviarInformeAuditoria(String xml) {
 
 			JAXBContext jaxbcontext;
 			try {

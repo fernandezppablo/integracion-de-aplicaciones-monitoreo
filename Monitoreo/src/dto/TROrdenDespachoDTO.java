@@ -1,57 +1,51 @@
 package dto;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import enums.Estado;
 
+@XmlRootElement(name="despacho")
 public class TROrdenDespachoDTO {
-	
-	private String id;
-	private Estado estado;
-	private float latitud;
-	private float longitud;
-	private String fecha;
-	private float monto;
-	private String numero;
-	private TROrdenVentaDTO asociada;
-	private List<ItemOrdenDespachoDTO> items = new ArrayList<ItemOrdenDespachoDTO>();
-	public Estado getEstado() {
-		return estado;
+	private int nroDespacho;
+	private int nroVenta;
+	private int idModulo;
+	private Date fecha;
+	public List<ItemOrdenDespachoDTO> items;
+	public int getNroDespacho() {
+		return nroDespacho;
 	}
-	public void setEstado(Estado estado) {
-		this.estado = estado;
+	public void setNroDespacho(int nroDespacho) {
+		this.nroDespacho = nroDespacho;
 	}
-	public float getLatitud() {
-		return latitud;
+	public int getNroVenta() {
+		return nroVenta;
 	}
-	public void setLatitud(float latitud) {
-		this.latitud = latitud;
+	public void setNroVenta(int nroVenta) {
+		this.nroVenta = nroVenta;
 	}
-	public float getLongitud() {
-		return longitud;
+	public int getIdModulo() {
+		return idModulo;
 	}
-	public void setLongitud(float longitud) {
-		this.longitud = longitud;
+	public void setIdModulo(int idModulo) {
+		this.idModulo = idModulo;
 	}
-	public String getFecha() {
+	@XmlElement(name = "fecha")
+	@XmlJavaTypeAdapter(DateAdapter.class)
+	public Date getFecha() {
 		return fecha;
 	}
-	public void setFecha(String fecha) {
+	public void setFecha(Date fecha) {
 		this.fecha = fecha;
 	}
-	public float getMonto() {
-		return monto;
-	}
-	public void setMonto(float monto) {
-		this.monto = monto;
-	}
-	public String getNumero() {
-		return numero;
-	}
-	public void setNumero(String numero) {
-		this.numero = numero;
-	}
+	@XmlElement( name="item" )
+	@XmlElementWrapper( name="items" )
 	public List<ItemOrdenDespachoDTO> getItems() {
 		return items;
 	}
@@ -59,26 +53,7 @@ public class TROrdenDespachoDTO {
 		this.items = items;
 	}
 	
-	public void agregarItem(ItemOrdenDespachoDTO item){
-		this.items.add(item);
-	}
-	public TROrdenVentaDTO getAsociada() {
-		return asociada;
-	}
-	//Con esta funcion copiamos todos los datos de la orden de venta
-	public void setAsociada(TROrdenVentaDTO asociada) {
-		if(asociada != null){
-			this.asociada = asociada;
-		
 
-			this.monto = asociada.getMonto();
-
-		}
-	}
-	public String getId() {
-		return id;
-	}
-	
 	
 	
 }
