@@ -3,6 +3,17 @@ package interfaces;
 import java.util.List;
 import java.util.Map;
 
+import dto.DespachoDTO;
+import dto.ItemAuditoriaDTO;
+import dto.ItemRankingDTO;
+import dto.TROrdenVentaDTO;
+
 public interface ServiciosVariosInterfaz {
-	public List<Map<Integer,Integer>> rankingArticulos();
+	public List<ItemRankingDTO> rankingArticulos();
+	public void enviarRanking(List<ItemRankingDTO> ranking) throws Exception ;
+	public void mandarDespacho(DespachoDTO aMandar) throws Exception;
+	public List<DespachoDTO> getDespachos();
+	public List<TROrdenVentaDTO> getOrdenesVentaSinAsociar();
+	public List<TROrdenVentaDTO> getOrdenesVentaAsociadas();
+	public List<ItemAuditoriaDTO> getItemsAuditoria();
 }
