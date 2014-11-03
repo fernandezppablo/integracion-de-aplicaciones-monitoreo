@@ -1,0 +1,366 @@
+
+
+/***
+	Generales
+**/
+
+
+@font-face {
+	font-family: "Neou";
+	src: url('./Neou-Thin.ttf');
+}
+
+#banner {
+	position: fixed;
+	height: 75px;
+	right: 0px;
+	left: 10%;
+	padding-left: 10%;
+	padding-top: 4px;
+	background-color: #454545;
+}
+
+#banner h1 {
+	color: white;
+	font-family: 'Neou';
+}
+
+#all-content {
+	position: absolute;
+	left: 10%;
+	top: 75px;
+	right: 0px;
+}
+
+#data-pane {
+	position: fixed;
+	top: 0px;
+	right: -60%;
+	bottom: 0px;
+	width: 60%;
+	z-index: 10;
+	border-left: 1px solid black;
+	background-color: white;
+	-webkit-transition: all 0.5s ease;
+	-moz-transition: all 0.5s ease;
+	-o-transition: all 0.5s ease;
+	transition: all 0.5s ease;
+}
+.data-pane-header {
+	background-color: #46A3F0;
+	padding-top: 10px;
+}
+.data-pane-header h1 {
+	color: white;
+	font-family: "Neou";
+	display: inline-block;
+	margin-left: 5%;
+}
+.data-pane-close {
+	color: white;
+	font-size: 2em;
+	margin-left: 2%;
+}
+.data-pane-close:hover {
+	cursor: pointer;
+	color: red;
+}
+
+.content-title {
+	padding-left: 20px;
+	padding-top: 10px;
+	border-bottom: 3px solid #46A3F0;
+}
+
+.content-title h3 {
+	color: #46A3F0;
+}
+
+.icon-bar {
+	background-color: #46A3F0;
+	width: 10%;
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	bottom: 0px;
+}
+
+.icon-bar label {
+	color: white;
+	font-family: 'Neou';
+	text-align: center;
+}
+
+.item {
+	padding: 20% 0;
+	display: block;
+}
+
+.item label {
+	width: 70%;
+	margin-top: 5%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.item i {
+	margin-left: 37%;
+	font-size: 2em;
+	color: white;
+}
+
+.item:hover {
+	background-color: #448CC7;
+	cursor: pointer;
+}
+
+
+
+
+
+/***
+	Panel de Logistica
+**/
+
+#ventas-container {
+	margin-top: 30px;
+}
+
+.venta {
+	width: 200px !important;
+	height: 150px !important;
+	border-radius: 5px;
+	margin-right: 1%;
+	border: 1px solid black;
+	padding: 0px !important;
+	position: relative;
+	-webkit-box-shadow: 0 8px 6px -6px black;
+	-moz-box-shadow: 0 8px 6px -6px black;
+    box-shadow: 0 8px 6px -6px black;
+}
+
+.venta:hover {
+	border: 2px solid #46A3F0;
+	cursor: pointer;
+}
+
+.venta .venta-descripcion {
+	list-style-type: none;
+	margin: 0px 0px 0px 10px;
+	padding-top: 18px;
+}
+
+.venta .venta-descripcion label{
+	display: inline;
+}
+
+.venta .venta-descripcion li{
+	display: block;
+	width: 95%;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: left;
+}
+
+
+
+.venta .venta-header {
+	background-color: #454545;
+	height: 40px;
+}
+
+.venta:hover .venta-header{
+	background-color: #46A3F0;
+}
+
+.venta .venta-titulo {
+	color: white;
+	text-align: left;
+	margin-top: 0px;
+	padding-top: 7px;
+	margin-right: 20px;
+	margin-left: 5px;
+}
+
+.venta .assign {
+	font-size: 2em;
+	position: absolute;
+	right: 5px;
+	top: 0px;
+	color: white;
+}
+
+.venta.pending .venta-header{
+	background-color: #ED3232;
+}
+
+.venta:hover.pending {
+	border: 2px solid #ED3232;
+}
+
+.venta.done .venta-header{
+	background-color: #3ECF43;
+}
+
+.venta:hover.done {
+	border: 2px solid #3ECF43;
+}
+
+.venta.pending .venta-header .assign{
+	color: white;
+}
+
+
+/***
+	Panel de seleccionar despacho
+**/
+.despachos {
+	list-style-type: none;
+	margin-top: 20px;
+	margin-right: 10px;
+}
+
+#data-seleccionar-despacho h3 {
+	text-align: center;
+}
+
+#data-seleccionar-despacho label {
+	text-align: center;
+	display: block;
+}
+
+.despacho {
+	border: 1px solid #454545;
+	margin-top: 5px;
+}
+
+.despacho:hover {
+	background-color: #508BAB;
+	border: 1px solid white;
+}
+.despacho:hover .despacho-nombre {
+	color: white;
+	border-bottom-color: white;
+}
+.despacho:hover label {
+	color: white;
+}
+.despacho:hover .coordenadas span {
+	border: 1px solid white;
+}
+.despacho:hover .latitud {
+	color: white;
+}
+.despacho:hover .longitud {
+	color: white;
+}
+
+.despacho-nombre {
+	text-align: center;
+	color: #454545;
+	border-bottom: 1px solid #ccc;
+}
+
+.coordenadas span{
+	border-right: 1px solid #ccc;
+}
+
+.shadow {
+	-webkit-box-shadow: 0 8px 6px -6px black;
+	-moz-box-shadow: 0 8px 6px -6px black;
+    box-shadow: 0 8px 6px -6px black;
+}
+
+.latitud {
+	color: blue;
+}
+
+.longitud {
+	color: blue;
+}
+
+.despacho.seleccionado {
+	background-color: #508BAB;
+	border: 1px solid white;
+}
+.despacho.seleccionado .despacho-nombre {
+	color: white;
+	border-bottom-color: white;
+}
+.despacho.seleccionado label {
+	color: white;
+}
+.despacho.seleccionado .coordenadas span {
+	border: 1px solid white;
+}
+.despacho.seleccionado .latitud {
+	color: white;
+}
+.despacho.seleccionado .longitud {
+	color: white;
+}
+
+#confirmar-despacho {
+	margin-left: 10px;
+	margin-right: 15px;
+}
+
+.bottom-row {
+	position:absolute;
+	bottom: 10px;
+}
+
+
+/***
+	Monitoreo
+***/
+ .monitoreo-status {
+	color: #46A3F0;
+ }
+ .monitoreo-tabla {
+	margin-top: 15px;
+ }
+ 
+ 
+ 
+ /***
+	Reportes
+ ***/
+ .portal-venta:hover {
+	cursor: pointer;
+ }
+ .portales-reporte {
+	margin-top: 20px;
+ }
+ .portal-suma {
+	margin-top: 25px;
+	border: 1px solid #ccc;
+ }
+ .portal-resumen {
+	border-top: 1px solid #ccc;
+	padding: 10px;
+ }
+ 
+ .portal-resumen span {
+	font-weight: bold;
+ }
+ .portal-nombre {
+	border-bottom: 1px solid #ccc;
+ }
+ .portal-total {
+	color: #DE5050;
+ }
+ #data-ver-detalle-venta h3{
+	margin-left: 25px;
+ }
+ #data-ver-detalle-venta  h5{
+	margin-left: 25px;
+ }
+ #data-ver-detalle-venta label {
+	text-align: center;
+	display: block;
+}
+ #data-ver-detalle-venta .coordenadas{
+	border-bottom: 1px solid #ccc;
+	border-top: 1px solid #ccc;
+ }
