@@ -28,7 +28,7 @@ public class TROrdenVenta extends PersistentObject{
 	@JoinColumn(name="TROrdenVentaId")
 	private List<ItemOrdenVenta> items = new ArrayList<ItemOrdenVenta>();
 	@OneToOne
-	private TROrdenVenta asociada;
+	private TROrdenDespacho asociada;
 	public Estado getEstado() {
 		return estado;
 	}
@@ -81,6 +81,12 @@ public class TROrdenVenta extends PersistentObject{
 	}
 	public void setModuloId(int moduloId) {
 		this.moduloId = moduloId;
+	}
+	public TROrdenDespacho getAsociada() {
+		return asociada;
+	}
+	public void setAsociada(TROrdenDespacho asociada) {
+		this.asociada = asociada;
 	}
 	
 }
