@@ -70,8 +70,16 @@ public class JMSServices implements MessageListener  {
 			e.printStackTrace();
 		}
 		
-		System.out.println("Se guardo el xml.");
+		System.out.println("Se guardo el ItemAuditoria.");
 		
+		
+	}
+	
+	public void recibirMail(String xml){
+		
+		generarLog(xml);
+		
+		System.out.println("ItemAuditoria Guardado, funcionalidad para mandar mail no implementada.");
 		
 	}
 
