@@ -21,6 +21,7 @@ public class TROrdenVentaDTO {
 	private Date fecha;
 	private float monto;
 	private List<ItemOrdenVentaDTO> ventaItems;
+	private TROrdenDespachoDTO asociada;
 	public int getVentaId() {
 		return ventaId;
 	}
@@ -67,6 +68,13 @@ public class TROrdenVentaDTO {
 	public void setVentaItems(List<ItemOrdenVentaDTO> ventaItems) {
 		this.ventaItems = ventaItems;
 	}
+	public TROrdenDespachoDTO getAsociada() {
+		return asociada;
+	}
+	public void setAsociada(TROrdenDespachoDTO asociada) {
+		this.asociada = asociada;
+	}
+	
 	
 
 	

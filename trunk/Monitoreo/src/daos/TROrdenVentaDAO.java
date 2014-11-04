@@ -17,6 +17,8 @@ import interfaces.TROrdenVentaDAOInterfaz;
 public class TROrdenVentaDAO implements TROrdenVentaDAOInterfaz{
 	@PersistenceContext(unitName = "TP")	
 	private EntityManager em;
+	
+	
 	public void grabarVenta(TROrdenVentaDTO trov) throws Exception{
 		
 
@@ -47,5 +49,7 @@ public class TROrdenVentaDAO implements TROrdenVentaDAOInterfaz{
 		
 		
 	}
+	
+	
 
 }
