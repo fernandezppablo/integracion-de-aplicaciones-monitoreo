@@ -32,7 +32,7 @@ import dto.ItemRankingDTO;
 import dto.MensajeRespuestaDTO;
 import dto.TROrdenVentaDTO;
 
-@Stateless
+@Stateless(name="serviciosVarios")
 public class ServiciosVariosDAO implements ServiciosVariosInterfaz{
 	@PersistenceContext(unitName = "TP")	
 	private EntityManager em;

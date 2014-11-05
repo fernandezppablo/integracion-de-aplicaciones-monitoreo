@@ -1,12 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"
-    import="dto.TROrdenVentaDTO"
-    import="dto.TROrdenDespachoDTO"
-    import="java.util.List"
-    import="java.util.ArrayList"
-    import="java.util.HashMap"
-    import="java.util.Map"
-    import="java.util.Iterator"%>
+    pageEncoding="ISO-8859-1"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -20,28 +14,6 @@
 		<link type="text/css" href="${pageContext.request.contextPath}/styles/foundation-icons/foundation-icons.css" rel="stylesheet">
 		<link type="text/css" href="${pageContext.request.contextPath}/styles/app.css" rel="stylesheet">
 	</head>
-	
-	<% 
-		List<TROrdenVentaDTO> ventasSinAsociar = (List<TROrdenVentaDTO>)request.getAttribute("sinasociar");
-		List<TROrdenVentaDTO> ventas = (List<TROrdenVentaDTO>)request.getAttribute("asociadas");
-		
-		for(int i=0; i<ventasSinAsociar.size(); i++) {
-			ventas.add(ventasSinAsociar.get(i));
-		}
-	
-		HashMap<Integer, List<TROrdenVentaDTO>> portalesMap = new HashMap<Integer, List<TROrdenVentaDTO>>();
-		for(int i=0; i<ventas.size(); i++) {
-			int modId = ventas.get(i).getModuloId();
-			if(portalesMap.containsKey(modId)) {
-				List<TROrdenVentaDTO> portalVentas = portalesMap.get(modId);
-				if(portalVentas == null) {
-					portalVentas = new ArrayList<TROrdenVentaDTO>();
-				}
-				portalVentas.add(ventas.get(i));
-				portalesMap.put(modId, portalVentas);
-			}
-		}
-	%>
 	
 	<body>
 		<!-- Menu izquierda -->
@@ -77,35 +49,49 @@
 					</div>
 					<div class="row">
 						<ul id="ventas-container" class="small-block-grid-4">
-						<% for(int i=0; i<ventas.size(); i++) { %>
-							<%
-							TROrdenVentaDTO venta = ventas.get(i);
-							if(venta.getAsociada() != null) {  %>
+						<!-- <li class="venta pending">
+						<div class="assign pending fi-info"></div>
+						<div class="assign done fi-check" style="display: none;"></div> -->
+						<c:forEach items="${requestScope.ventasSinAsociar}" var="venta">
+							<c:choose>
+							<c:when test="${venta.asociada ne null}">
 								<li class="venta done">
-							<% } else { %>
-								<li class="venta pending">
-							<% } %>
-								<div class="venta-header">
-									<h6 class="venta-titulo">
-										Venta nro: <%=venta.getVentaId() %>
-									</h6>
-									<div class="venta-estado">
-										<% if(venta.getAsociada() != null) { %>
+									<div class="venta-header">
+										<h6 class="venta-titulo">
+											Venta nro: <c:out value="${venta.ventaId}"></c:out>
+										</h6>
+										<div class="venta-estado">
 											<div class="assign pending fi-info" style="display: none;"></div>
 											<div class="assign done fi-check"></div>
-										<% } else { %>
+										</div>
+									</div>
+									<ul class="venta-descripcion">
+										<li class="venta-fecha"><label>Fecha:  </label><c:out value="${venta.fecha}"></c:out></li>
+										<li class="venta-portal"><label>Portal:  </label><c:out value="${venta.moduloId}"></c:out></li>
+										<li class="venta-monto"><label>Monto:  </label>$<c:out value="${venta.monto}"></c:out></li>
+									</ul>
+								</li>
+							</c:when>
+							<c:when test="${venta.asociada eq null}">
+								<li class="venta pending">
+									<div class="venta-header">
+										<h6 class="venta-titulo">
+											Venta nro: <c:out value="${venta.ventaId}"></c:out>
+										</h6>
+										<div class="venta-estado">
 											<div class="assign pending fi-info"></div>
 											<div class="assign done fi-check" style="display: none;"></div>
-										<% } %>
+										</div>
 									</div>
-								</div>
-								<ul class="venta-descripcion">
-									<li class="venta-fecha"><label>Fecha:  </label><%=venta.getFecha() %></li>
-									<li class="venta-portal"><label>Portal:  </label><%=venta.getModuloId() %></li>
-									<li class="venta-monto"><label>Monto:  </label>$<%=venta.getMonto() %></li>
-								</ul>
-							</li>
-						<% } %>
+									<ul class="venta-descripcion">
+										<li class="venta-fecha"><label>Fecha:  </label><c:out value="${venta.fecha}"></c:out></li>
+										<li class="venta-portal"><label>Portal:  </label><c:out value="${venta.moduloId}"></c:out></li>
+										<li class="venta-monto"><label>Monto:  </label>$<c:out value="${venta.monto}"></c:out></li>
+									</ul>
+								</li>
+							</c:when>
+							</c:choose>
+						</c:forEach>
 <!-- 							<li class="venta pending"> -->
 <!-- 								<div class="venta-header"> -->
 <!-- 									<h6 class="venta-titulo">Venta nro: 8965</h6> -->
@@ -160,28 +146,27 @@
 							</tr>
 						  </thead>
 						  <tbody>
-						  <% for(int i=0; i<ventas.size() ; i++) { 
-						  		TROrdenVentaDTO venta = ventas.get(i);
-						  %>
+						  <c:forEach items="${requestScope.ventasSinAsociar}" var="ventas">
 							<tr>
-							  <td><%=venta.getVentaId() %></td>
-							  <td><%=venta.getFecha() %></td>
-							  <td>$<%=venta.getMonto() %></td>
-							  <td><%=venta.getModuloId() %></td>
-							  <td><%=venta.getCoordenadaX() %></td>
-							  <td><%=venta.getCoordenadaY() %></td>
+							  <td><c:out value="venta.ventaId"></c:out></td>
+							  <td><c:out value="venta.fecha"></c:out></td>
+							  <td>$<c:out value="venta.monto"></c:out></td>
+							  <td><c:out value="venta.moduloId"></c:out></td>
+							  <td><c:out value="venta.coordenadaX"></c:out></td>
+							  <td><c:out value="venta.coordenadaY"></c:out></td>
 							  <td>
-							  	<% if(venta.getAsociada() != null) { %>
-							  		Si
-							  	<% } else { %>
-							  		No
-							  	<% } %>
+							  	<c:choose>
+							  		<c:when test="${venta.asociada eq null}">
+							  			No
+							  		</c:when>
+							  		<c:otherwise>
+							  			Si
+							  		</c:otherwise>
+							  	</c:choose>
 							  </td>
-							  <% 
-							  	TROrdenDespachoDTO despacho = venta.getAsociada();
-							  %>
-							  <td class="monitoreo-status"><%=despacho.getEstado() %></td>
+							  <td class="monitoreo-status"><c:out value="venta.asociada.estado"></c:out></td>
 							</tr>
+							</c:forEach>
 <!-- 							<tr> -->
 <!-- 							  <td>8965</td> -->
 <!-- 							  <td>5/10/2014</td> -->
@@ -215,46 +200,31 @@
 					</div>
 					<div class="row portales-reporte">
 					
-					<%
-						Iterator it = portalesMap.entrySet().iterator();
-						while(it.hasNext()) {
-							Map.Entry kv = (Map.Entry)it.next();
-							Integer portalId = (Integer)kv.getKey();
-							List<TROrdenVentaDTO> valores = (List<TROrdenVentaDTO>)kv.getValue();
-							
-					%>
-					
+					<c:forEach items="${requestScope.sumarizacionPortales}" var="portal"></c:forEach>
 						<div class="portal-suma shadow large-12 columns">
-							<h3 class="portal-nombre">Portal <%=portalId %></h3>
+							<h3 class="portal-nombre">Portal <c:out value="${portal.id}"></c:out></h3>
 							<ul class="row portal-ventas">
 							
-							<% 
-							long totalPortal = 0;
-							for(int i=0; i<valores.size(); i++) { 
-								totalPortal += valores.get(i).getMonto();
-							%>
-							
+							<c:forEach items="${portal.ventas}" var="venta">
 								<li class="portal-venta large-6 large-offset-6 columns">
 									<div class="row">
 										<div class="large-6 columns">
-											<h6>Venta nro: <span class="portal-venta-nro"><%=valores.get(i).getVentaId() %></span></h6>
+											<h6>Venta nro: <span class="portal-venta-nro"><c:out value="${venta.ventaId}"></c:out></span></h6>
 										</div>
-										<div class="large-6 columns portal-venta-monto">$<%=valores.get(i).getMonto() %></div>
+										<div class="large-6 columns portal-venta-monto">$<c:out value="${venta.monto}"></c:out></div>
 									</div>
 								</li>
-								
-							<% } %>
+							</c:forEach>
 							</ul>
 							<div class="row">
 								<div class="large-6 large-offset-6 columns portal-resumen">
 									<div class="row">
 										<span class="large-6 columns">Total</span>
-										<span class="portal-total large-6 columns">$<%=totalPortal %></span>
+										<span class="portal-total large-6 columns">$<c:out value="${portal.total}"></c:out></span>
 									</div>
 								</div>
 							</div>
 						</div>
-						<% } %>
 <!-- 						<div class="portal-suma shadow large-12 columns"> -->
 <!-- 							<h3 class="portal-nombre">Portal 2</h3> -->
 <!-- 							<ul class="row portal-ventas"> -->
@@ -335,51 +305,51 @@
 								<li class="despacho shadow row" data-id="1">
 									<div class="small-12 columns">
 										<h4 class="despacho-nombre row">
-											<span class="small-12 columns">Despacho 1<span>
+											<span class="small-12 columns">Despacho 1</span>
 										</h4>
 										<div class="row coordenadas">
 											<span class="small-6 columns"><label>Latitud</label><label class="latitud">67.987</label></span>
 											<span class="small-6 columns"><label>Longitud</label><label class="longitud">-78.568</label></span>
-										<div>
+										</div>
 									</div>
 								</li>
 								<li class="despacho shadow row" data-id="2">
 									<div class="small-12 columns">
 										<h4 class="despacho-nombre row">
-											<span class="small-12 columns">Despacho 2<span>
+											<span class="small-12 columns">Despacho 2</span>
 										</h4>
 										<div class="row coordenadas">
 											<span class="small-6 columns"><label>Latitud</label><label class="latitud">98.654</label></span>
 											<span class="small-6 columns"><label>Longitud</label><label class="longitud">-02.987</label></span>
-										<div>
+										</div>
 									</div>
 								</li>
 								<li class="despacho shadow row" data-id="3">
 									<div class="small-12 columns">
 										<h4 class="despacho-nombre row">
-											<span class="small-12 columns">Despacho 3<span>
+											<span class="small-12 columns">Despacho 3</span>
 										</h4>
 										<div class="row coordenadas">
 											<span class="small-6 columns"><label>Latitud</label><label class="latitud">98.789</label></span>
 											<span class="small-6 columns"><label>Longitud</label><label class="longitud">98.980</label></span>
-										<div>
+										</div>
 									</div>
 								</li>
 								<li class="despacho shadow row" data-id="4">
 									<div class="small-12 columns">
 										<h4 class="despacho-nombre row">
-											<span class="small-12 columns">Despacho 4<span>
+											<span class="small-12 columns">Despacho 4</span>
 										</h4>
 										<div class="row coordenadas">
 											<span class="small-6 columns"><label>Latitud</label><label class="latitud">-36.251</label></span>
 											<span class="small-6 columns"><label>Longitud</label><label class="longitud">103.435</label></span>
-										<div>
+										</div>
 									</div>
 								</li>
 							</ul>
 						</div>
 						<div class="row bottom-row">
-							<span id="confirmar-despacho" class="button success radius large small-10 small-offset-1 columns">Seleccionar<span>
+							<span id="confirmar-despacho" class="button success radius large small-10 small-offset-1 columns">Seleccionar</span>
 						</div>
 					</div>
 					
