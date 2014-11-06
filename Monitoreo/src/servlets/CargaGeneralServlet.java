@@ -88,7 +88,7 @@ public class CargaGeneralServlet extends HttpServlet {
 		request.setAttribute("despachos", sv.getDespachos());
 		request.setAttribute("ventas", ventas);
 		request.setAttribute("ventasSinAsociar", ventasSinAsociar);
-		request.setAttribute("auditorias", sv.getItemsAuditoria());
+		//request.setAttribute("auditorias", sv.getItemsAuditoria());
 		request.setAttribute("sumarizacionPortales", portalesVentas);
 		
 		request.getRequestDispatcher("/pages/index.jsp").forward(request, response);

@@ -14,7 +14,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -34,19 +33,48 @@ import dto.TROrdenVentaDTO;
 
 @Stateless(name="serviciosVarios")
 public class ServiciosVariosDAO implements ServiciosVariosInterfaz{
+	
 	@PersistenceContext(unitName = "TP")	
 	private EntityManager em;
+	
 	String ipportal = "localhost:8080"; //IP + PUERTO
+	
 	private String targetRanking = "http://" + ipportal + "/PortalWeb/rest/bestSeller/procesar";
 	
+	
+	
+	
+	@Override
+	public List<TROrdenVentaDTO> getOrdenesVentaSinAsociar() {
+		List<TROrdenVentaDTO> ventasdto = new ArrayList<TROrdenVentaDTO>();
+		
+		
+		try {
+			List<TROrdenVenta> ventas = (List<TROrdenVenta>) em.createQuery("SELECT d FROM TROrdenVenta d where d.asociada is null").getResultList();
+			
+			for(TROrdenVenta actual: ventas){
+				TROrdenVentaDTO nuevo = new TROrdenVentaDTO();
+				nuevo.setFecha(actual.getFecha());
+				nuevo.setCoordenadaX(actual.getLatitud());
+				nuevo.setCoordenadaY(actual.getLongitud());
+				nuevo.setModuloId(actual.getModuloId());
+				nuevo.setMonto(actual.getMonto());
+				nuevo.setVentaId(actual.getNumero());
+			}
+		} catch(ClassCastException cce) {
+			cce.printStackTrace();
+		}
+		
+		return ventasdto;
+	}
 	
 	public List<ItemRankingDTO> rankingArticulos()
 	{
 		List<ItemRankingDTO> resultado = new ArrayList<ItemRankingDTO>();
 		Query q = em.createQuery(
-				"select a.id, SUM(i.cantidad) " + 
-						"from ItemOrdenVenta i inner join Articulo a on a.id = i.Articulo " +
-						"group by a.id order by SUM(i,cantidad)"
+				"select a.id, SUM(i.cantidad) as cant " + 
+						"from ItemOrdenVenta i inner join Articulo a on a.id = i.articulo " +
+						"group by a.id order by cant"
 				);
 		Iterator itr = q.getResultList().iterator();
 		while(itr.hasNext()){
@@ -60,19 +88,25 @@ public class ServiciosVariosDAO implements ServiciosVariosInterfaz{
 		return resultado;
 	}
 	public List<DespachoDTO> getDespachos(){
-		List<Despacho> despachos = (List<Despacho>) em.createQuery("SELECT d FROM Despacho d");
 		List<DespachoDTO> despachosdto = new ArrayList<DespachoDTO>();
 		
-		for(Despacho actual: despachos){
-			DespachoDTO nuevo = new DespachoDTO();
-			nuevo.setLatitud(actual.getLatitud());
-			nuevo.setLongitud(actual.getLongitud());
-			nuevo.setNombre(actual.getNombre());
-			despachosdto.add(nuevo);
+		try {
+			List<Despacho> despachos = (List<Despacho>) em.createQuery("SELECT d FROM Despacho d").getResultList();
+			
+			for(Despacho actual: despachos){
+				DespachoDTO nuevo = new DespachoDTO();
+				nuevo.setLatitud(actual.getLatitud());
+				nuevo.setLongitud(actual.getLongitud());
+				nuevo.setNombre(actual.getNombre());
+				despachosdto.add(nuevo);
+			}
+		} catch(ClassCastException cce) {
+			cce.printStackTrace();
 		}
 		
 		return despachosdto;
 	}
+	
 	@Override
 	public void enviarRanking(List<ItemRankingDTO> rankings) throws Exception {
 		try {
@@ -144,55 +178,50 @@ public class ServiciosVariosDAO implements ServiciosVariosInterfaz{
 		// TODO Auto-generated method stub
 		
 	}
-	@Override
-	public List<TROrdenVentaDTO> getOrdenesVentaSinAsociar() {
-		List<TROrdenVenta> ventas = (List<TROrdenVenta>) em.createQuery("SELECT d FROM TROrdenVenta d where d.asociada is null");
-		List<TROrdenVentaDTO> ventasdto = new ArrayList<TROrdenVentaDTO>();
-		
-		for(TROrdenVenta actual: ventas){
-			TROrdenVentaDTO nuevo = new TROrdenVentaDTO();
-			nuevo.setFecha(actual.getFecha());
-			nuevo.setCoordenadaX(actual.getLatitud());
-			nuevo.setCoordenadaY(actual.getLongitud());
-			nuevo.setModuloId(actual.getModuloId());
-			nuevo.setMonto(actual.getMonto());
-			nuevo.setVentaId(actual.getNumero());
-		}
-		
-		return ventasdto;
-	}
+	
+	
 	@Override
 	public List<TROrdenVentaDTO> getOrdenesVentaAsociadas() {
-		// TODO Auto-generated method stub
-		List<TROrdenVenta> ventas = (List<TROrdenVenta>) em.createQuery("SELECT d FROM TROrdenVenta d where d.asociada is not null");
 		List<TROrdenVentaDTO> ventasdto = new ArrayList<TROrdenVentaDTO>();
 		
-		for(TROrdenVenta actual: ventas){
-			TROrdenVentaDTO nuevo = new TROrdenVentaDTO();
-			nuevo.setFecha(actual.getFecha());
-			nuevo.setCoordenadaX(actual.getLatitud());
-			nuevo.setCoordenadaY(actual.getLongitud());
-			nuevo.setModuloId(actual.getModuloId());
-			nuevo.setMonto(actual.getMonto());
-			nuevo.setVentaId(actual.getNumero());
+		try {
+			List<TROrdenVenta> ventas = (List<TROrdenVenta>) em.createQuery("SELECT d FROM TROrdenVenta d where d.asociada is not null").getResultList();
 			
+			for(TROrdenVenta actual: ventas){
+				TROrdenVentaDTO nuevo = new TROrdenVentaDTO();
+				nuevo.setFecha(actual.getFecha());
+				nuevo.setCoordenadaX(actual.getLatitud());
+				nuevo.setCoordenadaY(actual.getLongitud());
+				nuevo.setModuloId(actual.getModuloId());
+				nuevo.setMonto(actual.getMonto());
+				nuevo.setVentaId(actual.getNumero());
+				
+			}
+		} catch(ClassCastException cce) {
+			cce.printStackTrace();
 		}
+		
 		
 		return ventasdto;
 		
 	}
+	
 	@Override
 	public List<ItemAuditoriaDTO> getItemsAuditoria() {
-		List<ItemAuditoria> auditorias = (List<ItemAuditoria>) em.createQuery("SELECT a FROM ItemAuditoria a");
 		List<ItemAuditoriaDTO> auditoriasdto = new ArrayList<ItemAuditoriaDTO>();
-		
-		for(ItemAuditoria actual: auditorias){
-			ItemAuditoriaDTO nuevo = new ItemAuditoriaDTO();
-			nuevo.setFecha(actual.getFecha());
-			nuevo.setIdModulo(actual.getIdModulo());
-			nuevo.setLog(actual.getLog());
-			auditoriasdto.add(nuevo);
+		try {
+			List<ItemAuditoria> auditorias = (List<ItemAuditoria>) em.createQuery("SELECT a FROM ItemAuditoria a").getResultList();
 			
+			for(ItemAuditoria actual: auditorias){
+				ItemAuditoriaDTO nuevo = new ItemAuditoriaDTO();
+				nuevo.setFecha(actual.getFecha());
+				nuevo.setIdModulo(actual.getIdModulo());
+				nuevo.setLog(actual.getLog());
+				auditoriasdto.add(nuevo);
+				
+			}
+		} catch(ClassCastException cce) {
+			cce.printStackTrace();
 		}
 		return auditoriasdto;
 	}
