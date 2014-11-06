@@ -49,9 +49,6 @@
 					</div>
 					<div class="row">
 						<ul id="ventas-container" class="small-block-grid-4">
-						<!-- <li class="venta pending">
-						<div class="assign pending fi-info"></div>
-						<div class="assign done fi-check" style="display: none;"></div> -->
 						<c:forEach items="${requestScope.ventasSinAsociar}" var="venta">
 							<c:choose>
 							<c:when test="${venta.asociada ne null}">
@@ -92,34 +89,6 @@
 							</c:when>
 							</c:choose>
 						</c:forEach>
-<!-- 							<li class="venta pending"> -->
-<!-- 								<div class="venta-header"> -->
-<!-- 									<h6 class="venta-titulo">Venta nro: 8965</h6> -->
-<!-- 									<div class="venta-estado"> -->
-<!-- 										<div class="assign pending fi-info"></div> -->
-<!-- 										<div class="assign done fi-check" style="display: none;"></div> -->
-<!-- 									</div> -->
-<!-- 								</div> -->
-<!-- 								<ul class="venta-descripcion"> -->
-<!-- 									<li class="venta-fecha"><label>Fecha:  </label>5/10/2014</li> -->
-<!-- 									<li class="venta-portal"><label>Portal:  </label>2</li> -->
-<!-- 									<li class="venta-monto"><label>Monto:  </label>$2500</li> -->
-<!-- 								</ul> -->
-<!-- 							</li> -->
-<!-- 							<li class="venta"> -->
-<!-- 								<div class="venta-header"> -->
-<!-- 									<h6 class="venta-titulo">Venta nro: 32128</h6> -->
-<!-- 									<div class="venta-estado"> -->
-<!-- 										<div class="assign pending fi-info" style="display: none;"></div> -->
-<!-- 										<div class="assign done fi-check" style="display: none;"></div> -->
-<!-- 									</div> -->
-<!-- 								</div> -->
-<!-- 								<ul class="venta-descripcion"> -->
-<!-- 									<li class="venta-fecha"><label>Fecha:  </label>5/10/2014</li> -->
-<!-- 									<li class="venta-portal"><label>Portal:  </label>3</li> -->
-<!-- 									<li class="venta-monto"><label>Monto:  </label>$6750</li> -->
-<!-- 								</ul> -->
-<!-- 							</li> -->
 						</ul>
 					</div>
 				</div>
@@ -167,26 +136,6 @@
 							  <td class="monitoreo-status"><c:out value="venta.asociada.estado"></c:out></td>
 							</tr>
 							</c:forEach>
-<!-- 							<tr> -->
-<!-- 							  <td>8965</td> -->
-<!-- 							  <td>5/10/2014</td> -->
-<!-- 							  <td>$2500</td> -->
-<!-- 							  <td>2</td> -->
-<!-- 							  <td></td> -->
-<!-- 							  <td></td> -->
-<!-- 							  <td>No</td> -->
-<!-- 							  <td class="monitoreo-status">-</td> -->
-<!-- 							</tr> -->
-<!-- 							<tr> -->
-<!-- 							  <td>32128</td> -->
-<!-- 							  <td>5/10/2014</td> -->
-<!-- 							  <td>$6750</td> -->
-<!-- 							  <td>3</td> -->
-<!-- 							  <td></td> -->
-<!-- 							  <td></td> -->
-<!-- 							  <td>Si</td> -->
-<!-- 							  <td class="monitoreo-status">Cerrada</td> -->
-<!-- 							</tr> -->
 						  </tbody>
 						</table>
 					</div>
@@ -225,49 +174,6 @@
 								</div>
 							</div>
 						</div>
-<!-- 						<div class="portal-suma shadow large-12 columns"> -->
-<!-- 							<h3 class="portal-nombre">Portal 2</h3> -->
-<!-- 							<ul class="row portal-ventas"> -->
-<!-- 								<li class="portal-venta large-6 large-offset-6 columns"> -->
-<!-- 									<div class="row"> -->
-<!-- 										<div class="large-6 columns"> -->
-<!-- 											<h6>Venta nro: <span class="portal-venta-nro">8965</span></h6> -->
-<!-- 										</div> -->
-<!-- 										<div class="large-6 columns portal-venta-monto">$2500</div> -->
-<!-- 									</div> -->
-<!-- 								</li> -->
-<!-- 							</ul> -->
-<!-- 							<div class="row"> -->
-<!-- 								<div class="large-6 large-offset-6 columns portal-resumen"> -->
-<!-- 									<div class="row"> -->
-<!-- 										<span class="large-6 columns">Total</span> -->
-<!-- 										<span class="portal-total large-6 columns">$2500</span> -->
-<!-- 									</div> -->
-<!-- 								</div> -->
-<!-- 							</div> -->
-<!-- 						</div> -->
-						
-<!-- 						<div class="portal-suma shadow large-12 columns"> -->
-<!-- 							<h3 class="portal-nombre">Portal 3</h3> -->
-<!-- 							<ul class="row portal-ventas"> -->
-<!-- 								<li class="portal-venta large-6 large-offset-6 columns"> -->
-<!-- 									<div class="row"> -->
-<!-- 										<div class="large-6 columns"> -->
-<!-- 											<h6>Venta nro: <span class="portal-venta-nro">32128</span></h6> -->
-<!-- 										</div> -->
-<!-- 										<div class="large-6 columns portal-venta-monto">$6750</div> -->
-<!-- 									</div> -->
-<!-- 								</li> -->
-<!-- 							</ul> -->
-<!-- 							<div class="row"> -->
-<!-- 								<div class="large-6 large-offset-6 columns portal-resumen"> -->
-<!-- 									<div class="row"> -->
-<!-- 										<span class="large-6 columns">Total</span> -->
-<!-- 										<span class="portal-total large-6 columns">$6750</span> -->
-<!-- 									</div> -->
-<!-- 								</div> -->
-<!-- 							</div> -->
-<!-- 						</div> -->
 					</div>
 				</div>
 				

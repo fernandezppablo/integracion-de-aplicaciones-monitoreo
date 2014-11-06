@@ -32,7 +32,7 @@ import dto.ItemAuditoriaDTO;
 @ActivationConfigProperty(propertyName="ConnectionFactoryName", propertyValue="ConnectionFactory"),
 @ActivationConfigProperty(propertyName="MaxPoolSize", propertyValue="1"),
 @ActivationConfigProperty(propertyName="MaxMessages", propertyValue="1"),
-@ActivationConfigProperty(propertyName = "useJNDI", propertyValue = "true")
+@ActivationConfigProperty(propertyName="useJNDI", propertyValue = "true")
 })
 public class JMSServices implements MessageListener  {
 	@EJB(name = "AuditoriaDAO")
