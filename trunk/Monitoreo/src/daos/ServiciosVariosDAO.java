@@ -80,17 +80,19 @@ public class ServiciosVariosDAO implements ServiciosVariosInterfaz{
 	{
 		List<ItemRankingDTO> resultado = new ArrayList<ItemRankingDTO>();
 		Query q = em.createQuery(
-				"select a.id, SUM(i.cantidad) as cant " + 
-						"from ItemOrdenVenta i inner join Articulo a on a.id = i.articulo " +
-						"group by a.id order by cant"
+				"select i.articulo, SUM(i.cantidad) as cant " + 
+						"from ItemOrdenVenta i " +
+						"group by i.articulo order by cant"
 				);
 		Iterator itr = q.getResultList().iterator();
+		int pos = 0;
 		while(itr.hasNext()){
 			Object[] element = (Object[]) itr.next(); 
 			ItemRankingDTO nuevo = new ItemRankingDTO();
-			nuevo.setCodigoArticulo(Integer.valueOf(element[0].toString()));
-			nuevo.setPosicion(Integer.valueOf(element[1].toString()));
+			nuevo.codigoArticulo = (Integer.valueOf(element[0].toString()));
+			nuevo.posicion = (pos);
 			resultado.add(nuevo);
+			pos = pos + 1;
 		}
 	
 		return resultado;
@@ -183,8 +185,15 @@ public class ServiciosVariosDAO implements ServiciosVariosInterfaz{
 	}
 
 	@Override
-	public void mandarDespacho(DespachoDTO aMandar) throws Exception {
-		// TODO Auto-generated method stub
+	public void mandarDespacho(TROrdenDespachoDTO aMandar) throws Exception {
+		java.io.StringWriter sw = new StringWriter();
+        JAXBContext jc = JAXBContext.newInstance(TROrdenDespachoDTO.class);
+        Marshaller marshaller = jc.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        marshaller.setProperty("eclipselink.media.type", "application/xml");
+        marshaller.marshal(aMandar,sw);
+        
+        
 		
 	}
 	

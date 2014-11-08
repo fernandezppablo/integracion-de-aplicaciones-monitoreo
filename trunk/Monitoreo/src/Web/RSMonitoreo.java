@@ -121,7 +121,7 @@ public class RSMonitoreo {
 				DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				Date result =  df.parse(orden.getFecha()); 
 				despachoDTO.setFecha(result);
-				
+				IServicios.mandarDespacho(despachoDTO);
 				return despachoDTO;
 				
 			}
