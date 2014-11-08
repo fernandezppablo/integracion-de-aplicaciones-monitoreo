@@ -60,6 +60,7 @@ public class ServiciosVariosDAO implements ServiciosVariosInterfaz{
 				nuevo.setModuloId(actual.getModuloId());
 				nuevo.setMonto(actual.getMonto());
 				nuevo.setVentaId(actual.getNumero());
+				ventasdto.add(nuevo);
 			}
 		} catch(ClassCastException cce) {
 			cce.printStackTrace();
@@ -98,6 +99,7 @@ public class ServiciosVariosDAO implements ServiciosVariosInterfaz{
 				nuevo.setLatitud(actual.getLatitud());
 				nuevo.setLongitud(actual.getLongitud());
 				nuevo.setNombre(actual.getNombre());
+				nuevo.setNumero(actual.getNumero());
 				despachosdto.add(nuevo);
 			}
 		} catch(ClassCastException cce) {
@@ -185,7 +187,7 @@ public class ServiciosVariosDAO implements ServiciosVariosInterfaz{
 		List<TROrdenVentaDTO> ventasdto = new ArrayList<TROrdenVentaDTO>();
 		
 		try {
-			List<TROrdenVenta> ventas = (List<TROrdenVenta>) em.createQuery("SELECT d FROM TROrdenVenta d where d.asociada is not null").getResultList();
+			List<TROrdenVenta> ventas = (List<TROrdenVenta>) em.createQuery("SELECT d FROM TROrdenVenta d").getResultList();
 			
 			for(TROrdenVenta actual: ventas){
 				TROrdenVentaDTO nuevo = new TROrdenVentaDTO();
@@ -195,7 +197,7 @@ public class ServiciosVariosDAO implements ServiciosVariosInterfaz{
 				nuevo.setModuloId(actual.getModuloId());
 				nuevo.setMonto(actual.getMonto());
 				nuevo.setVentaId(actual.getNumero());
-				
+				ventasdto.add(nuevo);
 			}
 		} catch(ClassCastException cce) {
 			cce.printStackTrace();
@@ -218,7 +220,6 @@ public class ServiciosVariosDAO implements ServiciosVariosInterfaz{
 				nuevo.setIdModulo(actual.getIdModulo());
 				nuevo.setLog(actual.getLog());
 				auditoriasdto.add(nuevo);
-				
 			}
 		} catch(ClassCastException cce) {
 			cce.printStackTrace();

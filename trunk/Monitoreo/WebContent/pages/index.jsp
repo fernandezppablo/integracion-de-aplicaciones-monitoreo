@@ -10,7 +10,7 @@
 		<script src="${pageContext.request.contextPath}/scripts/foundation.min.js" ></script>
 		<script src="${pageContext.request.contextPath}/scripts/app.js" ></script>
 		<!-- Styles -->
-		<link type="text/css" href="${pageContext.request.contextPath}/styles/foundation.css" rel="stylesheet">
+		<link type="text/css" href="${pageContext.request.contextPath}/styles/foundation.min.css" rel="stylesheet">
 		<link type="text/css" href="${pageContext.request.contextPath}/styles/foundation-icons/foundation-icons.css" rel="stylesheet">
 		<link type="text/css" href="${pageContext.request.contextPath}/styles/app.css" rel="stylesheet">
 	</head>
@@ -52,7 +52,7 @@
 						<c:forEach items="${requestScope.ventasSinAsociar}" var="venta">
 							<c:choose>
 							<c:when test="${venta.asociada ne null}">
-								<li class="venta done">
+								<li class="venta done" data-id="${venta.ventaId}">
 									<div class="venta-header">
 										<h6 class="venta-titulo">
 											Venta nro: <c:out value="${venta.ventaId}"></c:out>
@@ -70,7 +70,7 @@
 								</li>
 							</c:when>
 							<c:when test="${venta.asociada eq null}">
-								<li class="venta pending">
+								<li class="venta pending" data-id="${venta.ventaId}">
 									<div class="venta-header">
 										<h6 class="venta-titulo">
 											Venta nro: <c:out value="${venta.ventaId}"></c:out>
@@ -115,14 +115,14 @@
 							</tr>
 						  </thead>
 						  <tbody>
-						  <c:forEach items="${requestScope.ventasSinAsociar}" var="ventas">
+						  <c:forEach items="${requestScope.ventas}" var="venta">
 							<tr>
-							  <td><c:out value="venta.ventaId"></c:out></td>
-							  <td><c:out value="venta.fecha"></c:out></td>
-							  <td>$<c:out value="venta.monto"></c:out></td>
-							  <td><c:out value="venta.moduloId"></c:out></td>
-							  <td><c:out value="venta.coordenadaX"></c:out></td>
-							  <td><c:out value="venta.coordenadaY"></c:out></td>
+							  <td><c:out value="${venta.ventaId}"></c:out></td>
+							  <td><c:out value="${venta.fecha}"></c:out></td>
+							  <td>$<c:out value="${venta.monto}"></c:out></td>
+							  <td><c:out value="${venta.moduloId}"></c:out></td>
+							  <td><c:out value="${venta.coordenadaX}"></c:out></td>
+							  <td><c:out value="${venta.coordenadaY}"></c:out></td>
 							  <td>
 							  	<c:choose>
 							  		<c:when test="${venta.asociada eq null}">
@@ -133,7 +133,7 @@
 							  		</c:otherwise>
 							  	</c:choose>
 							  </td>
-							  <td class="monitoreo-status"><c:out value="venta.asociada.estado"></c:out></td>
+							  <td class="monitoreo-status"><c:out value="${venta.asociada.estado}"></c:out></td>
 							</tr>
 							</c:forEach>
 						  </tbody>
@@ -149,9 +149,9 @@
 					</div>
 					<div class="row portales-reporte">
 					
-					<c:forEach items="${requestScope.sumarizacionPortales}" var="portal"></c:forEach>
+					<c:forEach items="${requestScope.sumarizacionPortales}" var="portal">
 						<div class="portal-suma shadow large-12 columns">
-							<h3 class="portal-nombre">Portal <c:out value="${portal.id}"></c:out></h3>
+							<h3 class="portal-nombre row">Portal <c:out value="${portal.id}"></c:out></h3>
 							<ul class="row portal-ventas">
 							
 							<c:forEach items="${portal.ventas}" var="venta">
@@ -174,6 +174,7 @@
 								</div>
 							</div>
 						</div>
+					</c:forEach>
 					</div>
 				</div>
 				
@@ -205,53 +206,23 @@
 								</div>
 							</div>
 						</div>
-						<div>
+						<div class="mid-row">
 							<ul class="despachos">
 								<!-- Cargar los despachos de forma dinámica -->
-								<li class="despacho shadow row" data-id="1">
-									<div class="small-12 columns">
-										<h4 class="despacho-nombre row">
-											<span class="small-12 columns">Despacho 1</span>
-										</h4>
-										<div class="row coordenadas">
-											<span class="small-6 columns"><label>Latitud</label><label class="latitud">67.987</label></span>
-											<span class="small-6 columns"><label>Longitud</label><label class="longitud">-78.568</label></span>
+								<c:forEach items="${requestScope.despachos}" var="despacho">
+									<li class="despacho shadow row" data-id="${despacho.numero}">
+										<div class="small-12 columns">
+											<h4 class="despacho-nombre row">
+												<span class="small-10 columns">Despacho: <c:out value="${despacho.nombre}"></c:out></span>
+												<span class="small-2 columns alert label recomend">Recomendado</span>
+											</h4>
+											<div class="row coordenadas">
+												<span class="small-6 columns"><label>Latitud</label><label class="latitud"><c:out value="${despacho.latitud}"></c:out></label></span>
+												<span class="small-6 columns"><label>Longitud</label><label class="longitud"><c:out value="${despacho.longitud}"></c:out></label></span>
+											</div>
 										</div>
-									</div>
-								</li>
-								<li class="despacho shadow row" data-id="2">
-									<div class="small-12 columns">
-										<h4 class="despacho-nombre row">
-											<span class="small-12 columns">Despacho 2</span>
-										</h4>
-										<div class="row coordenadas">
-											<span class="small-6 columns"><label>Latitud</label><label class="latitud">98.654</label></span>
-											<span class="small-6 columns"><label>Longitud</label><label class="longitud">-02.987</label></span>
-										</div>
-									</div>
-								</li>
-								<li class="despacho shadow row" data-id="3">
-									<div class="small-12 columns">
-										<h4 class="despacho-nombre row">
-											<span class="small-12 columns">Despacho 3</span>
-										</h4>
-										<div class="row coordenadas">
-											<span class="small-6 columns"><label>Latitud</label><label class="latitud">98.789</label></span>
-											<span class="small-6 columns"><label>Longitud</label><label class="longitud">98.980</label></span>
-										</div>
-									</div>
-								</li>
-								<li class="despacho shadow row" data-id="4">
-									<div class="small-12 columns">
-										<h4 class="despacho-nombre row">
-											<span class="small-12 columns">Despacho 4</span>
-										</h4>
-										<div class="row coordenadas">
-											<span class="small-6 columns"><label>Latitud</label><label class="latitud">-36.251</label></span>
-											<span class="small-6 columns"><label>Longitud</label><label class="longitud">103.435</label></span>
-										</div>
-									</div>
-								</li>
+									</li>
+								</c:forEach>
 							</ul>
 						</div>
 						<div class="row bottom-row">
@@ -284,6 +255,31 @@
 		</div>
 	</body>
 	<script>
+	
+		var ventas = {};
+		if(Venta) {
+			<c:forEach items="${requestScope.ventas}" var="venta">
+				ventas["${venta.ventaId}"] = new Venta(
+						"${venta.ventaId}",
+						undefined, 
+						"${venta.coordenadaY}", 
+						"${venta.coordenadaX}", 
+						"${venta.fecha}", 
+						"${venta.monto}", 
+						"${venta.moduloId}"
+						);
+			</c:forEach>
+			}
+
+		var despachos = {};
+		<c:forEach items="${requestScope.despachos}" var="despacho">
+			despachos["${despacho.nombre}"] = new Despacho(
+					"${despacho.nombre}", 
+					"${despacho.latitud}", 
+					"${despacho.longitud}", 
+					"${despacho.numero}"
+					);
+		</c:forEach>
 	  $(document).foundation();
 	</script>
 </html> 

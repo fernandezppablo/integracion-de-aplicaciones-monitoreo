@@ -54,19 +54,21 @@ function Venta(nro, estado, latitud, longitud, fecha, monto, modulo) {
 
 Venta.prototype.Triangular = function(depachos) {
 	var min = undefined;
+	var selected = undefined;
 	if(despachos && this.latitud && this.longitud) {
 		for(var i in despachos) {
 			var d = despachos[i];
 			if(d && d.latitud != undefined && d.longitud != undefined) {
-				var mod = sqrt( pow((this.latitud-d.latitud),2) + pow((this.longitud-d.longitud),2) );
-				if(mod < min) {
+				var mod = Math.sqrt( Math.pow((this.latitud-d.latitud),2) + Math.pow((this.longitud-d.longitud),2) );
+				if(!min || mod < min) {
 					min = mod;
+					selected = d.numero;
 				}
 			}
 		}
 	}
-	return min;
-}
+	return selected;
+};
 
 function Item(articulo, cantidad) {
 	this.articulo = articulo;
@@ -87,7 +89,8 @@ function ItemOrdenDespacho(articulo, cantidad) {
 	this.cantidad = cantidad;
 }
 
-function Despacho(nombre, latitud, longitud) {
+function Despacho(nombre, latitud, longitud, numero) {
+	this.numero = numero;
 	this.nombre = nombre;
 	this.latitud = latitud;
 	this.longitud = longitud;
@@ -128,24 +131,29 @@ var dataPane = {
 		$(panels.dataSaleView).hide();
 		$(panels.dataDispatch).show();
 		var d = $(panels.dataDispatch);
+		var v = d.find('.data-header');
 		
-		d.find('.despacho').removeClass('seleccionado');
-		d.find('#confirmar-despacho').removeClass('disabled');
-		d.find('.nro-venta').html(sale.nro);
-		d.find('.latitud').html(sale.latitud);
-		d.find('.longitud').html(sale.longitud);
+		d.find('.despacho').removeClass('seleccionado').removeClass('recomended');
+		v.find('#confirmar-despacho').removeClass('disabled');
+		v.find('.nro-venta').html(sale.nro);
+		v.find('.latitud').html(sale.latitud);
+		v.find('.longitud').html(sale.longitud);
 		
-		if(sale.orden && sale.orden.nombre) {
-			d.find('.despacho[data-id=' + sale.orden.nombre + ']').addClass('seleccionado');
+		var selectedName = sale.Triangular(despachos);
+		
+		d.find('.despacho[data-id="' + selectedName + '"]').addClass('recomended');
+		
+		if(sale.asociada && sale.asociada.id) {
+			d.find('.despacho[data-id=' + sale.orden.numero + ']').addClass('seleccionado');
 			d.find('#confirmar-despacho').addClass('disabled').unbind('click');
 		} else {
 			d.find('#confirmar-despacho').click(function() {
-				var nombreSeleccionado = d.find('.despacho.seleccionado').attr('data-id');
+				var numeroSeleccionado = d.find('.despacho.seleccionado').attr('data-id');
 				//Mandar al server
 			});
 		}
 		
-		this.open();
+		this._open();
 		return this;
 	},
 	loadSaleDetail: function(sale) {
@@ -166,7 +174,7 @@ var dataPane = {
 			//Mostrar el despacho asignado y el estado de la orden
 		}
 		
-		this.open();
+		this._open();
 		return this;
 	}
 };
@@ -178,17 +186,21 @@ var logistica = {
 	},
 	bindDataPane: function() {
 		$(panels.logistica + ' .venta').click(function(sender) {
-			if(sender) {
-				var nro = $(sender).attr('data-id');
-				//Buscar la venta en la coleccion
-				//dataPane.loadDispatchSelection();
-				
-				//Borrar
-				$(panels.dataSaleView).hide();
-				$(panels.dataDispatch).show();
-				dataPane.toggle();
-				//Borrar
+			var nro = $(this).attr('data-id');
+			var venta = null;
+			//Buscar la venta en la coleccion
+			if(ventas) {
+				venta = ventas[nro];
 			}
+			if(venta) {
+				dataPane.loadDispatchSelection(venta);	
+			}
+			
+//			//Borrar
+//			$(panels.dataSaleView).hide();
+//			$(panels.dataDispatch).show();
+//			dataPane.toggle();
+//			//Borrar
 		});
 	}
 };

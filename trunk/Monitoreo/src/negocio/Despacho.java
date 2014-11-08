@@ -10,6 +10,7 @@ import enums.Estado;
 @Entity
 public class Despacho extends PersistentObject{
 	
+	private int numero;
 	private String nombre;
 	private float longitud;
 	private float latitud;
@@ -30,6 +31,12 @@ public class Despacho extends PersistentObject{
 	}
 	public void setLatitud(float latitud) {
 		this.latitud = latitud;
+	}
+	public int getNumero() {
+		return numero;
+	}
+	public void setNumero(int numero) {
+		this.numero = numero;
 	}
 
 	

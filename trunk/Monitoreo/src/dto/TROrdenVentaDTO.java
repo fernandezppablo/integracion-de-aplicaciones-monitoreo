@@ -14,7 +14,7 @@ import enums.Estado;
 @XmlRootElement(name="venta")
 public class TROrdenVentaDTO {
 	
-	private int ventaId;
+	private Integer ventaId;
 	private int moduloId;
 	private float coordenadaX;
 	private float coordenadaY;
