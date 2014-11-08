@@ -1,9 +1,15 @@
 package servlets;
 
+import interfaces.DespachoDAOLocal;
 import interfaces.ServiciosVariosInterfaz;
+import interfaces.TROrdenDespachoDAOInterfaz;
+import interfaces.TROrdenVentaDAOInterfaz;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -11,14 +17,25 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.ejb.EJB;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import negocio.Despacho;
+import negocio.ItemOrdenDespacho;
+import negocio.TROrdenDespacho;
+import negocio.TROrdenVenta;
+import dto.ItemOrdenDespachoDTO;
 import dto.ResumenPortalDTO;
+import dto.TROrdenDespachoDTO;
 import dto.TROrdenVentaDTO;
+import enums.Estado;
 
 @WebServlet(name="init", urlPatterns="/web/*")
 public class CargaGeneralServlet extends HttpServlet {

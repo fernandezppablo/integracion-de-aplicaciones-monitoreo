@@ -273,7 +273,7 @@
 
 		var despachos = {};
 		<c:forEach items="${requestScope.despachos}" var="despacho">
-			despachos["${despacho.nombre}"] = new Despacho(
+			despachos["${despacho.numero}"] = new Despacho(
 					"${despacho.nombre}", 
 					"${despacho.latitud}", 
 					"${despacho.longitud}", 

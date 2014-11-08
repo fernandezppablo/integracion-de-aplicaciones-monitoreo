@@ -2,17 +2,24 @@ package daos;
 
 import interfaces.TROrdenDespachoDAOInterfaz;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+
 import enums.Estado;
+import negocio.Despacho;
 import negocio.TROrdenDespacho;
+import negocio.TROrdenVenta;
 
 
-@Stateless
+@Stateless(name="TROrdenDespachoDAO")
 public class TROrdenDespachoDAO implements TROrdenDespachoDAOInterfaz{
 	@PersistenceContext(unitName = "TP")	
 	private EntityManager em;
@@ -36,5 +43,25 @@ public class TROrdenDespachoDAO implements TROrdenDespachoDAOInterfaz{
 			throw new Exception("No existe un despacho con ese numero");
 		}
 		
+	}
+	
+	public TROrdenDespacho crearOrdenDeDespachoParaVenta(TROrdenVenta venta, Despacho despacho) {
+		TROrdenDespacho orden = new TROrdenDespacho();
+		
+		orden.setAsociada(venta);
+		orden.setDespacho(despacho);
+		
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		orden.setFecha(dateFormat.format(Calendar.getInstance().getTime()));
+		orden.setEstado(Estado.Abierta);
+		
+		try {
+			em.persist(orden);
+		} catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+		return orden;
 	}
 }

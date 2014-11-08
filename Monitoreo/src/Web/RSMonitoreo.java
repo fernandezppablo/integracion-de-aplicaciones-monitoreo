@@ -1,6 +1,13 @@
 package Web;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import interfaces.DespachoDAOLocal;
+import interfaces.ServiciosVariosInterfaz;
 import interfaces.TROrdenDespachoDAOInterfaz;
+import interfaces.TROrdenVentaDAOInterfaz;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -8,9 +15,15 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+
+import negocio.Despacho;
+import negocio.TROrdenDespacho;
+import negocio.TROrdenVenta;
 import dto.MensajeRespuestaDTO;
+import dto.TROrdenDespachoDTO;
 
 /**
  * Session Bean implementation class RSMonitoreo
@@ -21,6 +34,12 @@ public class RSMonitoreo {
 	//(name = "DespachoDAO")
 	@EJB(name="TROrdenDespachoDAO")
     private TROrdenDespachoDAOInterfaz dao;
+	@EJB(name="TROrdenVentaDAO")
+	private TROrdenVentaDAOInterfaz IVentas;
+	@EJB(name="DespachoDAO")
+	private DespachoDAOLocal IDespachos;
+	@EJB(name="serviciosVarios")
+	private ServiciosVariosInterfaz IServicios;
     /**
      * Default constructor. 
      */
@@ -54,6 +73,8 @@ public class RSMonitoreo {
 	}
       return generarRespuesta(true,"Proceso finalizado correctamente");
     }
+    
+    
    
    
     // This method is called if HTML is requested
@@ -74,6 +95,56 @@ public class RSMonitoreo {
     	}
     	respuesta.setMensaje(mensaje);
     	return respuesta;
+    }
+    
+    
+    @POST
+    @Path("/asociarDespachoAVenta/{venta}/{despacho}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public TROrdenDespachoDTO asociarDespachoAVenta(@PathParam("venta") int venta, @PathParam("despacho") int despacho) throws Exception{
+		
+		try {
+			if(venta != -1 && despacho != -1) {
+				TROrdenVenta Venta = IVentas.getVenta(venta);
+				Despacho Despacho =  IDespachos.getDespacho(despacho);
+				TROrdenDespacho orden = dao.crearOrdenDeDespachoParaVenta(Venta, Despacho);
+				
+				//TODO Llamar a web service de Despacho y mandarle la orden
+				
+				//serializar orden y mandarla de vuelta a la UI.
+				TROrdenDespachoDTO despachoDTO = new TROrdenDespachoDTO();
+				
+				despachoDTO.setNroDespacho(orden.getDespacho().getNumero());
+				despachoDTO.setNroVenta(orden.getAsociada().getNumero());
+				despachoDTO.setIdModulo(orden.getAsociada().getModuloId());
+				
+				DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				Date result =  df.parse(orden.getFecha()); 
+				despachoDTO.setFecha(result);
+				
+				return despachoDTO;
+				
+			}
+			
+			return null;
+		} catch(Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+    }
+    
+    @POST
+    @Path("/enviarRanking")
+    @Produces(MediaType.TEXT_HTML)
+    public String mandarRanking() {
+    	
+    	try {
+    		IServicios.enviarRanking(IServicios.rankingArticulos());
+    		return "true";
+    	} catch(Exception e) {
+    		e.printStackTrace();
+    		return "false";
+    	}
     }
 	
 }

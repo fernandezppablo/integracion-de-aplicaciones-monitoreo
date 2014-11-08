@@ -35,6 +35,29 @@ $(document).ready(function() {
 
 
 
+/*
+ * Controlador Business Delegate 
+ */
+var BusinessDelegate = {
+		AsignarOrdenAVenta: function(venta, despacho) {
+			if(!venta || !despacho) {
+				return;
+			}
+			$.post('Web/REST/asociarDespachoAVenta/' + venta.nro + '/' + despacho.numero,
+			function(response) {
+				alert("Pasó");
+			},
+			'json').fail(function() {
+				alert("Falló");
+			});
+		},
+		
+		EnviarRanking: function() {
+			$.post('Web/REST/enviarRanking', function(response) {}, 'text');
+		}
+		
+};
+
 
 
 /***
@@ -143,13 +166,20 @@ var dataPane = {
 		
 		d.find('.despacho[data-id="' + selectedName + '"]').addClass('recomended');
 		
-		if(sale.asociada && sale.asociada.id) {
+		if(sale.asociada && sale.asociada.numero) {
 			d.find('.despacho[data-id=' + sale.orden.numero + ']').addClass('seleccionado');
 			d.find('#confirmar-despacho').addClass('disabled').unbind('click');
 		} else {
+			d.find('.despacho').unbind('click').click(function() {
+				d.find('.despacho').removeClass('seleccionado');
+				$(this).addClass('seleccionado');
+			});
 			d.find('#confirmar-despacho').click(function() {
 				var numeroSeleccionado = d.find('.despacho.seleccionado').attr('data-id');
+				var venta = ventas[v.find('.nro-venta').html()];
+				var despacho = despachos[numeroSeleccionado];
 				//Mandar al server
+				BusinessDelegate.AsignarOrdenAVenta(venta, despacho);
 			});
 		}
 		
