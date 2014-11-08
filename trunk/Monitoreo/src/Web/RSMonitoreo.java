@@ -24,6 +24,7 @@ import negocio.TROrdenDespacho;
 import negocio.TROrdenVenta;
 import dto.MensajeRespuestaDTO;
 import dto.TROrdenDespachoDTO;
+import enums.Estado;
 
 /**
  * Session Bean implementation class RSMonitoreo
@@ -117,6 +118,7 @@ public class RSMonitoreo {
 				despachoDTO.setNroDespacho(orden.getDespacho().getNumero());
 				despachoDTO.setNroVenta(orden.getAsociada().getNumero());
 				despachoDTO.setIdModulo(orden.getAsociada().getModuloId());
+				despachoDTO.setEstado(Estado.Abierta);
 				
 				DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				Date result =  df.parse(orden.getFecha()); 
