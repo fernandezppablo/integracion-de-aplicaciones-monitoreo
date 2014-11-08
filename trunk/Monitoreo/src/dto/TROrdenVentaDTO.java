@@ -7,6 +7,7 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import enums.Estado;
@@ -68,6 +69,7 @@ public class TROrdenVentaDTO {
 	public void setVentaItems(List<ItemOrdenVentaDTO> ventaItems) {
 		this.ventaItems = ventaItems;
 	}
+	@XmlTransient
 	public TROrdenDespachoDTO getAsociada() {
 		return asociada;
 	}
