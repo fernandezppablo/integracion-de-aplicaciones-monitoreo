@@ -17,6 +17,7 @@ public class TROrdenDespachoDTO {
 	private int nroVenta;
 	private int idModulo;
 	private Date fecha;
+	private Estado estado;
 	public List<ItemOrdenDespachoDTO> items;
 	public int getNroDespacho() {
 		return nroDespacho;
@@ -51,6 +52,12 @@ public class TROrdenDespachoDTO {
 	}
 	public void setItems(List<ItemOrdenDespachoDTO> items) {
 		this.items = items;
+	}
+	public Estado getEstado() {
+		return estado;
+	}
+	public void setEstado(Estado estado) {
+		this.estado = estado;
 	}
 	
 

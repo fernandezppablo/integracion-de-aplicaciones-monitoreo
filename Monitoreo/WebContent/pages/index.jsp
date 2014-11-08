@@ -259,19 +259,32 @@
 		</div>
 	</body>
 	<script>
-	
+
+		var estados = {
+			'1': 'Abierta',
+			'2': 'Anulada',
+			'3': 'Cerrada'
+				};
 		var ventas = {};
 		if(Venta) {
 			<c:forEach items="${requestScope.ventas}" var="venta">
-				ventas["${venta.ventaId}"] = new Venta(
+			ventas["${venta.ventaId}"] = new Venta(
 						"${venta.ventaId}",
-						undefined, 
 						"${venta.coordenadaY}", 
 						"${venta.coordenadaX}", 
 						"${venta.fecha}", 
 						"${venta.monto}", 
 						"${venta.moduloId}"
 						);
+				<c:if test="${venta.asociada ne null}">
+					ventas["${venta.ventaId}"]['asociada'] = new OrdenDespacho(
+							"${venta.asociada.nroDespacho}",
+							"${venta.asociada.nroVenta}",
+							"${venta.asociada.estado}", 
+							"${venta.asociada.idModulo}", 
+							"${venta.asociada.fecha}"
+							);
+				</c:if>
 			</c:forEach>
 			}
 

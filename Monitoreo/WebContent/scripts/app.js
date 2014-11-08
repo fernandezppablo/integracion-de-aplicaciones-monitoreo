@@ -73,9 +73,8 @@ var BusinessDelegate = {
 /***
 	Objetos
 ***/
-function Venta(nro, estado, latitud, longitud, fecha, monto, modulo) {
+function Venta(nro, latitud, longitud, fecha, monto, modulo) {
 	this.nro = nro;
-	this.estado = estado;
 	this.latitud = latitud;
 	this.longitud = longitud;
 	this.fecha = fecha;
@@ -108,12 +107,12 @@ function Item(articulo, cantidad) {
 	this.cantidad = cantidad;
 }
 
-function OrdenDespacho(estado, latitud, longitud, fecha, monto) {
+function OrdenDespacho(nroDespacho, nroVenta, estado, portal, fecha) {
+	this.nroDespacho = nroDespacho;
+	this.nroVenta = nroVenta;
 	this.estado = estado;
-	this.latitud = latitud;
-	this.longitud = longitud;
+	this.portal = portal;
 	this.fecha = fecha;
-	this.monto = monto;
 	this.items = [];
 }
 

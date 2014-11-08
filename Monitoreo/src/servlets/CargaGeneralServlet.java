@@ -94,7 +94,7 @@ public class CargaGeneralServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		List<TROrdenVentaDTO> ventasSinAsociar = sv.getOrdenesVentaSinAsociar();
-		List<TROrdenVentaDTO> ventas = sv.getOrdenesVentaAsociadas();
+		List<TROrdenVentaDTO> ventas = sv.getOrdenesVenta();
 		List<ResumenPortalDTO> portalesVentas = this.buildPortalesSum(ventas);
 		
 		//request.setAttribute("ranking", sv.rankingArticulos());
