@@ -14,6 +14,6 @@ public interface ServiciosVariosInterfaz {
 	public void mandarDespacho(DespachoDTO aMandar) throws Exception;
 	public List<DespachoDTO> getDespachos();
 	public List<TROrdenVentaDTO> getOrdenesVentaSinAsociar();
-	public List<TROrdenVentaDTO> getOrdenesVentaAsociadas();
+	public List<TROrdenVentaDTO> getOrdenesVenta();
 	public List<ItemAuditoriaDTO> getItemsAuditoria();
 }

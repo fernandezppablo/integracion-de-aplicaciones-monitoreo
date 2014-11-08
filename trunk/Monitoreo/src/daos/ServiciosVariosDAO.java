@@ -11,7 +11,12 @@ import java.io.StringWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -29,7 +34,9 @@ import dto.DespachoDTO;
 import dto.ItemAuditoriaDTO;
 import dto.ItemRankingDTO;
 import dto.MensajeRespuestaDTO;
+import dto.TROrdenDespachoDTO;
 import dto.TROrdenVentaDTO;
+import enums.Estado;
 
 @Stateless(name="serviciosVarios")
 public class ServiciosVariosDAO implements ServiciosVariosInterfaz{
@@ -183,11 +190,11 @@ public class ServiciosVariosDAO implements ServiciosVariosInterfaz{
 	
 	
 	@Override
-	public List<TROrdenVentaDTO> getOrdenesVentaAsociadas() {
+	public List<TROrdenVentaDTO> getOrdenesVenta() {
 		List<TROrdenVentaDTO> ventasdto = new ArrayList<TROrdenVentaDTO>();
 		
 		try {
-			List<TROrdenVenta> ventas = (List<TROrdenVenta>) em.createQuery("SELECT d FROM TROrdenVenta d").getResultList();
+			List<TROrdenVenta> ventas = (List<TROrdenVenta>) em.createQuery("SELECT d FROM TROrdenVenta d left join fetch d.asociada").getResultList();
 			
 			for(TROrdenVenta actual: ventas){
 				TROrdenVentaDTO nuevo = new TROrdenVentaDTO();
@@ -197,10 +204,25 @@ public class ServiciosVariosDAO implements ServiciosVariosInterfaz{
 				nuevo.setModuloId(actual.getModuloId());
 				nuevo.setMonto(actual.getMonto());
 				nuevo.setVentaId(actual.getNumero());
+				
+				if(actual.getAsociada() != null) {
+					TROrdenDespachoDTO orden = new TROrdenDespachoDTO();
+					orden.setNroDespacho(actual.getAsociada().getDespacho().getNumero());
+					orden.setNroVenta(actual.getNumero());
+					orden.setIdModulo(actual.getModuloId());
+					
+					DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					orden.setFecha(dateFormat.parse(actual.getAsociada().getFecha()));
+					orden.setEstado(Estado.Abierta);
+					nuevo.setAsociada(orden);
+				}
+				
 				ventasdto.add(nuevo);
 			}
 		} catch(ClassCastException cce) {
 			cce.printStackTrace();
+		} catch(ParseException pe) {
+			pe.printStackTrace();
 		}
 		
 		
