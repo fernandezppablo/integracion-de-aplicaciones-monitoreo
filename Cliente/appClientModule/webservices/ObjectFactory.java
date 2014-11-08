@@ -25,15 +25,41 @@ import javax.xml.namespace.QName;
 public class ObjectFactory {
 
     private final static QName _RegistrarVenta_QNAME = new QName("http://webservices/", "registrarVenta");
-    private final static QName _InformarLogResponse_QNAME = new QName("http://webservices/", "informarLogResponse");
-    private final static QName _InformarLog_QNAME = new QName("http://webservices/", "informarLog");
+    private final static QName _GenerarRespuestaResponse_QNAME = new QName("http://webservices/", "generarRespuestaResponse");
     private final static QName _RegistrarVentaResponse_QNAME = new QName("http://webservices/", "registrarVentaResponse");
+    private final static QName _EnviarInformeAuditoriaResponse_QNAME = new QName("http://webservices/", "enviarInformeAuditoriaResponse");
+    private final static QName _EnviarInformeAuditoria_QNAME = new QName("http://webservices/", "enviarInformeAuditoria");
+    private final static QName _GenerarRespuesta_QNAME = new QName("http://webservices/", "generarRespuesta");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: webservices
      * 
      */
     public ObjectFactory() {
+    }
+
+    /**
+     * Create an instance of {@link GenerarRespuesta }
+     * 
+     */
+    public GenerarRespuesta createGenerarRespuesta() {
+        return new GenerarRespuesta();
+    }
+
+    /**
+     * Create an instance of {@link EnviarInformeAuditoria }
+     * 
+     */
+    public EnviarInformeAuditoria createEnviarInformeAuditoria() {
+        return new EnviarInformeAuditoria();
+    }
+
+    /**
+     * Create an instance of {@link EnviarInformeAuditoriaResponse }
+     * 
+     */
+    public EnviarInformeAuditoriaResponse createEnviarInformeAuditoriaResponse() {
+        return new EnviarInformeAuditoriaResponse();
     }
 
     /**
@@ -45,11 +71,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link InformarLog }
-     * 
-     */
- 
-    /**
      * Create an instance of {@link RegistrarVenta }
      * 
      */
@@ -58,11 +79,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link InformarLogResponse }
+     * Create an instance of {@link GenerarRespuestaResponse }
      * 
      */
-    public InformarLogResponse createInformarLogResponse() {
-        return new InformarLogResponse();
+    public GenerarRespuestaResponse createGenerarRespuestaResponse() {
+        return new GenerarRespuestaResponse();
     }
 
     /**
@@ -75,18 +96,13 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link InformarLogResponse }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link GenerarRespuestaResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservices/", name = "informarLogResponse")
-    public JAXBElement<InformarLogResponse> createInformarLogResponse(InformarLogResponse value) {
-        return new JAXBElement<InformarLogResponse>(_InformarLogResponse_QNAME, InformarLogResponse.class, null, value);
+    @XmlElementDecl(namespace = "http://webservices/", name = "generarRespuestaResponse")
+    public JAXBElement<GenerarRespuestaResponse> createGenerarRespuestaResponse(GenerarRespuestaResponse value) {
+        return new JAXBElement<GenerarRespuestaResponse>(_GenerarRespuestaResponse_QNAME, GenerarRespuestaResponse.class, null, value);
     }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link InformarLog }{@code >}}
-     * 
-     */
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link RegistrarVentaResponse }{@code >}}
@@ -95,6 +111,33 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://webservices/", name = "registrarVentaResponse")
     public JAXBElement<RegistrarVentaResponse> createRegistrarVentaResponse(RegistrarVentaResponse value) {
         return new JAXBElement<RegistrarVentaResponse>(_RegistrarVentaResponse_QNAME, RegistrarVentaResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link EnviarInformeAuditoriaResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://webservices/", name = "enviarInformeAuditoriaResponse")
+    public JAXBElement<EnviarInformeAuditoriaResponse> createEnviarInformeAuditoriaResponse(EnviarInformeAuditoriaResponse value) {
+        return new JAXBElement<EnviarInformeAuditoriaResponse>(_EnviarInformeAuditoriaResponse_QNAME, EnviarInformeAuditoriaResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link EnviarInformeAuditoria }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://webservices/", name = "enviarInformeAuditoria")
+    public JAXBElement<EnviarInformeAuditoria> createEnviarInformeAuditoria(EnviarInformeAuditoria value) {
+        return new JAXBElement<EnviarInformeAuditoria>(_EnviarInformeAuditoria_QNAME, EnviarInformeAuditoria.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link GenerarRespuesta }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://webservices/", name = "generarRespuesta")
+    public JAXBElement<GenerarRespuesta> createGenerarRespuesta(GenerarRespuesta value) {
+        return new JAXBElement<GenerarRespuesta>(_GenerarRespuesta_QNAME, GenerarRespuesta.class, null, value);
     }
 
 }

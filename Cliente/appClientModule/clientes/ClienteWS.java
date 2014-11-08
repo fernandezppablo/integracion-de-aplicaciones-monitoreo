@@ -31,12 +31,12 @@ public class ClienteWS {
 		/************************************/
 		/* TEST INFORMAR LOG                */
 		/************************************/
-		String resultado = port.informarLog(generateLog("log"));
+		//String resultado = port.enviarInformeAuditoria(generateLog("log"));
 		/************************************/
 		/* TEST REGISTRAR VENTA             */
 		/************************************/
-		//System.out.println(generateVenta());
-		//String resultado = port.registrarVenta(generateVenta());
+		System.out.println(generateVenta());
+		String resultado = port.registrarVenta(generateVenta());
 		System.out.println(resultado);
 		
 		
@@ -63,7 +63,7 @@ public class ClienteWS {
  
             //Main Node
         Element raiz = document.getDocumentElement();
-        //Por cada key creamos un item que contendr‡ la key y el value
+        //Por cada key creamos un item que contendrá la key y el value
 
         //Log jefe
         //Element log = document.createElement("log"); 
@@ -118,7 +118,7 @@ public class ClienteWS {
  
             //Main Node
         Element raiz = document.getDocumentElement();
-        //Por cada key creamos un item que contendr‡ la key y el value
+        //Por cada key creamos un item que contendrá la key y el value
 
         //Log jefe
         //Element log = document.createElement("log"); 
