@@ -6,6 +6,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name="despacho")
 public class DespachoDTO {
 
+	private int numero;
 	private String nombre;
 	private float longitud;
 	private float latitud;
@@ -26,6 +27,12 @@ public class DespachoDTO {
 	}
 	public void setLatitud(float latitud) {
 		this.latitud = latitud;
+	}
+	public int getNumero() {
+		return numero;
+	}
+	public void setNumero(int numero) {
+		this.numero = numero;
 	}
 
 	

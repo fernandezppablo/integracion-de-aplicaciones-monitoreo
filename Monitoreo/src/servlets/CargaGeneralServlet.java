@@ -24,6 +24,7 @@ import dto.TROrdenVentaDTO;
 public class CargaGeneralServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     
+	@EJB(name = "serviciosVarios")
 	private ServiciosVariosInterfaz sv;
 
 	private List<ResumenPortalDTO> buildPortalesSum(List<TROrdenVentaDTO> ventas) {
@@ -34,14 +35,17 @@ public class CargaGeneralServlet extends HttpServlet {
 		
 		for(int i=0; i<ventas.size(); i++) {
 			int modId = ventas.get(i).getModuloId();
+			List<TROrdenVentaDTO> portalVentas;
 			if(portalesMap.containsKey(modId)) {
-				List<TROrdenVentaDTO> portalVentas = portalesMap.get(modId);
+				portalVentas = portalesMap.get(modId);
 				if(portalVentas == null) {
 					portalVentas = new ArrayList<TROrdenVentaDTO>();
 				}
-				portalVentas.add(ventas.get(i));
-				portalesMap.put(modId, portalVentas);
+			} else {
+				portalVentas = new ArrayList<TROrdenVentaDTO>();
 			}
+			portalVentas.add(ventas.get(i));
+			portalesMap.put(modId, portalVentas);
 		}
 		
 		Iterator<Entry<Integer, List<TROrdenVentaDTO>>> it = portalesMap.entrySet().iterator();
@@ -69,10 +73,6 @@ public class CargaGeneralServlet extends HttpServlet {
         super();
     }
     
-    @EJB(name = "serviciosVarios")
-    public void setServiciosVarios(ServiciosVariosInterfaz servicios) {
-    	this.sv = servicios;
-    }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
@@ -80,11 +80,7 @@ public class CargaGeneralServlet extends HttpServlet {
 		List<TROrdenVentaDTO> ventas = sv.getOrdenesVentaAsociadas();
 		List<ResumenPortalDTO> portalesVentas = this.buildPortalesSum(ventas);
 		
-		for(int i=0; i<ventasSinAsociar.size(); i++) {
-			ventas.add(ventasSinAsociar.get(i));
-		}
-		
-		request.setAttribute("ranking", sv.rankingArticulos());
+		//request.setAttribute("ranking", sv.rankingArticulos());
 		request.setAttribute("despachos", sv.getDespachos());
 		request.setAttribute("ventas", ventas);
 		request.setAttribute("ventasSinAsociar", ventasSinAsociar);
