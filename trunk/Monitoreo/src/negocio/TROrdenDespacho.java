@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
@@ -21,6 +22,8 @@ public class TROrdenDespacho  extends PersistentObject{
 	private float longitud;
 	private String fecha;
 	private float monto;
+	@ManyToOne
+	private Despacho despacho;
 	
 	@OneToOne
 	@JoinColumn(name="asociada")
@@ -83,6 +86,12 @@ public class TROrdenDespacho  extends PersistentObject{
 				nuevo.setItemasociado(actual);
 			}
 		}
+	}
+	public Despacho getDespacho() {
+		return despacho;
+	}
+	public void setDespacho(Despacho despacho) {
+		this.despacho = despacho;
 	}
 	
 	

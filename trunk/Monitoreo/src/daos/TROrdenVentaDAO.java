@@ -13,7 +13,7 @@ import dto.ItemOrdenVentaDTO;
 import dto.TROrdenVentaDTO;
 import interfaces.TROrdenVentaDAOInterfaz;
 
-@Stateless
+@Stateless(name="TROrdenVentaDAO")
 public class TROrdenVentaDAO implements TROrdenVentaDAOInterfaz{
 	@PersistenceContext(unitName = "TP")	
 	private EntityManager em;
@@ -50,6 +50,21 @@ public class TROrdenVentaDAO implements TROrdenVentaDAOInterfaz{
 		
 	}
 	
-	
+	public TROrdenVenta getVenta(int numero) throws Exception{
+		try {
+			TROrdenVenta venta = (TROrdenVenta)em
+					.createQuery("select ov from TROrdenVenta ov where ov.numero = :NUMERO")
+					.setParameter(":NUMERO", numero)
+					.getSingleResult();
+			return venta;
+		} catch(ClassCastException cce) {
+			cce.printStackTrace();
+			throw new Exception("No se pudo convertir el resultado de la consulta a TROrdenVenta");
+		} catch(Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		
+	}
 
 }
