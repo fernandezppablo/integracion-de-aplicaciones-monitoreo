@@ -30,6 +30,10 @@
 				<i class="fi-clipboard"></i>
 				<label>Reporte</label>
 			</a>
+			<a class="item ranking">
+				<i class="fi-upload-cloud"></i>
+				<label>Enviar Ranking</label>
+			</a>
 		</div>
 		
 		<!-- Banner -->

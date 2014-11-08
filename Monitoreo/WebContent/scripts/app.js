@@ -27,6 +27,12 @@ $(document).ready(function() {
 		$(panels.monitoreo).hide();
 		$(panels.reporte).show();
 	});
+	//bind menu item enviar ranking
+	$('.icon-bar .item.ranking').click(function() {
+		if(BusinessDelegate) {
+			BusinessDelegate.EnviarRanking();
+		}
+	});
 	
 	dataPane.start();
 	logistica.start();
@@ -53,7 +59,11 @@ var BusinessDelegate = {
 		},
 		
 		EnviarRanking: function() {
-			$.post('Web/REST/enviarRanking', function(response) {}, 'text');
+			$.post('Web/REST/enviarRanking', function(response) {
+				alert('Ranking enviado correctamente');
+			}, 'text').fail(function() {
+				alert('Ranking falló');
+			});
 		}
 		
 };
