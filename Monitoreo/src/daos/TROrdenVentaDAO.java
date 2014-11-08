@@ -54,7 +54,7 @@ public class TROrdenVentaDAO implements TROrdenVentaDAOInterfaz{
 		try {
 			TROrdenVenta venta = (TROrdenVenta)em
 					.createQuery("select ov from TROrdenVenta ov where ov.numero = :NUMERO")
-					.setParameter(":NUMERO", numero)
+					.setParameter("NUMERO", numero)
 					.getSingleResult();
 			return venta;
 		} catch(ClassCastException cce) {

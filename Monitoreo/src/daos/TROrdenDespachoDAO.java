@@ -55,6 +55,8 @@ public class TROrdenDespachoDAO implements TROrdenDespachoDAOInterfaz{
 		orden.setFecha(dateFormat.format(Calendar.getInstance().getTime()));
 		orden.setEstado(Estado.Abierta);
 		
+		venta.setAsociada(orden);
+		
 		try {
 			em.persist(orden);
 		} catch(Exception e) {
