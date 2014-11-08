@@ -32,7 +32,7 @@ public class ItemAuditoriaDTO {
 		this.idModulo = idModulo;
 	}
 	@XmlElement(name = "fecha")
-	@XmlJavaTypeAdapter(DateAdapter.class)
+	//@XmlJavaTypeAdapter(DateAdapter.class)
 	public Date getFecha() {
 		return fecha;
 	}
