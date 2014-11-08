@@ -49,17 +49,11 @@ var BusinessDelegate = {
 			if(!venta || !despacho) {
 				return;
 			}
-			$.post('Web/REST/asociarDespachoAVenta/' + venta.nro + '/' + despacho.numero,
-			function(response) {
-				alert("Pasó");
-			},
-			'json').fail(function() {
-				alert("Falló");
-			});
+			return $.post('Web/REST/asociarDespachoAVenta/' + venta.nro + '/' + despacho.numero);
 		},
 		
 		EnviarRanking: function() {
-			$.post('Web/REST/enviarRanking', function(response) {
+			return $.post('Web/REST/enviarRanking', function(response) {
 				alert('Ranking enviado correctamente');
 			}, 'text').fail(function() {
 				alert('Ranking falló');
@@ -166,7 +160,7 @@ var dataPane = {
 		var v = d.find('.data-header');
 		
 		d.find('.despacho').removeClass('seleccionado').removeClass('recomended');
-		v.find('#confirmar-despacho').removeClass('disabled');
+		d.find('#confirmar-despacho').removeClass('disabled');
 		v.find('.nro-venta').html(sale.nro);
 		v.find('.latitud').html(sale.latitud);
 		v.find('.longitud').html(sale.longitud);
@@ -175,7 +169,7 @@ var dataPane = {
 		
 		d.find('.despacho[data-id="' + selectedName + '"]').addClass('recomended');
 		
-		if(sale.asociada && sale.asociada.numero) {
+		if(sale.asociada && sale.asociada.nroDespacho) {
 			d.find('.despacho[data-id=' + sale.orden.numero + ']').addClass('seleccionado');
 			d.find('#confirmar-despacho').addClass('disabled').unbind('click');
 		} else {
@@ -188,7 +182,34 @@ var dataPane = {
 				var venta = ventas[v.find('.nro-venta').html()];
 				var despacho = despachos[numeroSeleccionado];
 				//Mandar al server
-				BusinessDelegate.AsignarOrdenAVenta(venta, despacho);
+				BusinessDelegate.AsignarOrdenAVenta(venta, despacho)
+				.done(function(orden) {
+					if(venta && orden) {
+						/*
+						 * estado: null
+						 * fecha: 1415470461000
+						 * idModulo: 2
+						 * items: null
+						 * nroDespacho: 4
+						 * nroVenta: 3
+						 */
+						venta.asociada = new OrdenDespacho(orden.nroDespacho, orden.nroVenta, orden.estado, orden.idModulo, orden.fecha);
+						$(panels.logistica).find('.venta[data-id="' + venta.nro + '"]')
+							.removeClass('pending')
+							.addClass('done')
+							.find('.assign.pending').hide();
+							$(panels.logistica).find('.venta[data-id="' + venta.nro + '"] .assign.done').show();
+						d.find('#confirmar-despacho').addClass('disabled');
+						
+						$(panels.monitoreo).find('.venta-resumen[data-id="' + venta.nro + '"] .monitoreo-con-despacho').html('Si');
+						$(panels.monitoreo).find('.venta-resumen[data-id="' + venta.nro + '"] .monitoreo-status').html(venta.asociada.estado);
+						
+						dataPane._close();
+					}
+				}).fail(function() {
+					//Por ahora nada
+					alert('Falló el envio de orden de despacho');
+				});
 			});
 		}
 		

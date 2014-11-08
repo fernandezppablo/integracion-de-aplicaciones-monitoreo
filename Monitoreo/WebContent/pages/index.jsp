@@ -120,14 +120,14 @@
 						  </thead>
 						  <tbody>
 						  <c:forEach items="${requestScope.ventas}" var="venta">
-							<tr>
+							<tr class="venta-resumen" data-id="${venta.ventaId}">
 							  <td><c:out value="${venta.ventaId}"></c:out></td>
 							  <td><c:out value="${venta.fecha}"></c:out></td>
 							  <td>$<c:out value="${venta.monto}"></c:out></td>
 							  <td><c:out value="${venta.moduloId}"></c:out></td>
 							  <td><c:out value="${venta.coordenadaX}"></c:out></td>
 							  <td><c:out value="${venta.coordenadaY}"></c:out></td>
-							  <td>
+							  <td class="monitoreo-con-despacho">
 							  	<c:choose>
 							  		<c:when test="${venta.asociada eq null}">
 							  			No
