@@ -51,7 +51,7 @@ import enums.Estado;
 @Stateless(name="serviciosVarios")
 public class ServiciosVariosDAO implements ServiciosVariosInterfaz{
 	
-	@PersistenceContext(unitName = "TP")	
+	@PersistenceContext(unitName = "TP")
 	private EntityManager em;
 	
 	String ipportal = "172.16.163.15:8080"; //IP + PUERTO
