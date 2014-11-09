@@ -5,6 +5,7 @@ import interfaces.TROrdenVentaDAOInterfaz;
 
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.sql.Date;
 
 import javax.ejb.EJB;
 import javax.jws.WebMethod;
@@ -34,11 +35,13 @@ public class WSMonitoreo{
 			JAXBContext jaxbcontext;
 			try {
 				jaxbcontext = JAXBContext.newInstance(ItemAuditoriaDTO.class);
+				System.out.println(xml);
 				javax.xml.bind.Unmarshaller desencripta = jaxbcontext.createUnmarshaller();
 				ItemAuditoriaDTO item = (ItemAuditoriaDTO) desencripta.unmarshal(new StringReader(xml));
 				if(item.getFecha()==null){
 					return generarRespuesta(false,"Error en el formato de la fecha");
 				}
+				
 				AuditoriaDTO nueva = new AuditoriaDTO();
 				nueva.agregarItemAuditoria(item);
 				daoauditoria.grabarAuditoria(nueva);
