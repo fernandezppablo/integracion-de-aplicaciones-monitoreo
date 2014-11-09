@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class ItemOrdenDespachoDTO {
 	private int codigoArticulo;
-	private float cantidad;
+	private Integer cantidad;
 
 	public int getCodigoArticulo() {
 		return codigoArticulo;
@@ -15,11 +15,11 @@ public class ItemOrdenDespachoDTO {
 		this.codigoArticulo = codigoArticulo;
 	}
 
-	public float getCantidad() {
+	public Integer getCantidad() {
 		return cantidad;
 	}
 
-	public void setCantidad(float cantidad) {
+	public void setCantidad(int cantidad) {
 		this.cantidad = cantidad;
 	}
 	

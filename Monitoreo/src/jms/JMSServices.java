@@ -28,7 +28,7 @@ import dto.ItemAuditoriaDTO;
 {
 @ActivationConfigProperty(propertyName="messagingType", propertyValue="javax.jms.MessageListener"),
 @ActivationConfigProperty(propertyName="destinationType", propertyValue="javax.jms.Queue"),
-@ActivationConfigProperty(propertyName="destination", propertyValue="java:jboss/exported/queue/monitoreo"),
+@ActivationConfigProperty(propertyName="destination", propertyValue="java:jboss/exported/jms/queue/monitoreo"),
 @ActivationConfigProperty(propertyName="ConnectionFactoryName", propertyValue="ConnectionFactory"),
 @ActivationConfigProperty(propertyName="MaxPoolSize", propertyValue="1"),
 @ActivationConfigProperty(propertyName="MaxMessages", propertyValue="1"),

@@ -9,7 +9,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class ItemOrdenVentaDTO implements Serializable{
 
 	private int productoId;
-	private float cantidad;
+	private int cantidad;
 	
 	public ItemOrdenVentaDTO(){
 		
@@ -22,10 +22,10 @@ public class ItemOrdenVentaDTO implements Serializable{
 		this.productoId = productoId;
 	}
 
-	public float getCantidad() {
+	public int getCantidad() {
 		return cantidad;
 	}
-	public void setCantidad(float cantidad) {
+	public void setCantidad(int cantidad) {
 		this.cantidad = cantidad;
 	}
 

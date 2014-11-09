@@ -1,5 +1,6 @@
 package dto;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.xml.bind.annotation.XmlElement;
@@ -12,7 +13,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 public class ItemAuditoriaDTO {
 
 	private AuditoriaDTO auditoria;
-	private Date fecha;
+	private Calendar fecha;
 	private String log;
 	private int idModulo;
 	
@@ -33,10 +34,10 @@ public class ItemAuditoriaDTO {
 	}
 	@XmlElement(name = "fecha")
 	//@XmlJavaTypeAdapter(DateAdapter.class)
-	public Date getFecha() {
+	public Calendar getFecha() {
 		return fecha;
 	}
-	public void setFecha(Date fecha) {
+	public void setFecha(Calendar fecha) {
 		this.fecha = fecha;
 	}
 	@XmlElement(name = "mensaje")

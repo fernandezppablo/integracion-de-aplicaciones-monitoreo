@@ -2,7 +2,9 @@ package Web;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import interfaces.DespachoDAOLocal;
 import interfaces.ServiciosVariosInterfaz;
@@ -20,11 +22,12 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import negocio.Despacho;
+import negocio.ItemOrdenVenta;
 import negocio.TROrdenDespacho;
 import negocio.TROrdenVenta;
+import dto.ItemOrdenDespachoDTO;
 import dto.MensajeRespuestaDTO;
 import dto.TROrdenDespachoDTO;
-import enums.Estado;
 
 /**
  * Session Bean implementation class RSMonitoreo
@@ -118,11 +121,20 @@ public class RSMonitoreo {
 				despachoDTO.setNroDespacho(orden.getDespacho().getNumero());
 				despachoDTO.setNroVenta(orden.getAsociada().getNumero());
 				despachoDTO.setIdModulo(orden.getAsociada().getModuloId());
-				despachoDTO.setEstado(Estado.Abierta);
-				
 				DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				Date result =  df.parse(orden.getFecha()); 
 				despachoDTO.setFecha(result);
+				
+				
+				List<ItemOrdenDespachoDTO> items = new ArrayList<ItemOrdenDespachoDTO>();
+				
+				for(ItemOrdenVenta actual: Venta.getItems()){
+					ItemOrdenDespachoDTO nuevo = new ItemOrdenDespachoDTO();
+					nuevo.setCantidad(actual.getCantidad());
+					nuevo.setCodigoArticulo(actual.getArticulo());
+					items.add(nuevo);
+				}
+				despachoDTO.setItems(items);
 				IServicios.mandarDespacho(despachoDTO);
 				return despachoDTO;
 				

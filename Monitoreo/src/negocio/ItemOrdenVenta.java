@@ -19,7 +19,7 @@ public class ItemOrdenVenta  extends PersistentObject{
 	@JoinColumn(name="TROrdenVentaId")
 	private TROrdenVenta TROrdenVentaId;
 	private int articulo;
-	private float cantidad;
+	private int cantidad;
 	
 	
 	public TROrdenVenta getTROrdenVentaId() {
@@ -28,10 +28,10 @@ public class ItemOrdenVenta  extends PersistentObject{
 	public void setTROrdenVentaId(TROrdenVenta tROrdenVentaId) {
 		TROrdenVentaId = tROrdenVentaId;
 	}
-	public float getCantidad() {
+	public int getCantidad() {
 		return cantidad;
 	}
-	public void setCantidad(float cantidad) {
+	public void setCantidad(int cantidad) {
 		this.cantidad = cantidad;
 	}
 	public int getArticulo() {
