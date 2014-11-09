@@ -3,7 +3,6 @@ package daos;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import interfaces.AuditoriaDAOInterfaz;
 
@@ -11,21 +10,12 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-
-
-
-import javax.persistence.Query;
-
 import dto.AuditoriaDTO;
 import dto.ItemAuditoriaDTO;
-import dto.ItemOrdenVentaDTO;
-import dto.TROrdenVentaDTO;
 import negocio.Auditoria;
 import negocio.ItemAuditoria;
-import negocio.ItemOrdenVenta;
-import negocio.TROrdenVenta;
 
-@Stateless
+@Stateless(name="AuditoriaDAO")
 public class AuditoriaDAO implements AuditoriaDAOInterfaz{
 	@PersistenceContext(unitName = "TP")	
 	private EntityManager em;
@@ -35,8 +25,8 @@ public class AuditoriaDAO implements AuditoriaDAOInterfaz{
 		Auditoria nueva = new Auditoria();
 		em.persist(nueva);
 		List<ItemAuditoria> lista = new ArrayList<ItemAuditoria>();
-		for(ItemAuditoriaDTO actual: aGrabar.getItemsauditoria()){
-			ItemAuditoria entidad = new ItemAuditoria(actual.getLog(), null, actual.getIdModulo(), nueva);
+		for(ItemAuditoriaDTO actual: aGrabar.getItemsauditoria()){ 
+			ItemAuditoria entidad = new ItemAuditoria(actual.getLog(), actual.getFecha(), actual.getIdModulo(), nueva);
 			em.persist(entidad);
 			lista.add(entidad);		
 		}
@@ -45,12 +35,18 @@ public class AuditoriaDAO implements AuditoriaDAOInterfaz{
 
 	}
 
-	
-
-
-
-	
-
-
-	
+	public List<ItemAuditoria> ultimosLogs() throws Exception {
+		try {
+			return (List<ItemAuditoria>)em
+					.createQuery("select l from ItemAuditoria l order by l.fecha desc")
+					.setMaxResults(10)
+					.getResultList();
+		} catch(ClassCastException cce) {
+			cce.printStackTrace();
+			throw cce;
+		} catch(Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
 }

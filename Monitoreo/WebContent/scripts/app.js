@@ -3,6 +3,8 @@ var panels = {
 	logistica: '#content-logistica',
 	monitoreo: '#content-monitoreo',
 	reporte: '#content-reportes',
+	audit: '#content-audit',
+	ranking: '#content-ranking',
 	data: '#data-pane',
 	dataDispatch: '#data-seleccionar-despacho',
 	dataSaleView: '#data-ver-detalle-venta'
@@ -14,29 +16,47 @@ $(document).ready(function() {
 		$(panels.logistica).show();
 		$(panels.monitoreo).hide();
 		$(panels.reporte).hide();
+		$(panels.audit).hide();
+		$(panels.ranking).hide();
 	});
 	//bind menu item monitoreo
 	$('.icon-bar .item.monitoreo').click(function() {
 		$(panels.logistica).hide();
 		$(panels.monitoreo).show();
 		$(panels.reporte).hide();
+		$(panels.audit).hide();
+		$(panels.ranking).hide();
 	});
 	//bind menu item reporte
 	$('.icon-bar .item.reporte').click(function() {
 		$(panels.logistica).hide();
 		$(panels.monitoreo).hide();
 		$(panels.reporte).show();
+		$(panels.audit).hide();
+		$(panels.ranking).hide();
+	});
+	//bind menu item auditoria
+	$('.icon-bar .item.auditoria').click(function() {
+		$(panels.logistica).hide();
+		$(panels.monitoreo).hide();
+		$(panels.reporte).hide();
+		$(panels.audit).show();
+		$(panels.ranking).hide();
 	});
 	//bind menu item enviar ranking
 	$('.icon-bar .item.ranking').click(function() {
-		if(BusinessDelegate) {
-			BusinessDelegate.EnviarRanking();
-		}
+		$(panels.logistica).hide();
+		$(panels.monitoreo).hide();
+		$(panels.reporte).hide();
+		$(panels.audit).hide();
+		$(panels.ranking).show();
 	});
 	
 	dataPane.start();
 	logistica.start();
 	reportes.start();
+	auditoria.start();
+	ranking.start();
 });
 
 
@@ -53,11 +73,11 @@ var BusinessDelegate = {
 		},
 		
 		EnviarRanking: function() {
-			return $.post('Web/REST/enviarRanking', function(response) {
-				alert('Ranking enviado correctamente');
-			}, 'text').fail(function() {
-				alert('Ranking falló');
-			});
+			return $.post('Web/REST/enviarRanking');
+		},
+		
+		Logs: function() {
+			return $.get('Web/REST/logs');
 		}
 		
 };
@@ -74,7 +94,7 @@ function Venta(nro, latitud, longitud, fecha, monto, modulo) {
 	this.fecha = fecha;
 	this.monto = monto;
 	this.modulo = modulo;
-	this.items = [];
+	this.ventaItems = [];
 	this.orden = {};
 }
 
@@ -107,12 +127,6 @@ function OrdenDespacho(nroDespacho, nroVenta, estado, portal, fecha) {
 	this.estado = estado;
 	this.portal = portal;
 	this.fecha = fecha;
-	this.items = [];
-}
-
-function ItemOrdenDespacho(articulo, cantidad) {
-	this.articulo = articulo;
-	this.cantidad = cantidad;
 }
 
 function Despacho(nombre, latitud, longitud, numero) {
@@ -170,7 +184,8 @@ var dataPane = {
 		d.find('.despacho[data-id="' + selectedName + '"]').addClass('recomended');
 		
 		if(sale.asociada && sale.asociada.nroDespacho) {
-			d.find('.despacho[data-id=' + sale.orden.numero + ']').addClass('seleccionado');
+			d.find('.despacho').unbind('click');
+			d.find('.despacho[data-id="' + sale.orden.numero + '"]').addClass('seleccionado');
 			d.find('#confirmar-despacho').addClass('disabled').unbind('click');
 		} else {
 			d.find('.despacho').unbind('click').click(function() {
@@ -182,6 +197,7 @@ var dataPane = {
 				var venta = ventas[v.find('.nro-venta').html()];
 				var despacho = despachos[numeroSeleccionado];
 				//Mandar al server
+				$(panels.dataDispatch).find('.loader').show();
 				BusinessDelegate.AsignarOrdenAVenta(venta, despacho)
 				.done(function(orden) {
 					if(venta && orden) {
@@ -194,6 +210,7 @@ var dataPane = {
 						 * nroVenta: 3
 						 */
 						venta.asociada = new OrdenDespacho(orden.nroDespacho, orden.nroVenta, orden.estado, orden.idModulo, orden.fecha);
+						$(panels.dataDispatch).find('.loader').hide();
 						$(panels.logistica).find('.venta[data-id="' + venta.nro + '"]')
 							.removeClass('pending')
 							.addClass('done')
@@ -208,6 +225,7 @@ var dataPane = {
 					}
 				}).fail(function() {
 					//Por ahora nada
+					$(panels.dataDispatch).find('.loader').hide();
 					alert('Falló el envio de orden de despacho');
 				});
 			});
@@ -226,11 +244,11 @@ var dataPane = {
 		d.find('.nro-venta').html(sale.nro);
 		d.find('.fecha').html(sale.fecha);
 		d.find('.monto').html(sale.monto);
-		d.find('.portal').html(sale.portal);
+		d.find('.portal').html(sale.modulo);
 		d.find('.latitud').html(sale.latitud);
 		d.find('.longitud').html(sale.longitud);
 		
-		if(sale.orden && sale.orden.nombre) {
+		if(sale.orden && sale.orden.numero) {
 			//Mostrar el despacho asignado y el estado de la orden
 		}
 		
@@ -265,29 +283,101 @@ var logistica = {
 	}
 };
 
-//Controlador del panel de monitoreo
-var monitoreo = {
-
-};
-
 //Controlador del panel de reportes
 var reportes = {
 	start: function() {
 		this.bindDataPane();
 	},
 	bindDataPane: function() {
-		$(panels.reporte + ' .portal-venta').click(function(sender) {
-			if(sender) {
-				var nro = $(sender).attr('data-id');
-				//Buscar la venta en la coleccion
-				//dataPane.loadSaleDetail();
-				
-				//Borrar
-				$(panels.dataDispatch).hide();
-				$(panels.dataSaleView).show();
-				dataPane.toggle();
-				//Borrar
-			}
+		$(panels.reporte + ' .portal-venta').click(function() {
+			var nro = $(this).attr('data-id');
+			//Buscar la venta en la coleccion
+			console.log('here');
+			var sale = ventas[nro];
+			dataPane.loadSaleDetail(sale);
+			
+			//Borrar
+//			$(panels.dataDispatch).hide();
+//			$(panels.dataSaleView).show();
+//			dataPane.toggle();
+			//Borrar
 		});
 	}
+};
+
+//Controlador del panel de enviar ranking
+var ranking = {
+		start: function() {
+			$(panels.ranking).find('.enviar-ranking').click(function() {
+				if(BusinessDelegate) {
+					$(panels.ranking).find('.loader').show();
+					BusinessDelegate.EnviarRanking()
+						.done(function() {
+							$(panels.ranking).find('.loader').hide();
+						})
+						.fail(function() {
+							$(panels.ranking).find('.loader').hide();
+						});
+				}
+			});
+		}
+};
+
+//Controlador del panel de auditoria
+var auditoria = {
+		_lastLogs: [],
+		_logs: {},
+		_blocking: false,
+		_last_request: 0,
+		_request_id: 0,
+		_ID: function() {
+			return ++this._request_id;
+		},
+		start: function() {
+			setInterval(function() {
+				if(!this._blocking) {
+					$(panels.audit).find('.loader').show();
+					var id = auditoria._ID();
+					auditoria._last_request = id;
+					auditoria._blocking = true;
+					BusinessDelegate.Logs()
+						.done(function(logs) {
+							if(logs != null && logs != undefined) {
+								for(var i=0; i<logs.length; i++) {
+									var key = logs[i].idModulo + '::' + logs[i].fecha;
+									auditoria._logs[key] = logs[i];
+								}
+								auditoria.setLogs().done(function() {
+									auditoria._blocking = false;
+									$(panels.audit).find('.loader').hide();
+								});
+							}
+						})
+						.fail(function() {
+							$(panels.audit).find('.loader').hide();
+							console.log('No se pudo traer los logs');
+							auditoria._blocking = false;
+						});
+				}
+			}, 2700);
+		},
+		setLogs: function() {
+			var dfd = $.Deferred();
+			if(this._logs) {
+				console.log('Setting..');
+				$('.log-items').empty();
+				for(var i=0 in this._logs) {
+					var currentLog = this._logs[i];
+					if(currentLog) {
+						var template = $('#log-template .log').clone();
+						template.find('.log-portal').html(currentLog.idModulo);
+						template.find('.log-date').html(currentLog.fecha);
+						template.find('.log-message').html(currentLog.log);
+						$('.log-items').append(template);
+					}
+				}
+				dfd.resolve();
+			}
+			return dfd;
+		}
 };

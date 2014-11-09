@@ -28,7 +28,11 @@
 			</a>
 			<a class="item reporte">
 				<i class="fi-clipboard"></i>
-				<label>Reporte</label>
+				<label>Reportes</label>
+			</a>
+			<a class="item auditoria">
+				<i class="fi-page-multiple"></i>
+				<label>Auditoria</label>
 			</a>
 			<a class="item ranking">
 				<i class="fi-upload-cloud"></i>
@@ -149,7 +153,7 @@
 				<!-- Panel de reportes -->
 				<div id="content-reportes" style="display: none;">
 					<div class="content-title">
-						<h3>Reporte - Ventas totales</h3>
+						<h3>Reportes - Ventas totales</h3>
 					</div>
 					<div class="row portales-reporte">
 					
@@ -159,7 +163,7 @@
 							<ul class="row portal-ventas">
 							
 							<c:forEach items="${portal.ventas}" var="venta">
-								<li class="portal-venta large-6 large-offset-6 columns">
+								<li class="portal-venta large-6 large-offset-6 columns" data-id="${venta.ventaId}">
 									<div class="row">
 										<div class="large-6 columns">
 											<h6>Venta nro: <span class="portal-venta-nro"><c:out value="${venta.ventaId}"></c:out></span></h6>
@@ -182,6 +186,84 @@
 					</div>
 				</div>
 				
+				
+				<!-- Panel de Ranking -->
+				<div id="content-ranking" style="display: none;">
+					<div class="content-title">
+						<h3>
+							Ranking de Ventas
+							<span class="button alert radius medium enviar-ranking">
+								Enviar Ranking
+								<!-- Spinner  -->
+								<span class="loader load-button" title="loading" style="display: none;">
+								  <svg version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+								     width="15px" height="15px" viewBox="0 0 50 50" style="enable-background:new 0 0 50 50;" xml:space="preserve">
+									<path fill="#000" d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z">
+									    <animateTransform attributeType="xml"
+									      attributeName="transform"
+									      type="rotate"
+									      from="0 25 25"
+									      to="360 25 25"
+									      dur="0.6s"
+									      repeatCount="indefinite"/>
+								   	</path>
+								  </svg>
+								</span>
+							</span>
+						</h3>
+					</div>
+					<div class="row ranking-items">
+					
+					<c:forEach items="${requestScope.ranking}" var="item">
+						<div class="ranking-item shadow large-12 columns">
+							<div class="row">
+								<div class="ranking-item-position large-2 columns">
+									<span class="label round alert"><c:out value="${item.posicion}"></c:out></span>
+								</div>
+								<h4 class="ranking-item-nombre large-10 columns">Articulo: <c:out value="${item.codigoArticulo}"></c:out></h4>
+							</div>							
+						</div>
+					</c:forEach>
+					</div>
+				</div>
+				
+				
+				<!-- Panel de Auditoria -->
+				<div id="content-audit" style="display: none;">
+					<div id="log-template" style="display: none;">
+						<div class="log shadow large-12 columns">
+							<div class="log-header row">
+								<h4 class="large-10 columns">Portal: <span class="log-portal"></span> | Fecha: <span class="log-date"></span></h4>
+							</div>
+							<div class="row">
+								<p class="log-message large-12 columns"></p>
+							</div>							
+						</div>
+					</div>
+					<div class="content-title">
+						<h3>
+							Logs de Auditoria
+						</h3>
+						<!-- Spinner  -->
+						<div class="loader" title="loading" style="display: none;">
+						  <svg version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+						     width="20px" height="20px" viewBox="0 0 50 50" style="enable-background:new 0 0 50 50;" xml:space="preserve">
+						  <path fill="#000" d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z">
+						    <animateTransform attributeType="xml"
+						      attributeName="transform"
+						      type="rotate"
+						      from="0 25 25"
+						      to="360 25 25"
+						      dur="0.6s"
+						      repeatCount="indefinite"/>
+						    </path>
+						  </svg>
+						</div>
+					</div>
+					<div class="row log-items">
+						
+					</div>
+				</div>
 				
 			</div>
 			
@@ -230,7 +312,24 @@
 							</ul>
 						</div>
 						<div class="row bottom-row">
-							<span id="confirmar-despacho" class="button success radius large small-10 small-offset-1 columns">Seleccionar</span>
+							<span id="confirmar-despacho" class="button success radius large small-10 small-offset-1 columns">
+								Seleccionar
+								<!-- Spinner  -->
+								<span class="loader load-button" title="loading" style="display: none;">
+								  <svg version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+								     width="17px" height="17px" viewBox="0 0 50 50" style="enable-background:new 0 0 50 50;" xml:space="preserve">
+									<path fill="#000" d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z">
+									    <animateTransform attributeType="xml"
+									      attributeName="transform"
+									      type="rotate"
+									      from="0 25 25"
+									      to="360 25 25"
+									      dur="0.6s"
+									      repeatCount="indefinite"/>
+								   	</path>
+								  </svg>
+								</span>
+							</span>
 						</div>
 					</div>
 					
@@ -285,6 +384,15 @@
 							"${venta.asociada.fecha}"
 							);
 				</c:if>
+				
+				var itemsVenta = [];
+				
+				<c:forEach items="${venta.ventaItems}" var="item">
+					var it = new Item("${item.productoId}", "${item.cantidad}");
+					itemsVenta.push(it); 
+				</c:forEach>
+				
+				ventas["${venta.ventaId}"]['ventaItems'] = itemsVenta;
 			</c:forEach>
 			}
 

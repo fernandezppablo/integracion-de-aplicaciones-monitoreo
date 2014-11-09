@@ -97,7 +97,7 @@ public class CargaGeneralServlet extends HttpServlet {
 		List<TROrdenVentaDTO> ventas = sv.getOrdenesVenta();
 		List<ResumenPortalDTO> portalesVentas = this.buildPortalesSum(ventas);
 		
-		//request.setAttribute("ranking", sv.rankingArticulos());
+		request.setAttribute("ranking", sv.rankingArticulos());
 		request.setAttribute("despachos", sv.getDespachos());
 		request.setAttribute("ventas", ventas);
 		request.setAttribute("ventasSinAsociar", ventasSinAsociar);

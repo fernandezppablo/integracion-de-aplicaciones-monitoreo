@@ -21,6 +21,8 @@ public class ItemOrdenDespacho extends PersistentObject{
 	@OneToOne
 	private ItemOrdenVenta itemasociado;
 	private float cantidad;
+	
+	
 	public TROrdenDespacho getTransaccion() {
 		return transaccion;
 	}

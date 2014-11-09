@@ -4,6 +4,7 @@ import interfaces.TROrdenDespachoDAOInterfaz;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -13,8 +14,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import dto.ItemOrdenVentaDTO;
 import enums.Estado;
 import negocio.Despacho;
+import negocio.ItemOrdenDespacho;
 import negocio.TROrdenDespacho;
 import negocio.TROrdenVenta;
 
@@ -47,18 +50,28 @@ public class TROrdenDespachoDAO implements TROrdenDespachoDAOInterfaz{
 	
 	public TROrdenDespacho crearOrdenDeDespachoParaVenta(TROrdenVenta venta, Despacho despacho) {
 		TROrdenDespacho orden = new TROrdenDespacho();
-		
-		orden.setAsociada(venta);
 		orden.setDespacho(despacho);
 		
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		orden.setFecha(dateFormat.format(Calendar.getInstance().getTime()));
 		orden.setEstado(Estado.Abierta);
 		
-		venta.setAsociada(orden);
+		
+		List<ItemOrdenDespacho> itemsDespacho = new ArrayList<ItemOrdenDespacho>();
+		for(int i=0; i<venta.getItems().size(); i++) {
+			ItemOrdenDespacho iod = new ItemOrdenDespacho();
+			iod.setArticulo(venta.getItems().get(i).getArticulo());
+			iod.setCantidad(venta.getItems().get(i).getCantidad());
+			iod.setTransaccion(orden);
+			iod.setItemasociado(venta.getItems().get(i));
+			itemsDespacho.add(iod);
+		}
+		orden.setItems(itemsDespacho);
 		
 		try {
+			orden.setAsociada(venta);
 			em.persist(orden);
+			venta.setAsociada(orden);
 		} catch(Exception e) {
 			e.printStackTrace();
 			return null;

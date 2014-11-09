@@ -29,7 +29,9 @@ public class ItemAuditoria extends PersistentObject{
 	private Auditoria auditoria;
 	
 	
-	
+	public ItemAuditoria() {
+		
+	}
 	
 	public ItemAuditoria(String log, Date fecha, int idModulo,
 			Auditoria auditoria) {
