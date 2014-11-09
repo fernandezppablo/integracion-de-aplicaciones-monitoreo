@@ -40,6 +40,7 @@ import negocio.TROrdenVenta;
 import dto.DespachoDTO;
 import dto.ItemAuditoriaDTO;
 import dto.ItemOrdenDespachoDTO;
+import dto.ItemOrdenVentaDTO;
 import dto.ItemRankingDTO;
 import dto.MensajeRespuestaDTO;
 import dto.RankingDTO;
@@ -98,8 +99,8 @@ public class ServiciosVariosDAO implements ServiciosVariosInterfaz{
 		while(itr.hasNext()){
 			Object[] element = (Object[]) itr.next(); 
 			ItemRankingDTO nuevo = new ItemRankingDTO();
-			nuevo.codigoArticulo = (Integer.valueOf(element[0].toString()));
-			nuevo.posicion = (pos);
+			nuevo.setCodigoArticulo((Integer.valueOf(element[0].toString())));
+			nuevo.setPosicion(pos);
 			resultado.add(nuevo);
 			pos = pos + 1;
 		}
@@ -210,7 +211,7 @@ public class ServiciosVariosDAO implements ServiciosVariosInterfaz{
         try{
         	port1.recibirOrdenDespacho(nuevo);        	
         }catch(Exception e){
-        	System.out.println("A los negros les fallo");
+        	System.out.println("Falló el envio de Orden de Despacho.");
         }
 		
 	}
@@ -221,7 +222,8 @@ public class ServiciosVariosDAO implements ServiciosVariosInterfaz{
 		List<TROrdenVentaDTO> ventasdto = new ArrayList<TROrdenVentaDTO>();
 		
 		try {
-			List<TROrdenVenta> ventas = (List<TROrdenVenta>) em.createQuery("SELECT d FROM TROrdenVenta d left join fetch d.asociada").getResultList();
+			List<TROrdenVenta> ventas = (List<TROrdenVenta>) em.createQuery(
+					"SELECT DISTINCT d FROM TROrdenVenta d left join fetch d.asociada left join fetch d.items").getResultList();
 			
 			for(TROrdenVenta actual: ventas){
 				TROrdenVentaDTO nuevo = new TROrdenVentaDTO();
@@ -231,6 +233,15 @@ public class ServiciosVariosDAO implements ServiciosVariosInterfaz{
 				nuevo.setModuloId(actual.getModuloId());
 				nuevo.setMonto(actual.getMonto());
 				nuevo.setVentaId(actual.getNumero());
+				
+				List<ItemOrdenVentaDTO> itemsVenta = new ArrayList<ItemOrdenVentaDTO>();
+				for(int i=0; i<actual.getItems().size(); i++) {
+					ItemOrdenVentaDTO iov = new ItemOrdenVentaDTO();
+					iov.setProductoId(actual.getItems().get(i).getArticulo());
+					iov.setCantidad(actual.getItems().get(i).getCantidad());
+					itemsVenta.add(iov);
+				}
+				nuevo.setVentaItems(itemsVenta);
 				
 				if(actual.getAsociada() != null) {
 					TROrdenDespachoDTO orden = new TROrdenDespachoDTO();

@@ -13,7 +13,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 public class ItemAuditoriaDTO {
 
 	private AuditoriaDTO auditoria;
-	private Calendar fecha;
+	private Date fecha;
 	private String log;
 	private int idModulo;
 	
@@ -34,10 +34,10 @@ public class ItemAuditoriaDTO {
 	}
 	@XmlElement(name = "fecha")
 	//@XmlJavaTypeAdapter(DateAdapter.class)
-	public Calendar getFecha() {
+	public Date getFecha() {
 		return fecha;
 	}
-	public void setFecha(Calendar fecha) {
+	public void setFecha(Date fecha) {
 		this.fecha = fecha;
 	}
 	@XmlElement(name = "mensaje")

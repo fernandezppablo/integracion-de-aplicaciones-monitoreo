@@ -18,7 +18,8 @@ public class TROrdenDespachoDTO {
 	private int idModulo;
 	private Date fecha;
 	private Estado estado;
-	public List<ItemOrdenDespachoDTO> items;
+	private List<ItemOrdenDespachoDTO> items;
+	
 	public int getNroDespacho() {
 		return nroDespacho;
 	}

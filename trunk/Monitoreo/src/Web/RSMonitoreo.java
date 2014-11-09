@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import interfaces.AuditoriaDAOInterfaz;
 import interfaces.DespachoDAOLocal;
 import interfaces.ServiciosVariosInterfaz;
 import interfaces.TROrdenDespachoDAOInterfaz;
@@ -22,9 +23,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import negocio.Despacho;
+import negocio.ItemAuditoria;
 import negocio.ItemOrdenVenta;
 import negocio.TROrdenDespacho;
 import negocio.TROrdenVenta;
+import dto.ItemAuditoriaSimpleDTO;
 import dto.ItemOrdenDespachoDTO;
 import dto.MensajeRespuestaDTO;
 import dto.TROrdenDespachoDTO;
@@ -35,7 +38,9 @@ import dto.TROrdenDespachoDTO;
 @Stateless
 @Path("REST")
 public class RSMonitoreo {
-	//(name = "DespachoDAO")
+	
+	@EJB(name="AuditoriaDAO")
+	private AuditoriaDAOInterfaz IAuditoria;
 	@EJB(name="TROrdenDespachoDAO")
     private TROrdenDespachoDAOInterfaz dao;
 	@EJB(name="TROrdenVentaDAO")
@@ -158,6 +163,28 @@ public class RSMonitoreo {
     	} catch(Exception e) {
     		e.printStackTrace();
     		return "false";
+    	}
+    }
+    
+    
+    @GET
+    @Path("/logs")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<ItemAuditoriaSimpleDTO> getLogs() {
+    	try {
+    		List<ItemAuditoriaSimpleDTO> logsDtos = new ArrayList<ItemAuditoriaSimpleDTO>();
+    		List<ItemAuditoria> logs = IAuditoria.ultimosLogs();
+    		for(int i=0; i<logs.size(); i++) {
+    			ItemAuditoriaSimpleDTO log = new ItemAuditoriaSimpleDTO();
+    			log.setFecha(logs.get(i).getFecha());
+    			log.setIdModulo(logs.get(i).getIdModulo());
+    			log.setLog(logs.get(i).getLog());
+    			logsDtos.add(log);
+    		}
+    		return logsDtos;
+    	} catch(Exception e) {
+    		e.printStackTrace();
+    		return null;
     	}
     }
 	

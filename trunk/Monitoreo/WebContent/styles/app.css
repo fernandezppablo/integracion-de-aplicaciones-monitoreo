@@ -180,7 +180,7 @@
 	margin-top: 0px;
 	padding-top: 7px;
 	margin-right: 20px;
-	margin-left: 5px;
+	margin-left: 15px;
 }
 
 .venta .assign {
@@ -221,6 +221,10 @@
 	margin-right: 10px;
 }
 
+.despacho:hover {
+	cursor: pointer;
+}
+
 #data-seleccionar-despacho h3 {
 	text-align: center;
 }
@@ -236,24 +240,7 @@
 }
 
 .despacho:hover {
-	background-color: #508BAB;
-	border: 1px solid white;
-}
-.despacho:hover .despacho-nombre {
-	color: white;
-	border-bottom-color: white;
-}
-.despacho:hover label {
-	color: white;
-}
-.despacho:hover .coordenadas span {
-	border: 1px solid white;
-}
-.despacho:hover .latitud {
-	color: white;
-}
-.despacho:hover .longitud {
-	color: white;
+	background-color: #eee;
 }
 
 .despacho-nombre {
@@ -281,24 +268,7 @@
 }
 
 .despacho.seleccionado {
-	background-color: #508BAB;
-	border: 1px solid white;
-}
-.despacho.seleccionado .despacho-nombre {
-	color: white;
-	border-bottom-color: white;
-}
-.despacho.seleccionado label {
-	color: white;
-}
-.despacho.seleccionado .coordenadas span {
-	border: 1px solid white;
-}
-.despacho.seleccionado .latitud {
-	color: white;
-}
-.despacho.seleccionado .longitud {
-	color: white;
+	background-color: #ddd;
 }
 
 .recomend {
@@ -383,3 +353,62 @@
 	border-bottom: 1px solid #ccc;
 	border-top: 1px solid #ccc;
  }
+ 
+ #content-ranking .enviar-ranking {
+ 	margin-left: 20px;
+ 	margin-bottom: 0px;
+ }
+ .ranking-item {
+ 	border: 1px solid #ccc;
+ 	margin: 10px 0px;
+ }
+ 
+ .ranking-item-nombre {
+ 	display: inline;
+ }
+ 
+ .ranking-item-position {
+ 	padding-top: 12px;
+ }
+ 
+ .log {
+ 	border-left: 1px solid #ccc;
+ 	border-right: 1px solid #ccc;
+ 	border-top: 1px solid #ccc;
+ 	margin: 10px 0px;
+ }
+ 
+ .log-header {
+ 	border-bottom: 1px solid #ccc;
+ }
+ 
+ .log-header h4 {
+ 	text-align: center;
+ }
+ 
+ #content-audit h3 {
+ 	display: inline;
+ }
+ 
+ .loader{
+  margin: 0 0 2em;
+  height: 100px;
+  width: 20%;
+  text-align: center;
+  padding: 1em;
+  margin: 0 auto 1em;
+  display: inline;
+  vertical-align: top;
+}
+
+/*
+  Set the color of the icon
+*/
+svg path,
+svg rect{
+  fill: #E04141;
+}
+
+.load-button svg path, .load-button svg rect {
+	fill: #FFFFFF;
+}
