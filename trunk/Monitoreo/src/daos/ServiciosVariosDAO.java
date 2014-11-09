@@ -27,13 +27,22 @@ import javax.persistence.Query;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import uade.fain.ia.tpo.interfaces.soap.Item;
+import uade.fain.ia.tpo.interfaces.soap.OrdenDespacho;
+import uade.fain.ia.tpo.interfaces.soap.OrdenDespachoSoapWS;
+import uade.fain.ia.tpo.interfaces.soap.OrdenDespachoSoapWSBeanService;
+import uade.fain.ia.tpo.interfaces.soap.RecibirOrdenDespacho;
 import negocio.Despacho;
 import negocio.ItemAuditoria;
 import negocio.TROrdenVenta;
 import dto.DespachoDTO;
 import dto.ItemAuditoriaDTO;
+import dto.ItemOrdenDespachoDTO;
 import dto.ItemRankingDTO;
 import dto.MensajeRespuestaDTO;
+import dto.RankingDTO;
 import dto.TROrdenDespachoDTO;
 import dto.TROrdenVentaDTO;
 import enums.Estado;
@@ -44,9 +53,9 @@ public class ServiciosVariosDAO implements ServiciosVariosInterfaz{
 	@PersistenceContext(unitName = "TP")	
 	private EntityManager em;
 	
-	String ipportal = "localhost:8080"; //IP + PUERTO
+	String ipportal = "172.16.163.15:8080"; //IP + PUERTO
 	
-	private String targetRanking = "http://" + ipportal + "/PortalWeb/rest/bestSeller/procesar";
+	private String targetRanking = "http://" + ipportal + "/PortalWebCliente/rest/bestSeller/procesar";
 	
 	
 	
@@ -85,7 +94,7 @@ public class ServiciosVariosDAO implements ServiciosVariosInterfaz{
 						"group by i.articulo order by cant"
 				);
 		Iterator itr = q.getResultList().iterator();
-		int pos = 0;
+		int pos = 1;
 		while(itr.hasNext()){
 			Object[] element = (Object[]) itr.next(); 
 			ItemRankingDTO nuevo = new ItemRankingDTO();
@@ -131,16 +140,13 @@ public class ServiciosVariosDAO implements ServiciosVariosInterfaz{
             httpConnection.setRequestMethod("POST");
 
             httpConnection.setRequestProperty("Content-Type", "application/json");
-
-            java.io.StringWriter sw = new StringWriter();
-            OutputStream outputStream = httpConnection.getOutputStream();
-            JAXBContext jc = JAXBContext.newInstance(ItemRankingDTO.class);
-            Marshaller marshaller = jc.createMarshaller();
-            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            marshaller.setProperty("eclipselink.media.type", "application/json");
-            marshaller.marshal(rankings,sw);
             
-            outputStream.write(sw.toString().getBytes());
+            RankingDTO ranking = new RankingDTO(rankings);
+            ObjectMapper mapper = new ObjectMapper(); // create once, reuse
+    		String json = mapper.writeValueAsString(ranking);
+            
+    		OutputStream outputStream = httpConnection.getOutputStream();
+            outputStream.write(json.getBytes());
 
             outputStream.flush();
 
@@ -158,11 +164,11 @@ public class ServiciosVariosDAO implements ServiciosVariosInterfaz{
 
                     (httpConnection.getInputStream())));
 
-            String json= "";
+            String json2= "";
             String output = "";
             JAXBContext jaxbcontext;
             while ((output = responseBuffer.readLine()) != null) {
-            	json = json + output;
+            	json2 = json2 + output;
             }
             System.out.println("Texto xml de ranking: " + json);
             
@@ -186,14 +192,26 @@ public class ServiciosVariosDAO implements ServiciosVariosInterfaz{
 
 	@Override
 	public void mandarDespacho(TROrdenDespachoDTO aMandar) throws Exception {
-		java.io.StringWriter sw = new StringWriter();
-        JAXBContext jc = JAXBContext.newInstance(TROrdenDespachoDTO.class);
-        Marshaller marshaller = jc.createMarshaller();
-        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-        marshaller.setProperty("eclipselink.media.type", "application/xml");
-        marshaller.marshal(aMandar,sw);
+		OrdenDespachoSoapWSBeanService service1 = new OrdenDespachoSoapWSBeanService();
+        System.out.println("Create Web Service...");
+        OrdenDespachoSoapWS port1 = service1.getOrdenDespachoSoapWSImplPort();
+        OrdenDespacho nuevo = new OrdenDespacho();
+        nuevo.setCodigoDespacho(String.valueOf(aMandar.getNroDespacho()));
+        nuevo.setCodigoVenta(String.valueOf(aMandar.getNroVenta()));
+        nuevo.setIdMonitoreo("3");
+        nuevo.setIdPortal("1");
+        for(ItemOrdenDespachoDTO actual: aMandar.getItems()){
+        	Item item = new Item();
+        	item.setArticuloId(String.valueOf(actual.getCodigoArticulo()));
+        	item.setCantidad(actual.getCantidad());
+        	nuevo.getItems().add(item);
+        }
         
-        
+        try{
+        	port1.recibirOrdenDespacho(nuevo);        	
+        }catch(Exception e){
+        	System.out.println("A los negros les fallo");
+        }
 		
 	}
 	
@@ -247,7 +265,7 @@ public class ServiciosVariosDAO implements ServiciosVariosInterfaz{
 			
 			for(ItemAuditoria actual: auditorias){
 				ItemAuditoriaDTO nuevo = new ItemAuditoriaDTO();
-				nuevo.setFecha(actual.getFecha());
+				//nuevo.setFecha(actual.getFecha());
 				nuevo.setIdModulo(actual.getIdModulo());
 				nuevo.setLog(actual.getLog());
 				auditoriasdto.add(nuevo);

@@ -36,7 +36,7 @@ public class AuditoriaDAO implements AuditoriaDAOInterfaz{
 		em.persist(nueva);
 		List<ItemAuditoria> lista = new ArrayList<ItemAuditoria>();
 		for(ItemAuditoriaDTO actual: aGrabar.getItemsauditoria()){
-			ItemAuditoria entidad = new ItemAuditoria(actual.getLog(), actual.getFecha(), actual.getIdModulo(), nueva);
+			ItemAuditoria entidad = new ItemAuditoria(actual.getLog(), null, actual.getIdModulo(), nueva);
 			em.persist(entidad);
 			lista.add(entidad);		
 		}
