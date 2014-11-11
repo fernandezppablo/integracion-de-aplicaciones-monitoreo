@@ -27,13 +27,13 @@ import javax.persistence.Query;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import uade.fain.ia.tpo.interfaces.soap.Item;
 import uade.fain.ia.tpo.interfaces.soap.OrdenDespacho;
 import uade.fain.ia.tpo.interfaces.soap.OrdenDespachoSoapWS;
 import uade.fain.ia.tpo.interfaces.soap.OrdenDespachoSoapWSBeanService;
-import uade.fain.ia.tpo.interfaces.soap.RecibirOrdenDespacho;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import negocio.Despacho;
 import negocio.ItemAuditoria;
 import negocio.TROrdenVenta;
@@ -54,9 +54,9 @@ public class ServiciosVariosDAO implements ServiciosVariosInterfaz{
 	@PersistenceContext(unitName = "TP")
 	private EntityManager em;
 	
-	String ipportal = "172.16.163.15:8080"; //IP + PUERTO
+	String ipportal = "172.16.163.62:8080"; //IP + PUERTO
 	
-	private String targetRanking = "http://" + ipportal + "/PortalWebCliente/rest/bestSeller/procesar";
+	private String targetRanking = "http://" + ipportal + "/PortalWeb/rest/bestSeller/procesar";
 	
 	
 	
@@ -173,11 +173,14 @@ public class ServiciosVariosDAO implements ServiciosVariosInterfaz{
             }
             System.out.println("Texto xml de ranking: " + json);
             
-            
+            /*
             jaxbcontext = JAXBContext.newInstance(MensajeRespuestaDTO.class);
             javax.xml.bind.Unmarshaller desencripta = jaxbcontext.createUnmarshaller();
             MensajeRespuestaDTO mensaje = (MensajeRespuestaDTO) desencripta.unmarshal(new StringReader(json));
- 
+            
+            mapper = new ObjectMapper(); // create once, reuse
+    		String json = mapper.writeValueAsString(ranking);
+    		*/
           } catch (MalformedURLException e) {
 
             e.printStackTrace();
@@ -195,12 +198,12 @@ public class ServiciosVariosDAO implements ServiciosVariosInterfaz{
 	public void mandarDespacho(TROrdenDespachoDTO aMandar) throws Exception {
 		OrdenDespachoSoapWSBeanService service1 = new OrdenDespachoSoapWSBeanService();
         System.out.println("Create Web Service...");
-        OrdenDespachoSoapWS port1 = service1.getOrdenDespachoSoapWSImplPort();
+        OrdenDespachoSoapWS port1 = service1.getOrdenDespachoSoapWSBeanPort();
         OrdenDespacho nuevo = new OrdenDespacho();
         nuevo.setCodigoDespacho(String.valueOf(aMandar.getNroDespacho()));
         nuevo.setCodigoVenta(String.valueOf(aMandar.getNroVenta()));
         nuevo.setIdMonitoreo("3");
-        nuevo.setIdPortal("1");
+        nuevo.setIdPortal("9");
         for(ItemOrdenDespachoDTO actual: aMandar.getItems()){
         	Item item = new Item();
         	item.setArticuloId(String.valueOf(actual.getCodigoArticulo()));
@@ -209,9 +212,10 @@ public class ServiciosVariosDAO implements ServiciosVariosInterfaz{
         }
         
         try{
-        	port1.recibirOrdenDespacho(nuevo);        	
+        	port1.recibirOrdenDespacho(nuevo);
+        	
         }catch(Exception e){
-        	System.out.println("Falló el envio de Orden de Despacho.");
+        	throw new Exception("Error en el envio, el servicio del otro grupo anda mal");
         }
 		
 	}

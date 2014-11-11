@@ -58,6 +58,7 @@ public class JMSServices implements MessageListener  {
 			ItemAuditoriaDTO item = (ItemAuditoriaDTO) desencripta.unmarshal(new StringReader(xml));
 			
 			AuditoriaDTO nueva = new AuditoriaDTO();
+			item.setFecha(item.getFecha());
 			nueva.agregarItemAuditoria(item);
 			daoauditoria.grabarAuditoria(nueva);
 

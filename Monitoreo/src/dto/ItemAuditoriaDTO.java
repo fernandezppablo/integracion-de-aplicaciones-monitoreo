@@ -1,5 +1,7 @@
 package dto;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -25,7 +27,7 @@ public class ItemAuditoriaDTO {
 		this.auditoria = auditoria;
 	}
 
-	@XmlElement(name = "idModulo")
+	@XmlElement(name = "moduloId")
 	public int getIdModulo() {
 		return idModulo;
 	}
@@ -38,7 +40,21 @@ public class ItemAuditoriaDTO {
 		return fecha;
 	}
 	public void setFecha(Date fecha) {
-		this.fecha = fecha;
+		
+		SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX"); 
+		try {
+			if(fecha != null){
+				String fechastring = fecha.toString();
+				Date fechafinal = formato.parse(fechastring);				
+				this.fecha = fecha;
+			}else{
+				this.fecha = new Date();
+			}
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			this.fecha = new Date();
+		
+		}
 	}
 	@XmlElement(name = "mensaje")
 	public String getLog() {

@@ -6,6 +6,7 @@ import interfaces.TROrdenVentaDAOInterfaz;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 
 import javax.ejb.EJB;
 import javax.jws.WebMethod;
@@ -38,6 +39,7 @@ public class WSMonitoreo{
 				System.out.println(xml);
 				javax.xml.bind.Unmarshaller desencripta = jaxbcontext.createUnmarshaller();
 				ItemAuditoriaDTO item = (ItemAuditoriaDTO) desencripta.unmarshal(new StringReader(xml));
+				item.setFecha(item.getFecha());
 				if(item.getFecha()==null){
 					return generarRespuesta(false,"Error en el formato de la fecha");
 				}
@@ -70,6 +72,7 @@ public class WSMonitoreo{
 	{
 		
 		JAXBContext jaxbcontext;
+		System.out.println(xml);
 		try {
 			//Primero deserializamos la orden de venta
 			jaxbcontext = JAXBContext.newInstance(TROrdenVentaDTO.class);
