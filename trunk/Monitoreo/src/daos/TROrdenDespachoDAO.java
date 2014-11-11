@@ -70,8 +70,8 @@ public class TROrdenDespachoDAO implements TROrdenDespachoDAOInterfaz{
 		
 		try {
 			orden.setAsociada(venta);
-			em.persist(orden);
-			venta.setAsociada(orden);
+			//em.persist(orden);
+			//venta.setAsociada(orden);
 		} catch(Exception e) {
 			e.printStackTrace();
 			return null;

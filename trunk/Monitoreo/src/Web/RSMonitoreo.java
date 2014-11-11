@@ -14,6 +14,8 @@ import interfaces.TROrdenVentaDAOInterfaz;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -38,7 +40,8 @@ import dto.TROrdenDespachoDTO;
 @Stateless
 @Path("REST")
 public class RSMonitoreo {
-	
+	@PersistenceContext(unitName = "TP")	
+	private EntityManager em;
 	@EJB(name="AuditoriaDAO")
 	private AuditoriaDAOInterfaz IAuditoria;
 	@EJB(name="TROrdenDespachoDAO")
@@ -70,10 +73,9 @@ public class RSMonitoreo {
   
  // This method is called if TEXT_PLAIN is requested
     @POST
-    @Path("/cambioEstadoDespacho")
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/cambioEstadoOrdenDespacho/{despacho}")
     @Produces(MediaType.APPLICATION_JSON)
-    public MensajeRespuestaDTO cambiarOrdenEstadoDespacho(int despacho) {	
+    public MensajeRespuestaDTO cambioEstadoOrdenDespacho(@PathParam("despacho")int despacho) {	
       try {
 		dao.cambiarEstadoDespacho(despacho);
 	} catch (Exception e) {
@@ -141,6 +143,8 @@ public class RSMonitoreo {
 				}
 				despachoDTO.setItems(items);
 				IServicios.mandarDespacho(despachoDTO);
+				em.persist(orden);
+				orden.getAsociada().setAsociada(orden);
 				return despachoDTO;
 				
 			}
