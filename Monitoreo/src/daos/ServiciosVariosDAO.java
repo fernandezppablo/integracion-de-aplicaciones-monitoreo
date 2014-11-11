@@ -202,7 +202,7 @@ public class ServiciosVariosDAO implements ServiciosVariosInterfaz{
         OrdenDespacho nuevo = new OrdenDespacho();
         nuevo.setCodigoDespacho(String.valueOf(aMandar.getNroDespacho()));
         nuevo.setCodigoVenta(String.valueOf(aMandar.getNroVenta()));
-        nuevo.setIdMonitoreo("3");
+        nuevo.setIdMonitoreo(aMandar.getIdModulo());
         nuevo.setIdPortal("9");
         for(ItemOrdenDespachoDTO actual: aMandar.getItems()){
         	Item item = new Item();

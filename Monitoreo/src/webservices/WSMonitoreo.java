@@ -100,7 +100,7 @@ public class WSMonitoreo{
 		
 	}
 
-	public String generarRespuesta(boolean estado,String mensaje){
+	private String generarRespuesta(boolean estado,String mensaje){
 		java.io.StringWriter sw = new StringWriter();
     	MensajeRespuestaDTO respuesta = new MensajeRespuestaDTO();
     	if(estado){
