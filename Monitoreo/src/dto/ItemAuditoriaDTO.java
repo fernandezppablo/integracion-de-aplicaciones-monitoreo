@@ -35,26 +35,12 @@ public class ItemAuditoriaDTO {
 		this.idModulo = idModulo;
 	}
 	@XmlElement(name = "fecha")
-	//@XmlJavaTypeAdapter(DateAdapter.class)
+	@XmlJavaTypeAdapter(DateAdapter.class)
 	public Date getFecha() {
 		return fecha;
 	}
 	public void setFecha(Date fecha) {
-		
-		SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX"); 
-		try {
-			if(fecha != null){
-				String fechastring = fecha.toString();
-				Date fechafinal = formato.parse(fechastring);				
-				this.fecha = fecha;
-			}else{
-				this.fecha = new Date();
-			}
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			this.fecha = new Date();
-		
-		}
+		this.fecha = fecha;
 	}
 	@XmlElement(name = "mensaje")
 	public String getLog() {

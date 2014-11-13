@@ -61,7 +61,7 @@ public class TROrdenVentaDTO {
 	public void setMonto(float monto) {
 		this.monto = monto;
 	}
-	 @XmlElement( name="Item" )
+	 @XmlElement( name="item" )
 	 @XmlElementWrapper( name="ventaItems" )
 	public List<ItemOrdenVentaDTO> getVentaItems() {
 		return ventaItems;
