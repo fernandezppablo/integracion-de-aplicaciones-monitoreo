@@ -5,12 +5,15 @@ var panels = {
 	reporte: '#content-reportes',
 	audit: '#content-audit',
 	ranking: '#content-ranking',
+	settings: '#content-settings',
 	data: '#data-pane',
 	dataDispatch: '#data-seleccionar-despacho',
 	dataSaleView: '#data-ver-detalle-venta'
 };
 
 $(document).ready(function() {
+	$('html').removeClass('loading');
+	
 	//bind menu item logistica
 	$('.icon-bar .item.logistica').click(function() {
 		$(panels.logistica).show();
@@ -18,6 +21,7 @@ $(document).ready(function() {
 		$(panels.reporte).hide();
 		$(panels.audit).hide();
 		$(panels.ranking).hide();
+		$(panels.settings).hide();
 	});
 	//bind menu item monitoreo
 	$('.icon-bar .item.monitoreo').click(function() {
@@ -26,6 +30,7 @@ $(document).ready(function() {
 		$(panels.reporte).hide();
 		$(panels.audit).hide();
 		$(panels.ranking).hide();
+		$(panels.settings).hide();
 	});
 	//bind menu item reporte
 	$('.icon-bar .item.reporte').click(function() {
@@ -34,6 +39,7 @@ $(document).ready(function() {
 		$(panels.reporte).show();
 		$(panels.audit).hide();
 		$(panels.ranking).hide();
+		$(panels.settings).hide();
 	});
 	//bind menu item auditoria
 	$('.icon-bar .item.auditoria').click(function() {
@@ -42,6 +48,7 @@ $(document).ready(function() {
 		$(panels.reporte).hide();
 		$(panels.audit).show();
 		$(panels.ranking).hide();
+		$(panels.settings).hide();
 	});
 	//bind menu item enviar ranking
 	$('.icon-bar .item.ranking').click(function() {
@@ -50,6 +57,16 @@ $(document).ready(function() {
 		$(panels.reporte).hide();
 		$(panels.audit).hide();
 		$(panels.ranking).show();
+		$(panels.settings).hide();
+	});
+	//bind menu item enviar ranking
+	$('.icon-bar .item.settings').click(function() {
+		$(panels.logistica).hide();
+		$(panels.monitoreo).hide();
+		$(panels.reporte).hide();
+		$(panels.audit).hide();
+		$(panels.ranking).hide();
+		$(panels.settings).show();
 	});
 	
 	dataPane.start();
@@ -57,6 +74,7 @@ $(document).ready(function() {
 	reportes.start();
 	auditoria.start();
 	ranking.start();
+	settings.start();
 });
 
 
@@ -78,6 +96,14 @@ var BusinessDelegate = {
 		
 		Logs: function() {
 			return $.get('Web/REST/logs');
+		},
+		
+		GuardarIps: function(ipPortal, ipDespacho, ipDeposito) {
+			return $.post('Web/REST/cambiarIps', {
+				'portal': ipPortal,
+				'deposito': ipDeposito,
+				'despacho': ipDespacho
+			});
 		}
 		
 };
@@ -292,7 +318,6 @@ var reportes = {
 		$(panels.reporte + ' .portal-venta').click(function() {
 			var nro = $(this).attr('data-id');
 			//Buscar la venta en la coleccion
-			console.log('here');
 			var sale = ventas[nro];
 			dataPane.loadSaleDetail(sale);
 			
@@ -364,7 +389,6 @@ var auditoria = {
 		setLogs: function() {
 			var dfd = $.Deferred();
 			if(this._logs) {
-				console.log('Setting..');
 				$('.log-items').empty();
 				for(var i=0 in this._logs) {
 					var currentLog = this._logs[i];
@@ -381,3 +405,23 @@ var auditoria = {
 			return dfd;
 		}
 };
+
+
+var settings = {
+		
+		start: function() {
+			$(panels.settings).find('#save-ips').unbind('click').click(function() {
+				var portal = $(panels.settings).find('.settings-ip-portal input').val(),
+					despacho = $(panels.settings).find('.settings-ip-despacho input').val(),
+					deposito = $(panels.settings).find('.settings-ip-deposito input').val();
+				$(panels.settings).find('.loader').show();
+				BusinessDelegate.GuardarIps(portal, despacho, deposito)
+					.done(function() {
+						$(panels.settings).find('.loader').hide();
+					})
+					.fail(function() {
+						$(panels.settings).find('.loader').hide();
+					});
+			});
+		}
+}

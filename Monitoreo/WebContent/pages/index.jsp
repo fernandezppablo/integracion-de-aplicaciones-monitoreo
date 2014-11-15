@@ -1,7 +1,47 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<html>
+<html class="loading">
+	
+	<style>
+		html {
+		    -webkit-transition: background-color 1s;
+		    transition: background-color 1s;
+		}
+		html.loading {
+			background-color: white;
+		}
+		body {
+			opacity: 1;
+			-webkit-transition: opacity 1s;
+		}
+		html.loading body {
+			opacity: 0;
+		}
+		
+		html.loading::before {
+			content: '';
+			width: 30px;
+			height: 30px;
+			border-radius: 100%;
+			background-color: #46A3F0;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			-webkit-animation: Spin 1.4s infinite;
+		}
+		
+		@-webkit-keyframes Spin {
+			33% {
+				-webkit-transform: rotateX(180deg);
+			}
+			to {
+				-webkit-transform: rotateZ(180deg);
+			}
+		}
+	</style>
+	
+	
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 		<title>Monitoreo</title>
@@ -14,6 +54,8 @@
 		<link type="text/css" href="${pageContext.request.contextPath}/styles/foundation-icons/foundation-icons.css" rel="stylesheet">
 		<link type="text/css" href="${pageContext.request.contextPath}/styles/app.css" rel="stylesheet">
 	</head>
+	
+	
 	
 	<body>
 		<!-- Menu izquierda -->
@@ -37,6 +79,10 @@
 			<a class="item ranking">
 				<i class="fi-upload-cloud"></i>
 				<label>Enviar Ranking</label>
+			</a>
+			<a class="item settings">
+				<i class="fi-widget"></i>
+				<label>Configuración</label>
 			</a>
 		</div>
 		
@@ -262,6 +308,66 @@
 					</div>
 					<div class="row log-items">
 						
+					</div>
+				</div>
+				
+				
+				<!-- Panel de Configuración -->
+				<div id="content-settings" style="display: none;">
+					<div class="content-title">
+						<h3>
+							Configuración
+						</h3>
+					</div>
+					<div class="row all-ips">
+						<div class="large-12 columns">
+							<div class="row">
+								<div class="settings-ip-portal">
+									<label>
+										IP - Portal
+										<input type="text" placeholder="IP del Portal" value="${requestScope.ipPortal}"/>
+									</label>
+								</div>
+							</div>
+							<div class="row">
+								<div class="settings-ip-despacho">
+									<label>
+										IP - Despacho
+										<input type="text" placeholder="IP del Despacho" value="${requestScope.ipDespacho}"/>
+									</label>
+								</div>
+							</div>
+							<div class="row">
+								<div class="settings-ip-deposito">
+									<label>
+										IP - Deposito
+										<input type="text" placeholder="IP del Deposito" value="${requestScope.ipDeposito}"/>
+									</label>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="large-3 large-offset-9 columns">
+							<div id="save-ips" class="button alert medium radius">
+								Guardar
+								<!-- Spinner  -->
+								<span class="loader load-button" title="loading" style="display: none;">
+								  <svg version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+								     width="13px" height="13px" viewBox="0 0 50 50" style="enable-background:new 0 0 50 50;" xml:space="preserve">
+									<path fill="#000" d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z">
+									    <animateTransform attributeType="xml"
+									      attributeName="transform"
+									      type="rotate"
+									      from="0 25 25"
+									      to="360 25 25"
+									      dur="0.6s"
+									      repeatCount="indefinite"/>
+								   	</path>
+								  </svg>
+								</span>	
+							</div>
+						</div>
 					</div>
 				</div>
 				

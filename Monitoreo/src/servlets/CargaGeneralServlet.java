@@ -1,6 +1,7 @@
 package servlets;
 
 import interfaces.DespachoDAOLocal;
+import interfaces.IURLManager;
 import interfaces.ServiciosVariosInterfaz;
 import interfaces.TROrdenDespachoDAOInterfaz;
 import interfaces.TROrdenVentaDAOInterfaz;
@@ -31,6 +32,7 @@ import negocio.Despacho;
 import negocio.ItemOrdenDespacho;
 import negocio.TROrdenDespacho;
 import negocio.TROrdenVenta;
+import negocio.URLContainer;
 import dto.ItemOrdenDespachoDTO;
 import dto.ResumenPortalDTO;
 import dto.TROrdenDespachoDTO;
@@ -43,6 +45,8 @@ public class CargaGeneralServlet extends HttpServlet {
     
 	@EJB(name = "serviciosVarios")
 	private ServiciosVariosInterfaz sv;
+	@EJB(name = "URLManager")
+	private IURLManager urls;
 
 	private List<ResumenPortalDTO> buildPortalesSum(List<TROrdenVentaDTO> ventas) {
 
@@ -93,6 +97,8 @@ public class CargaGeneralServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
+		URLContainer urlContainer = urls.getIPs();
+		
 		List<TROrdenVentaDTO> ventasSinAsociar = sv.getOrdenesVentaSinAsociar();
 		List<TROrdenVentaDTO> ventas = sv.getOrdenesVenta();
 		List<ResumenPortalDTO> portalesVentas = this.buildPortalesSum(ventas);
@@ -103,6 +109,12 @@ public class CargaGeneralServlet extends HttpServlet {
 		request.setAttribute("ventasSinAsociar", ventasSinAsociar);
 		//request.setAttribute("auditorias", sv.getItemsAuditoria());
 		request.setAttribute("sumarizacionPortales", portalesVentas);
+		
+		if(urlContainer != null) {
+			request.setAttribute("ipPortal", urlContainer.ipPortal);
+			request.setAttribute("ipDespacho", urlContainer.ipDespacho);
+			request.setAttribute("ipDeposito", urlContainer.ipDeposito);
+		}
 		
 		request.getRequestDispatcher("/pages/index.jsp").forward(request, response);
 	}
