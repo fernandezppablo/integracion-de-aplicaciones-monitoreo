@@ -5,6 +5,8 @@
 **/
 
 
+
+
 @font-face {
 	font-family: 'Neou';
 	src: url('./Neou-Thin.ttf');
@@ -105,7 +107,7 @@
 }
 
 .item i {
-	font-size: 2em;
+	font-size: 1.6em;
 	color: white;
 }
 
@@ -411,4 +413,8 @@ svg rect{
 
 .load-button svg path, .load-button svg rect {
 	fill: #FFFFFF;
+}
+
+.all-ips {
+	margin-top: 20px;
 }

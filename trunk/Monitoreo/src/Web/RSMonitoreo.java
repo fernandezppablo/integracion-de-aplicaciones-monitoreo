@@ -8,6 +8,7 @@ import java.util.List;
 
 import interfaces.AuditoriaDAOInterfaz;
 import interfaces.DespachoDAOLocal;
+import interfaces.IURLManager;
 import interfaces.ServiciosVariosInterfaz;
 import interfaces.TROrdenDespachoDAOInterfaz;
 import interfaces.TROrdenVentaDAOInterfaz;
@@ -17,6 +18,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -33,6 +35,7 @@ import dto.ItemAuditoriaSimpleDTO;
 import dto.ItemOrdenDespachoDTO;
 import dto.MensajeRespuestaDTO;
 import dto.TROrdenDespachoDTO;
+import enums.IP;
 
 /**
  * Session Bean implementation class RSMonitoreo
@@ -52,6 +55,8 @@ public class RSMonitoreo {
 	private DespachoDAOLocal IDespachos;
 	@EJB(name="serviciosVarios")
 	private ServiciosVariosInterfaz IServicios;
+	@EJB(name="URLManager")
+	private IURLManager urls;
     /**
      * Default constructor. 
      */
@@ -190,6 +195,17 @@ public class RSMonitoreo {
     		e.printStackTrace();
     		return null;
     	}
+    }
+    
+    @POST
+    @Path("/cambiarIps")
+    @Produces(MediaType.TEXT_HTML)
+    public String updateIps(@FormParam("portal") String ipPortal, @FormParam("despacho") String ipDespacho, @FormParam("deposito") String ipDeposito) {
+    	System.out.println(ipPortal + " " + ipDespacho + " " + ipDeposito);
+    	urls.setIP(ipPortal, IP.Portal);
+    	urls.setIP(ipDespacho, IP.Despacho);
+    	urls.setIP(ipDeposito, IP.Deposito);
+    	return "true";
     }
 	
 }
