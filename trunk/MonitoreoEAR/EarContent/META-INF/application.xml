@@ -7,7 +7,4 @@
       <context-root>Monitoreo</context-root>
     </web>
   </module>
-  <module>
-    <java>Cliente.jar</java>
-  </module>
 </application>
